@@ -213,7 +213,6 @@ public class PlayerController : MonoBehaviour
 
     void Accelerate()
     {
-        print(input * (accelerationCurve.Evaluate(body.velocity.magnitude / maxSpeed) * maxAcceleration));
         body.AddForce(input * (accelerationCurve.Evaluate(body.velocity.magnitude / maxSpeed) * maxAcceleration), ForceMode.Acceleration);
         body.drag = movingDrag;
     }
