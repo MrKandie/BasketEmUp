@@ -19,21 +19,23 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     public Transform self;
     public Rigidbody body;
-
     public float deadzone = 0.2f;
 
-    [Space]
+    [Space(2)]
     [Header("Controls")]
     public MoveState moveState;
     [SerializeField] private float speed;
+
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
     public float maxSpeed = 10;
     public float maxAcceleration = 10;
     public AnimationCurve accelerationCurve;
-    [Space]
+
+    [Space(2)]
     public float movingDrag = .4f;
     public float idleDrag = .4f;
-    [Space]
+
+    [Space(2)]
     [Range(0.01f, 1f)]
     public float turnSpeed = .25f;
     public AnimationCurve walkAnimationSpeedCurve;
@@ -45,6 +47,7 @@ public class PlayerController : MonoBehaviour
     Vector3 input;
     Quaternion turnRotation;
     float distance;
+    bool inputDisabled;
 
     void Update()
     {
@@ -71,6 +74,7 @@ public class PlayerController : MonoBehaviour
     #region Input
     void GetInput()
     {
+        if (inputDisabled) { input = Vector3.zero; return; }
         if (HasGamepad())
         {
             GamepadInput();
@@ -169,6 +173,18 @@ public class PlayerController : MonoBehaviour
     {
         body.velocity = Vector3.ClampMagnitude(body.velocity, maxSpeed);
         speed = body.velocity.magnitude;
+    }
+    #endregion
+
+    #region Functions
+    public void DisableInput()
+    {
+        inputDisabled = true;
+    }
+
+    public void EnableInput()
+    {
+        inputDisabled = false;
     }
     #endregion
 }
