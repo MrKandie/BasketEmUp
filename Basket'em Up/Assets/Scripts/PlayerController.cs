@@ -384,22 +384,25 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
     {
-        float passTime = GameManager.i.momentumManager.GetPassDuration();
-        AnimationCurve speedCurve = GameManager.i.momentumManager.GetPassMovementCurve();
-        AnimationCurve angleCurve = GameManager.i.momentumManager.GetPassAngleCurve();
-
         Vector3 startPosition = ball.transform.position;
-        ball.direction = player.hand.transform.position - startPosition;
+        Vector3 endPosition = player.hand.transform.position;
+
+        float passSpeed = GameManager.i.momentumManager.GetPassSpeed();
+        float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
+        AnimationCurve speedCurve = GameManager.i.momentumManager.passMovementCurve;
+        AnimationCurve angleCurve = GameManager.i.momentumManager.passAngleCurve;
+
+        ball.direction = endPosition - startPosition;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();
             //Apply speed curve
-            ball.transform.position = Vector3.Lerp(startPosition, player.hand.transform.position, speedCurve.Evaluate(i / passTime));
+            ball.transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i / passTime));
 
             //Apply angle curve
             ball.transform.position = new Vector3(
                     ball.transform.position.x, 
-                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.momentumManager.passMaxHeight), 
+                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.momentumManager.GetPassHeight()), 
                     ball.transform.position.z
                 );
         }

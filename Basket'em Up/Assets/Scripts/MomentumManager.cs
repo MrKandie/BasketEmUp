@@ -4,42 +4,37 @@ using UnityEngine;
 
 public class MomentumManager : MonoBehaviour
 {
+    [Range(0f,1f)]
     public float momentum; //Float correspondant à la puissance du momentum
 
-    public float passSpeed; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public AnimationCurve passMovementCurve; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public AnimationCurve passAngleCurve; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public float passMaxHeight; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public int momentumDamages; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public float passDuration; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
+    [Header("Vitesse de la passe en metres par seconde")]
+    [MinMaxSlider(0, 50)]
+    public Vector2 minMaxPassSpeed; //En mètres par seconde
 
-    //TODO
+    [Header("Degats de la balle (100pv = full hp)")]
+    [MinMaxSlider(0, 100)]
+    public Vector2 minMaxPassDamage;
+
+    [Header("Hauteur de la passe en metres")]
+    [MinMaxSlider(0, 10)]
+    public Vector2 minMaxPassHeight; //En mètres
+
+    [Header("Courbes de mouvement de la balle")]
+    public AnimationCurve passMovementCurve;
+    public AnimationCurve passAngleCurve;
+
     public float GetPassSpeed()
     {
-        return passSpeed;
+        return Mathf.Lerp(minMaxPassSpeed.x, minMaxPassSpeed.y, momentum);
     }
 
-    //TODO
-    public AnimationCurve GetPassMovementCurve()
+    public float GetPassHeight()
     {
-        return passMovementCurve;
+        return Mathf.Lerp(minMaxPassHeight.x, minMaxPassHeight.y, 1-momentum);
     }
 
-    //TODO
-    public AnimationCurve GetPassAngleCurve()
-    {
-        return passAngleCurve;
-    }
-
-    //TODO
-    public float GetPassDuration()
-    {
-        return passDuration;
-    }
-
-    //TODO
     public int GetMomentumDamages()
     {
-        return momentumDamages;
+        return Mathf.RoundToInt(Mathf.Lerp(minMaxPassDamage.x, minMaxPassDamage.y, momentum));
     }
 }
