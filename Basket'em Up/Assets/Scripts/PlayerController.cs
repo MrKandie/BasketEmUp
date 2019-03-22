@@ -370,10 +370,11 @@ public class PlayerController : MonoBehaviour
     #region Coroutines 
     IEnumerator TakeBall_C(Ball ball, float time)
     {
+        Vector3 startPosition = ball.transform.position;
         for (float i = 0; i < time; i+=Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();
-            ball.transform.position = Vector3.Lerp(ball.transform.position, hand.transform.position, i / time);
+            ball.transform.position = Vector3.Lerp(startPosition, hand.transform.position, i / time);
         }
         possessedBall = ball;
         ball.holder = this;
@@ -383,13 +384,15 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
     {
-        float passTime = GameManager.i.momentumManager.GetPassDuration(momentum);
-        AnimationCurve speedCurve = GameManager.i.momentumManager.GetPassMovementCurve(momentum);
-        AnimationCurve angleCurve = GameManager.i.momentumManager.GetPassAngleCurve(momentum);
+        float passTime = GameManager.i.momentumManager.GetPassDuration();
+        AnimationCurve speedCurve = GameManager.i.momentumManager.GetPassMovementCurve();
+        AnimationCurve angleCurve = GameManager.i.momentumManager.GetPassAngleCurve();
 
         Vector3 startPosition = ball.transform.position;
+        ball.direction = player.hand.transform.position - startPosition;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
         {
+            yield return new WaitForEndOfFrame();
             //Apply speed curve
             ball.transform.position = Vector3.Lerp(startPosition, player.hand.transform.position, speedCurve.Evaluate(i / passTime));
 
@@ -399,9 +402,9 @@ public class PlayerController : MonoBehaviour
                     startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.momentumManager.passMaxHeight), 
                     ball.transform.position.z
                 );
-            yield return new WaitForEndOfFrame();
         }
-        player.TakeBall(ball, 1);
+        ball.direction = Vector3.zero;
+        player.TakeBall(ball, 0);
         yield return null;
     }
     #endregion

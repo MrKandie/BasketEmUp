@@ -9,29 +9,37 @@ public class MomentumManager : MonoBehaviour
     public float passSpeed; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
     public AnimationCurve passMovementCurve; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
     public AnimationCurve passAngleCurve; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
-    public float passMaxHeight;
+    public float passMaxHeight; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
+    public int momentumDamages; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
+    public float passDuration; //Sera généré automatiquement en fonction de la valeur de momentum plus tard
 
     //TODO
-    public float GetPassSpeed(float momentum)
+    public float GetPassSpeed()
     {
         return passSpeed;
     }
 
     //TODO
-    public AnimationCurve GetPassMovementCurve(float momentum)
+    public AnimationCurve GetPassMovementCurve()
     {
         return passMovementCurve;
     }
 
     //TODO
-    public AnimationCurve GetPassAngleCurve(float momentum)
+    public AnimationCurve GetPassAngleCurve()
     {
         return passAngleCurve;
     }
 
     //TODO
-    public float GetPassDuration(float momentum)
+    public float GetPassDuration()
     {
-        return 0.5f;
+        return passDuration;
+    }
+
+    //TODO
+    public int GetMomentumDamages()
+    {
+        return momentumDamages;
     }
 }
