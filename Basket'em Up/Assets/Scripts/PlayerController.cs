@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1))
         {
-            TakeBall(FindObjectOfType<Ball>(), 1);
+            TakeBall(FindObjectOfType<Ball>(), 0.1f);
         }
 
         if (HasGamepad())
@@ -343,6 +343,7 @@ public class PlayerController : MonoBehaviour
         {
             ball.holder.DropBall();
         }
+        StopAllCoroutines();
         StartCoroutine(TakeBall_C(ball, time));
     }
 
@@ -354,6 +355,7 @@ public class PlayerController : MonoBehaviour
         if (possessedBall == null) { return; }
 
         //Function
+        StopAllCoroutines();
         StartCoroutine(PassBall_C(possessedBall, player, momentum));
         DropBall();
     }
@@ -371,11 +373,13 @@ public class PlayerController : MonoBehaviour
     IEnumerator TakeBall_C(Ball ball, float time)
     {
         Vector3 startPosition = ball.transform.position;
+        Vector3 endPosition = hand.transform.position;
         for (float i = 0; i < time; i+=Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();
-            ball.transform.position = Vector3.Lerp(startPosition, hand.transform.position, i / time);
+            ball.transform.position = Vector3.Lerp(startPosition, endPosition, i / time);
         }
+        ball.transform.position = endPosition;
         possessedBall = ball;
         ball.holder = this;
         ball.transform.SetParent(hand.transform);
@@ -406,6 +410,7 @@ public class PlayerController : MonoBehaviour
                     ball.transform.position.z
                 );
         }
+        ball.transform.position = endPosition;
         ball.direction = Vector3.zero;
         player.TakeBall(ball, 0);
         yield return null;
