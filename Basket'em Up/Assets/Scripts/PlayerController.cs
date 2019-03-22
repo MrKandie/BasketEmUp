@@ -20,13 +20,18 @@ public class PlayerController : MonoBehaviour
     public Transform self;
     public Rigidbody body;
     public float deadzone = 0.2f;
+    public Transform hand;
 
     [Space(2)]
-    [Header("Settings")]
+    [Header("General settings")]
     public Color playerColor;
+
+    [Space(2)]
+    [Header("Movement settings")]
     public MoveState moveState;
     public float speed;
     public AnimationCurve accelerationCurve;
+
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
     public float maxSpeed = 10;
     public float maxAcceleration = 10;
@@ -41,8 +46,12 @@ public class PlayerController : MonoBehaviour
     public AnimationCurve walkAnimationSpeedCurve;
 
     [Space(2)]
+    [Header("Pass settings")]
     [Range(0, 180f)]
     [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
+
+    [Space(2)]
+    [Header("Other settings")]
 
 
     Vector3 speedVector;
@@ -53,6 +62,8 @@ public class PlayerController : MonoBehaviour
     float distance;
     bool inputDisabled;
     GameObject highlighter;
+    Ball possessedBall;
+    GameObject target;
 
     private void Awake()
     {
@@ -63,6 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         GetInput();
         if (inputDisabled) { return; }
+        target = GetTargetedObject();
         HighlightTarget();
     }
 
@@ -95,6 +107,15 @@ public class PlayerController : MonoBehaviour
     void GetInput()
     {
         if (inputDisabled) { input = Vector3.zero; return; }
+
+        if (Input.GetMouseButtonDown(0) && target != null && target.GetComponent<PlayerController>() != null)
+        {
+            PassBall(target.GetComponent<PlayerController>(), GameManager.i.momentumManager.momentum);
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            TakeBall(FindObjectOfType<Ball>(), 1);
+        }
 
         if (HasGamepad())
         {
@@ -198,16 +219,6 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Private functions
-    private GameObject GenerateHighlighter()
-    {
-        if (highlighter != null ) { return highlighter; }
-        highlighter = Instantiate(GameManager.i.library.highlighter, self.transform, false);
-        highlighter.transform.Find("Visuals").GetComponent<SpriteRenderer>().color = playerColor;
-        return highlighter;
-    }
-
-    #endregion
     #region Public functions
     public void DisableInput()
     {
@@ -254,8 +265,7 @@ public class PlayerController : MonoBehaviour
 
     public void HighlightTarget()
     {
-        GameObject target = GetTargetedObject();
-        if (target == null)
+        if (target == null || possessedBall == null)
         {
             StopHighlight();
         }
@@ -317,6 +327,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Drops the ball
+    public void DropBall()
+    {
+        if (possessedBall == null) { return; }
+        possessedBall.transform.SetParent(null);
+        possessedBall.holder = null;
+        possessedBall = null;
+    }
+
+    //Gives the ball to the player
+    public void TakeBall(Ball ball, float time)
+    {
+        if (ball.holder != null)
+        {
+            ball.holder.DropBall();
+        }
+        StartCoroutine(TakeBall_C(ball, time));
+    }
+
+    //Pass the ball to a specific player
+    public void PassBall(PlayerController player, float momentum)
+    {
+        //Conditions
+        if (player == this) { Debug.LogWarning("Can't pass ball to yourself"); return; }
+        if (possessedBall == null) { return; }
+
+        //Function
+        StartCoroutine(PassBall_C(possessedBall, player, momentum));
+        DropBall();
+    }
+
     //Returns the angle between two positions
     public float GetAngle(Vector2 initial, Vector2 target)
     {
@@ -324,5 +365,55 @@ public class PlayerController : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         return angle;
     }
+    #endregion
+
+    #region Coroutines 
+    IEnumerator TakeBall_C(Ball ball, float time)
+    {
+        for (float i = 0; i < time; i+=Time.deltaTime)
+        {
+            yield return new WaitForEndOfFrame();
+            ball.transform.position = Vector3.Lerp(ball.transform.position, hand.transform.position, i / time);
+        }
+        possessedBall = ball;
+        ball.holder = this;
+        ball.transform.SetParent(hand.transform);
+        yield return null;
+    }
+
+    IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
+    {
+        float passTime = GameManager.i.momentumManager.GetPassDuration(momentum);
+        AnimationCurve speedCurve = GameManager.i.momentumManager.GetPassMovementCurve(momentum);
+        AnimationCurve angleCurve = GameManager.i.momentumManager.GetPassAngleCurve(momentum);
+
+        Vector3 startPosition = ball.transform.position;
+        for (float i = 0; i < passTime; i+=Time.deltaTime)
+        {
+            //Apply speed curve
+            ball.transform.position = Vector3.Lerp(startPosition, player.hand.transform.position, speedCurve.Evaluate(i / passTime));
+
+            //Apply angle curve
+            ball.transform.position = new Vector3(
+                    ball.transform.position.x, 
+                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.momentumManager.passMaxHeight), 
+                    ball.transform.position.z
+                );
+            yield return new WaitForEndOfFrame();
+        }
+        player.TakeBall(ball, 1);
+        yield return null;
+    }
+    #endregion
+
+    #region Private functions
+    private GameObject GenerateHighlighter()
+    {
+        if (highlighter != null) { return highlighter; }
+        highlighter = Instantiate(GameManager.i.library.highlighter, self.transform, false);
+        highlighter.transform.Find("Visuals").GetComponent<SpriteRenderer>().color = playerColor;
+        return highlighter;
+    }
+
     #endregion
 }

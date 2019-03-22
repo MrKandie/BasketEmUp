@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     //Singleton du gameManager
     [HideInInspector] public static GameManager i;
     [HideInInspector] public Library library;
+    [HideInInspector] public MomentumManager momentumManager;
 
     [Header("Game settings")]
     public int NoSettingsYet;
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     {
         i = this;
         library = FindObjectOfType<Library>();
+        momentumManager = FindObjectOfType<MomentumManager>();
         ControlPlayer(0);
     }
 
