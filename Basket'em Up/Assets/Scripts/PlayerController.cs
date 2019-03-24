@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public float deadzone = 0.2f;
     public Transform hand;
     public Animator playerAnim;
+    public ParticleSystem[] handoffEffects;
 
     [Space(2)]
     [Header("General settings")]
@@ -63,6 +64,10 @@ public class PlayerController : MonoBehaviour
     GameObject highlighter;
     Ball possessedBall;
     GameObject target;
+    [HideInInspector]
+    public bool doingHandoff;
+    [HideInInspector]
+    public Transform handoffTarget;
 
     private void Awake()
     {
@@ -185,24 +190,15 @@ public class PlayerController : MonoBehaviour
             body.drag = idleDrag;
             moveState = MoveState.Idle;
         }
-        /*else if (moveState != MoveState.Steer)
-        {
-            if (input == Vector3.zero)
-            {
-                body.drag = idleDrag;
-            }
-            else
-            {
-                body.drag = movingDrag;
-            }
-            moveState = MoveState.Walk;
-        }*/
     }
 
     void Rotate()
     {
-        turnRotation = Quaternion.Euler(0, Mathf.Atan2(input.x, input.z) * 180 / Mathf.PI, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, turnRotation, turnSpeed);
+        if (!doingHandoff)
+            turnRotation = Quaternion.Euler(0, Mathf.Atan2(input.x, input.z) * 180 / Mathf.PI, 0);
+        else
+            turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
+        self.rotation = Quaternion.Slerp(transform.rotation, turnRotation, turnSpeed);
     }
 
     void Accelerate()
@@ -387,8 +383,16 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
     {
+        doingHandoff = true;
         Vector3 startPosition = ball.transform.position;
         Vector3 endPosition = player.hand.transform.position;
+        handoffTarget = player.hand.transform;
+
+        self.rotation = Quaternion.LookRotation(handoffTarget.position - self.position);
+        for (int i = 0; i < handoffEffects.Length; i++)
+        {
+            handoffEffects[i].Play();
+        }
 
         float passSpeed = GameManager.i.momentumManager.GetPassSpeed();
         float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
