@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AI;
 
 public enum MoveState
 {
     Idle,
     Walk,
-    Steer
 }
 
 public class PlayerController : MonoBehaviour
@@ -21,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody body;
     public float deadzone = 0.2f;
     public Transform hand;
+    public Animator playerAnim;
 
     [Space(2)]
     [Header("General settings")]
@@ -92,7 +91,7 @@ public class PlayerController : MonoBehaviour
             accelerationTimer = 0;
         }
         Move();
-
+        UpdateAnimatorBlendTree();
     }
 
     void OnGUI()
@@ -186,7 +185,7 @@ public class PlayerController : MonoBehaviour
             body.drag = idleDrag;
             moveState = MoveState.Idle;
         }
-        else if (moveState != MoveState.Steer)
+        /*else if (moveState != MoveState.Steer)
         {
             if (input == Vector3.zero)
             {
@@ -197,7 +196,7 @@ public class PlayerController : MonoBehaviour
                 body.drag = movingDrag;
             }
             moveState = MoveState.Walk;
-        }
+        }*/
     }
 
     void Rotate()
@@ -425,6 +424,9 @@ public class PlayerController : MonoBehaviour
         highlighter.transform.Find("Visuals").GetComponent<SpriteRenderer>().color = playerColor;
         return highlighter;
     }
-
+    private void UpdateAnimatorBlendTree()
+    {
+        playerAnim.SetFloat("IdleRunningBlend", speed / maxSpeed);
+    }
     #endregion
 }
