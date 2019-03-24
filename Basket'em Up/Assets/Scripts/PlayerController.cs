@@ -395,6 +395,8 @@ public class PlayerController : MonoBehaviour
         AnimationCurve speedCurve = GameManager.i.momentumManager.passMovementCurve;
         AnimationCurve angleCurve = GameManager.i.momentumManager.passAngleCurve;
 
+        playerAnim.SetTrigger("HandoffTrigger");
+
         ball.direction = endPosition - startPosition;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
         {
