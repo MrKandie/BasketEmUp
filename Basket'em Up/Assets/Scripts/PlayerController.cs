@@ -388,6 +388,7 @@ public class PlayerController : MonoBehaviour
         Vector3 endPosition = player.hand.transform.position;
         handoffTarget = player.hand.transform;
 
+        //Rotate players towards target and play particles
         self.rotation = Quaternion.LookRotation(handoffTarget.position - self.position);
         for (int i = 0; i < handoffEffects.Length; i++)
         {
