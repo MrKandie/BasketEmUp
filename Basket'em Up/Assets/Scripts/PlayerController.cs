@@ -385,6 +385,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
     {
+        GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerPass);
         player.targetedBy = self.gameObject;
         doingHandoff = true;
         Vector3 startPosition = ball.transform.position;
