@@ -51,9 +51,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
 
     [Space(2)]
-    [Header("Other settings")]
-
-
+    [Header("Debug")]
     Vector3 speedVector;
     float accelerationTimer;
     Vector3 lastVelocity;
@@ -63,7 +61,8 @@ public class PlayerController : MonoBehaviour
     bool inputDisabled;
     GameObject highlighter;
     Ball possessedBall;
-    GameObject target;
+    GameObject target; //The object targeted by this player
+    public GameObject targetedBy; //The object targeting this player
     [HideInInspector]
     public bool doingHandoff;
     [HideInInspector]
@@ -85,10 +84,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         CheckMoveState();
+        Rotate();
         if (input.magnitude != 0)
         {
             accelerationTimer += Time.fixedDeltaTime;
-            Rotate();
             Accelerate();
         }
         else
@@ -194,10 +193,13 @@ public class PlayerController : MonoBehaviour
 
     void Rotate()
     {
-        if (!doingHandoff)
-            turnRotation = Quaternion.Euler(0, Mathf.Atan2(input.x, input.z) * 180 / Mathf.PI, 0);
-        else
+        if (doingHandoff)
             turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
+        else if (targetedBy != null)
+            turnRotation = Quaternion.LookRotation(targetedBy.transform.position - self.position);
+        else 
+            turnRotation = Quaternion.Euler(0, Mathf.Atan2(input.x, input.z) * 180 / Mathf.PI, 0);
+
         self.rotation = Quaternion.Slerp(transform.rotation, turnRotation, turnSpeed);
     }
 
@@ -383,6 +385,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
     {
+        GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerPass);
+        player.targetedBy = self.gameObject;
         doingHandoff = true;
         Vector3 startPosition = ball.transform.position;
         Vector3 endPosition = player.hand.transform.position;
@@ -419,6 +423,7 @@ public class PlayerController : MonoBehaviour
         ball.transform.position = endPosition;
         ball.direction = Vector3.zero;
         player.TakeBall(ball, 0);
+        player.targetedBy = null;
         yield return null;
     }
     #endregion

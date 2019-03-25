@@ -9,7 +9,6 @@ public class PlayerAnimEvent : MonoBehaviour
 
     public void HandoffEnd()
     {
-        print("endHandoff");
         pc.doingHandoff = false;
         pc.handoffTarget = null;
     }

@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     [Header("Settings")]
     public int HPmax = 100;
 
+    [Header("Debug")]
     int HPcurrent;
     Rigidbody rb;
 
