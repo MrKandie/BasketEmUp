@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    [Header("Debug")]
     public PlayerController holder;
     public Vector3 direction;
 
