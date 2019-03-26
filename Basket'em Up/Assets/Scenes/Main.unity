@@ -1229,6 +1229,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 69913409235962623, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5825664154814933021, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1303,6 +1308,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playerColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: targetAngleTreshold
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6122283427768529348, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
@@ -1441,6 +1451,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 69913409235962623, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5825664154814933021, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1515,6 +1530,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playerColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: targetAngleTreshold
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6122283427768529348, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
@@ -1979,6 +1999,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 69913409235962623, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5825664154814933021, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2054,6 +2079,11 @@ PrefabInstance:
       propertyPath: playerColor.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: targetAngleTreshold
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6122283427768529348, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2096,7 +2126,7 @@ GameObject:
   - component: {fileID: 1606880695}
   m_Layer: 0
   m_Name: Capsule
-  m_TagString: enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2271,7 +2301,7 @@ GameObject:
   - component: {fileID: 1632814460}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2431,6 +2461,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852335636}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1865053371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1865053373}
+  - component: {fileID: 1865053372}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1865053372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865053371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e88c02f6f8670f48a4d2718b6c9009c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemies:
+  - {fileID: 1632814459}
+  players:
+  - {fileID: 1573674273}
+  - {fileID: 874674763}
+  - {fileID: 1004332887}
+--- !u!4 &1865053373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865053371}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.7150636, y: 0.13753414, z: -0.45134258}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1952878819
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,7 +2673,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4.9}
+  m_AnchoredPosition: {x: 0, y: -4.899994}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2009461439
@@ -2859,11 +2938,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   library: {fileID: 0}
   momentumManager: {fileID: 0}
+  levelManager: {fileID: 0}
   NoSettingsYet: 0
-  playerList:
-  - {fileID: 1573674273}
-  - {fileID: 874674763}
-  - {fileID: 1004332887}
 --- !u!4 &2078713521
 Transform:
   m_ObjectHideFlags: 0
@@ -2887,6 +2963,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 649883893}
     m_Modifications:
+    - target: {fileID: 8172423480976007421, guid: bb99bd06f2ca7a6428bfd4d992798768,
+        type: 3}
+      propertyPath: m_Name
+      value: P_BallTrail
+      objectReference: {fileID: 0}
     - target: {fileID: 8172423480976007420, guid: bb99bd06f2ca7a6428bfd4d992798768,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2941,11 +3022,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8172423480976007421, guid: bb99bd06f2ca7a6428bfd4d992798768,
-        type: 3}
-      propertyPath: m_Name
-      value: P_BallTrail
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb99bd06f2ca7a6428bfd4d992798768, type: 3}

@@ -10,11 +10,12 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "enemy" && direction != Vector3.zero)
+        Enemy potentialEnemy = other.GetComponent<Enemy>();
+        if (potentialEnemy != null && direction != Vector3.zero)
         {
-            Enemy target = other.GetComponent<Enemy>();
-            target.AddDamage(GameManager.i.momentumManager.GetMomentumDamages());
-            target.Push(direction, 5);
+            Enemy enemy = potentialEnemy;
+            enemy.AddDamage(GameManager.i.momentumManager.GetMomentumDamages());
+            enemy.Push(direction, 5);
         }
     }
 }

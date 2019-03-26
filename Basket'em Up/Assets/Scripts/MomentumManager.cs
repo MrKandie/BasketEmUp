@@ -88,7 +88,6 @@ public class MomentumManager : MonoBehaviour
     {
         float timeSinceLastUpdate = Time.time - lastIncrementationTime;
         momentum -= momentumLosseCurve.Evaluate(timeSinceLastUpdate) * momentumLosseCoef;
-        Debug.Log(momentumLosseCurve.Evaluate(timeSinceLastUpdate));
     }
     #endregion
 }

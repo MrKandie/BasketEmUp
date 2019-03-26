@@ -9,7 +9,7 @@ public enum MoveState
     Walk,
 }
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, iTarget
 {
 
     static public PlayerController instance;
@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     public Transform hand;
     public Animator playerAnim;
     public ParticleSystem[] handoffEffects;
+
+    [SerializeField]
+    private Transform _targetedTransform;
+    public Transform targetedTransform { get { return _targetedTransform; } set { _targetedTransform = value; } } //The position where the ball will land when someone shoot at this player
 
     [Space(2)]
     [Header("General settings")]
@@ -61,7 +65,7 @@ public class PlayerController : MonoBehaviour
     bool inputDisabled;
     GameObject highlighter;
     Ball possessedBall;
-    GameObject target; //The object targeted by this player
+    iTarget target; //The object targeted by this player
     public GameObject targetedBy; //The object targeting this player
     [HideInInspector]
     public bool doingHandoff;
@@ -111,9 +115,9 @@ public class PlayerController : MonoBehaviour
     {
         if (inputDisabled) { input = Vector3.zero; return; }
 
-        if (Input.GetMouseButtonDown(0) && target != null && target.GetComponent<PlayerController>() != null)
+        if (Input.GetMouseButtonDown(0) && target != null)
         {
-            PassBall(target.GetComponent<PlayerController>(), GameManager.i.momentumManager.momentum);
+            PassBall(target, GameManager.i.momentumManager.momentum);
         }
         if (Input.GetMouseButtonDown(1))
         {
@@ -268,55 +272,48 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            HighlightGameObject(target);
+            MonoBehaviour targetScript = target as MonoBehaviour;
+            GameObject targetGameObject = targetScript.gameObject;
+            HighlightGameObject(targetGameObject);
         }
     }
 
     //Returns the nearest object to the mouse position
-    public GameObject GetTargetedObject()
+    public iTarget GetTargetedObject()
     {
         if (HasGamepad() && GetMouseDirection().magnitude == 0) { return null; }
         Vector2 positionVec2 = new Vector2(self.position.x, self.position.z);
         float mouseAngle = GetAngle(positionVec2, positionVec2 + GetMouseDirection());
 
-        List<GameObject> potentialTargets = new List<GameObject>();
-        List<GameObject> acceptedTargets = new List<GameObject>();
-
-        //Generates the potential target list
-        for (int i = 0; i < GameManager.i.playerList.Count; i++)
-        {
-            if (GameManager.i.playerList[i] != this)
-            {
-                potentialTargets.Add(GameManager.i.playerList[i].self.gameObject);
-            }
-        }
+        List<iTarget> potentialTargets = GameManager.i.levelManager.targetableObjects;
+        List<iTarget> acceptedTargets = new List<iTarget>();
 
         //Get the targets in the correct direction
-        foreach (GameObject obj in potentialTargets)
+        foreach (iTarget target in potentialTargets)
         {
-            Vector2 objPositionVec2 = new Vector2(obj.transform.position.x, obj.transform.position.z);
-            float targetAngle = GetAngle(positionVec2, objPositionVec2);
+            Vector2 targetPositionVec2 = new Vector2(target.targetedTransform.position.x, target.targetedTransform.position.z);
+            float targetAngle = GetAngle(positionVec2, targetPositionVec2);
             float angleDifference = Mathf.Abs(Mathf.DeltaAngle(targetAngle, mouseAngle));
             if (angleDifference <= targetAngleTreshold)
             {
-                acceptedTargets.Add(obj);
+                acceptedTargets.Add(target);
             }
         }
 
         //Get the nearest target between all the correct targets
         if (acceptedTargets.Count > 0)
         {
-            GameObject nearestObject = acceptedTargets[0];
-            float nearestDistance = Vector3.Distance(nearestObject.transform.position, self.transform.position);
-            foreach (GameObject acceptedTarget in acceptedTargets)
+            iTarget nearestTarget = acceptedTargets[0];
+            float nearestDistance = Vector3.Distance(nearestTarget.targetedTransform.position, self.transform.position);
+            foreach (iTarget acceptedTarget in acceptedTargets)
             {
-                if (Vector3.Distance(acceptedTarget.transform.position, self.transform.position) < nearestDistance)
+                if (Vector3.Distance(acceptedTarget.targetedTransform.position, self.transform.position) < nearestDistance)
                 {
-                    nearestObject = acceptedTarget;
-                    nearestDistance = Vector3.Distance(acceptedTarget.transform.position, self.transform.position);
+                    nearestTarget = acceptedTarget;
+                    nearestDistance = Vector3.Distance(acceptedTarget.targetedTransform.position, self.transform.position);
                 }
             }
-            return nearestObject;
+            return nearestTarget;
         }
         else
         {
@@ -345,15 +342,16 @@ public class PlayerController : MonoBehaviour
     }
 
     //Pass the ball to a specific player
-    public void PassBall(PlayerController player, float momentum)
+    public void PassBall(iTarget target, float momentum)
     {
         //Conditions
-        if (player == this) { Debug.LogWarning("Can't pass ball to yourself"); return; }
+        MonoBehaviour targetScript = target as MonoBehaviour;
+        if (targetScript == this) { Debug.LogWarning("Can't pass ball to yourself"); return; }
         if (possessedBall == null) { return; }
 
         //Function
         StopAllCoroutines();
-        StartCoroutine(PassBall_C(possessedBall, player, momentum));
+        StartCoroutine(PassBall_C(possessedBall, target, momentum));
         DropBall();
     }
 
@@ -383,14 +381,14 @@ public class PlayerController : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator PassBall_C(Ball ball, PlayerController player, float momentum)
+    IEnumerator PassBall_C(Ball ball, iTarget target, float momentum)
     {
         GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerPass);
-        player.targetedBy = self.gameObject;
+        target.OnTargetedBySomeone(self.transform);
         doingHandoff = true;
         Vector3 startPosition = ball.transform.position;
-        Vector3 endPosition = player.hand.transform.position;
-        handoffTarget = player.hand.transform;
+        Vector3 endPosition = target.targetedTransform.position;
+        handoffTarget = target.targetedTransform;
 
         //Rotate players towards target and play particles
         self.rotation = Quaternion.LookRotation(handoffTarget.position - self.position);
@@ -422,8 +420,7 @@ public class PlayerController : MonoBehaviour
         }
         ball.transform.position = endPosition;
         ball.direction = Vector3.zero;
-        player.TakeBall(ball, 0);
-        player.targetedBy = null;
+        target.OnBallReceived(ball);
         yield return null;
     }
     #endregion
@@ -440,5 +437,17 @@ public class PlayerController : MonoBehaviour
     {
         playerAnim.SetFloat("IdleRunningBlend", speed / maxSpeed);
     }
+
+    public void OnBallReceived(Ball ball)
+    {
+        targetedBy = null;
+        TakeBall(ball, 0);
+    }
+
+    public void OnTargetedBySomeone(Transform target)
+    {
+        targetedBy = target.gameObject;
+    }
+
     #endregion
 }

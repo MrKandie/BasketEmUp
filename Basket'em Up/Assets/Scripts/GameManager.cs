@@ -8,19 +8,18 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public static GameManager i;
     [HideInInspector] public Library library;
     [HideInInspector] public MomentumManager momentumManager;
+    [HideInInspector] public LevelManager levelManager;
 
     [Header("Game settings")]
     public int NoSettingsYet;
 
-
-    [Header("Game informations")]
-    public List<PlayerController> playerList = new List<PlayerController>();
 
     private void Awake()
     {
         i = this;
         library = FindObjectOfType<Library>();
         momentumManager = FindObjectOfType<MomentumManager>();
+        levelManager = FindObjectOfType<LevelManager>();
         ControlPlayer(0);
     }
 
@@ -31,11 +30,11 @@ public class GameManager : MonoBehaviour
 
     public void ControlPlayer(int playerID)
     {
-        foreach (PlayerController player in playerList)
+        foreach (PlayerController player in levelManager.players)
         {
             player.DisableInput();
         }
-        playerList[playerID].EnableInput();
+        levelManager.players[playerID].EnableInput();
     }
 
     public void CheckInputs()
