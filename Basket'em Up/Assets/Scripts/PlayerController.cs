@@ -7,6 +7,7 @@ public enum MoveState
 {
     Idle,
     Walk,
+    Blocked,
 }
 
 public class PlayerController : MonoBehaviour, iTarget
@@ -66,11 +67,9 @@ public class PlayerController : MonoBehaviour, iTarget
     GameObject highlighter;
     Ball possessedBall;
     iTarget target; //The object targeted by this player
-    public GameObject targetedBy; //The object targeting this player
-    [HideInInspector]
-    public bool doingHandoff;
-    [HideInInspector]
-    public Transform handoffTarget;
+    [HideInInspector] public GameObject targetedBy; //The object targeting this player
+    [HideInInspector] public bool doingHandoff;
+    [HideInInspector] public Transform handoffTarget;
 
     private void Awake()
     {
@@ -81,7 +80,6 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         GetInput();
         if (inputDisabled) { return; }
-        target = GetTargetedObject();
         HighlightTarget();
     }
 
@@ -115,15 +113,8 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         if (inputDisabled) { input = Vector3.zero; return; }
 
-        if (Input.GetMouseButtonDown(0) && target != null)
-        {
-            PassBall(target, GameManager.i.momentumManager.momentum);
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            TakeBall(FindObjectOfType<Ball>(), 0.1f);
-        }
 
+        GeneralInput();
         if (HasGamepad())
         {
             GamepadInput();
@@ -131,6 +122,33 @@ public class PlayerController : MonoBehaviour, iTarget
         else
         {
             KeyboardInput();
+        }
+    }
+
+    void GeneralInput()
+    {
+        if (Input.GetButtonDown("Handoff"))
+        {
+            List<iTarget> ally = GameManager.i.levelManager.GetTargetableAllies();
+            ally.Remove(this);
+            target = ally[0];
+            PassBall(target, GameManager.i.momentumManager.momentum);
+            target = null;
+        }
+        if (Input.GetButton("Shoot"))
+        {
+            Freeze();
+            target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
+        }
+        if (Input.GetButtonUp("Shoot") && target != null)
+        {
+            UnFreeze();
+            PassBall(target, GameManager.i.momentumManager.momentum);
+            target = null;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            TakeBall(FindObjectOfType<Ball>(), 0.1f);
         }
     }
 
@@ -144,21 +162,21 @@ public class PlayerController : MonoBehaviour, iTarget
     {
 
         int _horDir = 0;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetAxisRaw("Horizontal") < 0)
         {
             _horDir--;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetAxisRaw("Horizontal") > 0)
         {
             _horDir++;
         }
 
         int _vertDir = 0;
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetAxisRaw("Vertical") < 0)
         {
             _vertDir--;
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetAxisRaw("Vertical") > 0)
         {
             _vertDir++;
         }
@@ -184,7 +202,9 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void CheckMoveState()
     {
-        if (body.velocity.magnitude <= minWalkSpeed)
+        if (moveState == MoveState.Blocked) { return; }
+
+        else if (body.velocity.magnitude <= minWalkSpeed)
         {
             if (moveState != MoveState.Idle)
             {
@@ -279,13 +299,12 @@ public class PlayerController : MonoBehaviour, iTarget
     }
 
     //Returns the nearest object to the mouse position
-    public iTarget GetTargetedObject()
+    public iTarget GetTargetedObject(List<iTarget> potentialTargets)
     {
         if (HasGamepad() && GetMouseDirection().magnitude == 0) { return null; }
         Vector2 positionVec2 = new Vector2(self.position.x, self.position.z);
         float mouseAngle = GetAngle(positionVec2, positionVec2 + GetMouseDirection());
 
-        List<iTarget> potentialTargets = GameManager.i.levelManager.targetableObjects;
         List<iTarget> acceptedTargets = new List<iTarget>();
 
         //Get the targets in the correct direction
@@ -397,14 +416,15 @@ public class PlayerController : MonoBehaviour, iTarget
             handoffEffects[i].Play();
         }
 
-        float passSpeed = GameManager.i.momentumManager.GetPassSpeed();
+        float passSpeed = GameManager.i.ballMovementManager.GetPassSpeed();
         float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
-        AnimationCurve speedCurve = GameManager.i.momentumManager.passMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.momentumManager.passAngleCurve;
+        AnimationCurve speedCurve = GameManager.i.ballMovementManager.passMovementCurve;
+        AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
 
         playerAnim.SetTrigger("HandoffTrigger");
 
         ball.direction = endPosition - startPosition;
+        ball.triggerEnabled = true;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();
@@ -414,11 +434,12 @@ public class PlayerController : MonoBehaviour, iTarget
             //Apply angle curve
             ball.transform.position = new Vector3(
                     ball.transform.position.x, 
-                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.momentumManager.GetPassHeight()), 
+                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetPassHeight()), 
                     ball.transform.position.z
                 );
         }
         ball.transform.position = endPosition;
+        ball.triggerEnabled = false;
         ball.direction = Vector3.zero;
         target.OnBallReceived(ball);
         yield return null;
@@ -436,6 +457,15 @@ public class PlayerController : MonoBehaviour, iTarget
     private void UpdateAnimatorBlendTree()
     {
         playerAnim.SetFloat("IdleRunningBlend", speed / maxSpeed);
+    }
+    private void Freeze()
+    {
+        moveState = MoveState.Blocked;
+    }
+
+    private void UnFreeze()
+    {
+        moveState = MoveState.Idle;
     }
 
     public void OnBallReceived(Ball ball)
