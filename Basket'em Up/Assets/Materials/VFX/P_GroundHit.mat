@@ -31,7 +31,7 @@ Material:
     - _Cutoff: 0.5
     - _MultiplyEmissiveEarlyFlames: 1
     - _MultiplyEmissiveLateFlames: 1.3
-    - _Progression: 0
+    - _Progression: 0.071
     - _SwitchTwoChanTex: 0
     - _node_7600: 1
     - _node_8053: 0
