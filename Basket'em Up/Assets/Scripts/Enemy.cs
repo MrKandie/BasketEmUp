@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Components")]
+    public Animator HitAnim;
+
     [Header("Settings")]
     public int HPmax = 100;
 
@@ -19,6 +22,8 @@ public class Enemy : MonoBehaviour
 
     public void AddDamage(int amount)
     {
+        HitAnim.SetTrigger("HitTrigger");
+
         HPcurrent -= amount;
         HPcurrent = Mathf.Clamp(HPcurrent, 0, HPmax);
 
