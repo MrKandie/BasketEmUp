@@ -10,6 +10,7 @@ public class MomentumManager : MonoBehaviour
 
     [Header("General settings")]
     public float momentumGainedPerPass = 0.2f;
+    public float momentumLosseWhenBallTouchGround = 0.5f;
     public AnimationCurve momentumLosseCurve;
     public float momentumLosseCoef = 1f;
 

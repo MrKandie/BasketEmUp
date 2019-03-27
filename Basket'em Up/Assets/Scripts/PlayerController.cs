@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void Rotate()
     {
-        if (doingHandoff)
+        if (doingHandoff && handoffTarget != null)
             turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
         else if (targetedBy != null)
             turnRotation = Quaternion.LookRotation(targetedBy.transform.position - self.position);
@@ -367,6 +367,7 @@ public class PlayerController : MonoBehaviour, iTarget
         MonoBehaviour targetScript = target as MonoBehaviour;
         if (targetScript == this) { Debug.LogWarning("Can't pass ball to yourself"); return; }
         if (possessedBall == null) { return; }
+        if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
 
         //Function
         StopAllCoroutines();
@@ -386,6 +387,8 @@ public class PlayerController : MonoBehaviour, iTarget
     #region Coroutines 
     IEnumerator TakeBall_C(Ball ball, float time)
     {
+        ball.SetState(BallMoveState.Moving);
+        ball.StopAllCoroutines();
         Vector3 startPosition = ball.transform.position;
         Vector3 endPosition = hand.transform.position;
         for (float i = 0; i < time; i+=Time.deltaTime)
@@ -424,7 +427,6 @@ public class PlayerController : MonoBehaviour, iTarget
         playerAnim.SetTrigger("HandoffTrigger");
 
         ball.direction = endPosition - startPosition;
-        ball.triggerEnabled = true;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();

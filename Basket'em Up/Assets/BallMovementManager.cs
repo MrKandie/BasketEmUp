@@ -32,6 +32,9 @@ public class BallMovementManager : MonoBehaviour
     [MinMaxSlider(0, 10)]
     public Vector2 minMaxBounceHeight; //En mètres
 
+    [Header("Coefficient de vitesse pour le rebond de la balle sur le sol")]
+    public float bounceOnGroundSpeedCoef;
+
     public float GetPassSpeed()
     {
         return Mathf.Lerp(minMaxPassSpeed.x, minMaxPassSpeed.y, GameManager.i.momentumManager.momentum);
