@@ -130,9 +130,12 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         if (Input.GetButtonDown("Handoff"))
         {
-            List<iTarget> ally = GameManager.i.levelManager.GetTargetableAllies();
+            List<iTarget> ally = new List<iTarget>();
+            foreach (iTarget target in GameManager.i.levelManager.GetTargetableAllies())
+            {
+                ally.Add(target);
+            }
             ally.Remove(this);
-            Debug.Log(ally.Count);
             target = ally[0];
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;

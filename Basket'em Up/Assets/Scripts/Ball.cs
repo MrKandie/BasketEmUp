@@ -145,7 +145,6 @@ public class Ball : MonoBehaviour
         transform.position = endPosition;
         SetState(BallMoveState.Idle);
         GameManager.i.momentumManager.DecrementMomentum(GameManager.i.momentumManager.momentumLosseWhenBallTouchGround);
-        Debug.Log("Ball touched ground");
         yield return null;
     }
 

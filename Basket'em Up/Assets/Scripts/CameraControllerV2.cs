@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraControllerV2 : MonoBehaviour
 {
-
     public Vector3 positionOffset;
     public Vector3 rotationOffset;
     public Transform player1;
