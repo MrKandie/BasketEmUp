@@ -131,6 +131,7 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             List<iTarget> ally = GameManager.i.levelManager.GetTargetableAllies();
             ally.Remove(this);
+            Debug.Log(ally.Count);
             target = ally[0];
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;
