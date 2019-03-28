@@ -21,7 +21,7 @@ public class CameraControllerV2 : MonoBehaviour
         dirToP2.rotation = Quaternion.LookRotation(player2.position - player1.position);
 
         wantedRotation = dirToP2.rotation * Quaternion.Euler(rotationOffset);
-        wantedPosition = player1.position + positionOffset.x * dirToP2.right + positionOffset.y * dirToP2.up + positionOffset.z * dirToP2.forward;
+        wantedPosition = dirToP2.position + positionOffset.x * dirToP2.right + positionOffset.y * dirToP2.up + positionOffset.z * dirToP2.forward;
 
         transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, 0.2f);
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
