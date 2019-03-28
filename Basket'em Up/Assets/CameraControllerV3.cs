@@ -20,7 +20,7 @@ public class CameraControllerV3 : MonoBehaviour
         Vector3 dir = (furthestPlayer.position - transform.position).normalized;
 
         wantedPosition = Vector3.Lerp(player1.position, player2.position, 0.5f);
-        wantedForward = Vector3.Lerp(transform.forward, dir, 0.01f);
+        wantedForward = Vector3.Lerp(transform.forward, dir, 1f);
 
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
         transform.forward = wantedForward;

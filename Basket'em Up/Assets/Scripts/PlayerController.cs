@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public float speed;
     public AnimationCurve accelerationCurve;
 
+
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
     public float maxSpeed = 10;
     public float maxAcceleration = 10;
@@ -50,6 +51,17 @@ public class PlayerController : MonoBehaviour, iTarget
     [Range(0.01f, 1f)]
     public float turnSpeed = .25f;
     public AnimationCurve walkAnimationSpeedCurve;
+
+    [Space(2)]
+    [Header("Dunk settings")]
+    public float dunkJumpHeight; //In meters
+    public float dunkJumpDistance; //In meters
+    public float dunkJumpSpeed; //In m/s
+    public float dunkSpeed; 
+    [MinMaxSlider(0, 1)]
+    Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
+    public AnimationCurve dunkJumpSpeedCurve;
+    public AnimationCurve dunkJumpMovementCurve;
 
     [Space(2)]
     [Header("Pass settings")]
@@ -68,6 +80,7 @@ public class PlayerController : MonoBehaviour, iTarget
     GameObject highlighter;
     Ball possessedBall;
     iTarget target; //The object targeted by this player
+    Coroutine dunkJumpCoroutine;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
@@ -128,6 +141,10 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void GeneralInput()
     {
+        if (Input.GetButtonDown("Dunk"))
+        {
+            StartDunk();
+        }
         if (Input.GetButtonDown("Handoff"))
         {
             List<iTarget> ally = new List<iTarget>();
@@ -172,36 +189,12 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void KeyboardInput()
     {
-
-        /*int _horDir = 0;
-        if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            _horDir--;
-        }
-        if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            _horDir++;
-        }
-
-        int _vertDir = 0;
-        if (Input.GetAxisRaw("Vertical") < 0)
-        {
-            _vertDir--;
-        }
-        if (Input.GetAxisRaw("Vertical") > 0)
-        {
-            _vertDir++;
-        }*/
-
         Vector3 _inputX = Input.GetAxisRaw("Horizontal") * cam.transform.right;
         Vector3 _inputZ = Input.GetAxisRaw("Vertical") * cam.transform.forward;
         input = _inputX + _inputZ;
         input.y = 0;
         input.Normalize();
         Debug.DrawLine(transform.position, transform.position + input * 10);
-
-        /*input = new Vector3(_horDir, 0, _vertDir);
-        input.Normalize();*/
     }
 
     bool HasGamepad()
@@ -369,6 +362,15 @@ public class PlayerController : MonoBehaviour, iTarget
         }
     }
 
+    //Jump to start the dunk
+    public void StartDunk()
+    {
+        if (possessedBall == null)
+        {
+            dunkJumpCoroutine = StartCoroutine(StartDunk_C());
+        }
+    }
+
     //Drops the ball
     public void DropBall()
     {
@@ -385,7 +387,6 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             ball.holder.DropBall();
         }
-        StopAllCoroutines();
         StartCoroutine(TakeBall_C(ball, time));
     }
 
@@ -399,7 +400,6 @@ public class PlayerController : MonoBehaviour, iTarget
         if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
 
         //Function
-        StopAllCoroutines();
         StartCoroutine(PassBall_C(possessedBall, target, momentum));
         DropBall();
     }
@@ -414,6 +414,33 @@ public class PlayerController : MonoBehaviour, iTarget
     #endregion
 
     #region Coroutines 
+    IEnumerator StartDunk_C()
+    {
+        Vector3 startPosition = self.position;
+        Vector3 endPosition = self.position + (self.forward * dunkJumpDistance);
+        float dunkTime = Vector3.Distance(startPosition, endPosition) / dunkSpeed;
+
+        for (float i = 0; i < dunkTime; i+= Time.deltaTime)
+        {
+            yield return new WaitForEndOfFrame();
+            self.position = Vector3.Lerp(startPosition, endPosition, dunkJumpSpeedCurve.Evaluate(i / dunkTime));
+            float height = dunkJumpMovementCurve.Evaluate(i / dunkTime) * dunkJumpHeight;
+            self.position = new Vector3(self.position.x, self.position.y + height, self.position.z);
+            if (possessedBall == true)
+            {
+                Debug.Log("DUNK");
+                StartCoroutine(Dunk_C(endPosition));
+                StopCoroutine(dunkJumpCoroutine);
+            }
+        }
+    }
+
+    IEnumerator Dunk_C(Vector3 position)
+    {
+        Vector3 startPosition = self.position;
+        yield return null;
+    }
+
     IEnumerator TakeBall_C(Ball ball, float time)
     {
         ball.SetState(BallMoveState.Moving);
