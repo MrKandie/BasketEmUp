@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public Transform hand;
     public Animator playerAnim;
     public ParticleSystem[] handoffEffects;
+    public Camera cam;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -155,14 +156,18 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void GamepadInput()
     {
-        input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        Vector3 _inputX = Input.GetAxisRaw("Horizontal") * cam.transform.right;
+        Vector3 _inputZ = Input.GetAxisRaw("Vertical") * cam.transform.forward;
+        input = _inputX + _inputZ;
+        input.y = 0;
         input = input.normalized * ((input.magnitude - deadzone) / (1 - deadzone));
+        Debug.DrawLine(transform.position, transform.position + input * 10);
     }
 
     void KeyboardInput()
     {
 
-        int _horDir = 0;
+        /*int _horDir = 0;
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
             _horDir--;
@@ -180,9 +185,17 @@ public class PlayerController : MonoBehaviour, iTarget
         if (Input.GetAxisRaw("Vertical") > 0)
         {
             _vertDir++;
-        }
-        input = new Vector3(_horDir, 0, _vertDir);
+        }*/
+
+        Vector3 _inputX = Input.GetAxisRaw("Horizontal") * cam.transform.right;
+        Vector3 _inputZ = Input.GetAxisRaw("Vertical") * cam.transform.forward;
+        input = _inputX + _inputZ;
+        input.y = 0;
         input.Normalize();
+        Debug.DrawLine(transform.position, transform.position + input * 10);
+
+        /*input = new Vector3(_horDir, 0, _vertDir);
+        input.Normalize();*/
     }
 
     bool HasGamepad()
