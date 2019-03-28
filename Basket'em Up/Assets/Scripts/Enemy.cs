@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour, iTarget
 {
     [Header("Components")]
     public Animator HitAnim;
+    public Transform hitEffetTransform;
 
     [Header("Settings")]
     public int HPmax = 100;
@@ -33,6 +34,10 @@ public class Enemy : MonoBehaviour, iTarget
             invincibilityCD -= Time.deltaTime;
         }
         invincibilityCD = Mathf.Clamp(invincibilityCD, 0, Mathf.Infinity);
+
+        Quaternion _hitEffetRotation = Quaternion.LookRotation(Camera.main.transform.position - hitEffetTransform.position);
+        _hitEffetRotation.eulerAngles = new Vector3(0, _hitEffetRotation.eulerAngles.y, 0);
+        hitEffetTransform.rotation = _hitEffetRotation;
     }
 
     public void AddDamage(int amount)

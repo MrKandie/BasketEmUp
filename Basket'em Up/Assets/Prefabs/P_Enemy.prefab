@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HitAnim: {fileID: 8343125975685739055}
+  hitEffetTransform: {fileID: 8343125976116994013}
   HPmax: 100
   invincibilityTime: 1
   _targetedTransform: {fileID: 8343125976612939768}
