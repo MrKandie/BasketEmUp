@@ -140,11 +140,14 @@ public class PlayerController : MonoBehaviour, iTarget
             Freeze();
             target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
         }
-        if (Input.GetButtonUp("Shoot") && target != null)
+        if (Input.GetButtonUp("Shoot"))
         {
             UnFreeze();
-            PassBall(target, GameManager.i.momentumManager.momentum);
-            target = null;
+            if (target != null)
+            {
+                PassBall(target, GameManager.i.momentumManager.momentum);
+                target = null;
+            }
         }
         if (Input.GetMouseButtonDown(1))
         {
@@ -217,7 +220,14 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void Rotate()
     {
-        if (doingHandoff && handoffTarget != null)
+        if (moveState == MoveState.Blocked)
+        {
+            if (target != null)
+            {
+                turnRotation = Quaternion.LookRotation(target.targetedTransform.position - self.position);
+            }
+        }
+        else if (doingHandoff && handoffTarget != null)
             turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
         else if (targetedBy != null)
             turnRotation = Quaternion.LookRotation(targetedBy.transform.position - self.position);
@@ -229,12 +239,14 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void Accelerate()
     {
+        if (moveState == MoveState.Blocked) { return; }
         body.AddForce(input * (accelerationCurve.Evaluate(body.velocity.magnitude / maxSpeed) * maxAcceleration), ForceMode.Acceleration);
         body.drag = movingDrag;
     }
 
     void Move()
     {
+        if (moveState == MoveState.Blocked) { speed = 0; return; }
         body.velocity = Vector3.ClampMagnitude(body.velocity, maxSpeed);
         speed = body.velocity.magnitude;
     }
