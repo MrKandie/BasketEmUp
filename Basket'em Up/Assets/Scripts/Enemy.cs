@@ -9,10 +9,12 @@ public class Enemy : MonoBehaviour, iTarget
 
     [Header("Settings")]
     public int HPmax = 100;
+    public float invincibilityTime = 1f;
 
     [Header("Debug")]
     int HPcurrent;
     Rigidbody rb;
+    float invincibilityCD;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -24,8 +26,19 @@ public class Enemy : MonoBehaviour, iTarget
         HPcurrent = HPmax;
     }
 
+    private void Update()
+    {
+        if (invincibilityCD > 0)
+        {
+            invincibilityCD -= Time.deltaTime;
+        }
+        invincibilityCD = Mathf.Clamp(invincibilityCD, 0, Mathf.Infinity);
+    }
+
     public void AddDamage(int amount)
     {
+        if (invincibilityCD > 0) { return; } 
+        invincibilityCD = invincibilityTime;
         HitAnim.SetTrigger("HitTrigger");
 
         HPcurrent -= amount;
@@ -53,10 +66,12 @@ public class Enemy : MonoBehaviour, iTarget
 
     public void OnBallReceived(Ball ball)
     {
-        AddDamage(100);
+        AddDamage(GameManager.i.ballMovementManager.GetDamages());
+        ball.BounceOnNearbyTargets();
     }
 
     public void OnTargetedBySomeone(Transform target)
     {
+
     }
 }

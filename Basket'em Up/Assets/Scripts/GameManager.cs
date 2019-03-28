@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Library library;
     [HideInInspector] public MomentumManager momentumManager;
     [HideInInspector] public LevelManager levelManager;
+    [HideInInspector] public BallMovementManager ballMovementManager;
 
     [Header("Game settings")]
     public int NoSettingsYet;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
         library = FindObjectOfType<Library>();
         momentumManager = FindObjectOfType<MomentumManager>();
         levelManager = FindObjectOfType<LevelManager>();
+        ballMovementManager = FindObjectOfType<BallMovementManager>();
         ControlPlayer(0);
     }
 

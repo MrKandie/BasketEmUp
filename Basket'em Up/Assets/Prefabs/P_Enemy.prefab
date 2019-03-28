@@ -141,6 +141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitAnim: {fileID: 8343125975685739055}
   HPmax: 100
+  invincibilityTime: 1
+  _targetedTransform: {fileID: 8343125976612939768}
 --- !u!136 &8343125976612939774
 CapsuleCollider:
   m_ObjectHideFlags: 0

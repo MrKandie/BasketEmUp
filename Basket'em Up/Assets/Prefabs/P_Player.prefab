@@ -54,7 +54,8 @@ MonoBehaviour:
   handoffEffects:
   - {fileID: 7036509741946447823}
   - {fileID: 47267294258427855}
-  playerColor: {r: 0, g: 0, b: 0, a: 0}
+  _targetedTransform: {fileID: 3535076308953019112}
+  playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
   moveState: 0
   speed: 0
   accelerationCurve:
@@ -111,7 +112,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  targetAngleTreshold: 30
+  targetAngleTreshold: 5
   targetedBy: {fileID: 0}
   doingHandoff: 0
   handoffTarget: {fileID: 0}
@@ -234,7 +235,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ae07aab32276c2c4ab046c30b9a0e7c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -346,7 +347,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ae07aab32276c2c4ab046c30b9a0e7c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9968,7 +9969,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ae07aab32276c2c4ab046c30b9a0e7c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
