@@ -13,11 +13,11 @@ public class BallMovementManager : MonoBehaviour
     public AnimationCurve passAngleCurve;
 
     [Header("Vitesse de la passe en metres par seconde")]
-    [MinMaxSlider(0, 50)]
+    [MinMaxSlider(0, 150)]
     public Vector2 minMaxPassSpeed; //En mètres par seconde (Sans prendre en compte la curve)
 
     [Header("Vitesse du rebond en metres par seconde")]
-    [MinMaxSlider(0, 50)]
+    [MinMaxSlider(0, 150)]
     public Vector2 minMaxBounceSpeed; //En mètres par seconde (Sans prendre en compte la curve)
 
     [Header("Degats de la balle (100pv = full hp)")]
