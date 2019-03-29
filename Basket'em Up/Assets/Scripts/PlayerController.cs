@@ -148,6 +148,7 @@ public class PlayerController : MonoBehaviour, iTarget
         }
         if (Input.GetButtonDown("Handoff"))
         {
+            playerAnim.SetTrigger("HandoffTrigger");
             List<iTarget> ally = new List<iTarget>();
             foreach (iTarget target in GameManager.i.levelManager.GetTargetableAllies())
             {
@@ -158,7 +159,11 @@ public class PlayerController : MonoBehaviour, iTarget
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;
         }
-        if (Input.GetButton("Shoot"))
+        if (Input.GetButtonDown("Shoot"))
+        {
+            playerAnim.SetTrigger("PrepareShootingTrigger");
+        }
+            if (Input.GetButton("Shoot"))
         {
             Freeze();
             target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
@@ -169,6 +174,7 @@ public class PlayerController : MonoBehaviour, iTarget
             if (target != null)
             {
                 PassBall(target, GameManager.i.momentumManager.momentum);
+                playerAnim.SetTrigger("ShootingTrigger");
                 target = null;
             }
         }
@@ -485,8 +491,6 @@ public class PlayerController : MonoBehaviour, iTarget
         float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
         AnimationCurve speedCurve = GameManager.i.ballMovementManager.passMovementCurve;
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
-
-        playerAnim.SetTrigger("HandoffTrigger");
 
         ball.direction = endPosition - startPosition;
         for (float i = 0; i < passTime; i+=Time.deltaTime)

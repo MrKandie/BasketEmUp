@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, iTarget
 {
     [Header("Components")]
+    public Animator enemyAnim;
     public Animator HitAnim;
     public Transform hitEffetTransform;
 
@@ -45,6 +46,7 @@ public class Enemy : MonoBehaviour, iTarget
         if (invincibilityCD > 0) { return; } 
         invincibilityCD = invincibilityTime;
         HitAnim.SetTrigger("HitTrigger");
+        enemyAnim.SetTrigger("HitTrigger");
 
         HPcurrent -= amount;
         HPcurrent = Mathf.Clamp(HPcurrent, 0, HPmax);
