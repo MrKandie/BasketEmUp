@@ -20,20 +20,26 @@ public class CameraControllerV3 : MonoBehaviour
         Vector3 dir = (furthestPlayer.position - transform.position).normalized;
 
         wantedPosition = Vector3.Lerp(player1.position, player2.position, 0.5f);
-        wantedForward = Vector3.Lerp(transform.forward, dir, 1f);
+        wantedForward = Vector3.Lerp(transform.forward, dir, 0.01f);
 
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
         transform.forward = wantedForward;
 
         //Clamp camera
-        float eulerAngle = transform.eulerAngles.y;
-        if (eulerAngle > 180)
+        float eulerAngleY = transform.eulerAngles.y;
+        if (eulerAngleY > 180)
         {
-            eulerAngle = eulerAngle - 360;
+            eulerAngleY = eulerAngleY - 360;
         }
-        eulerAngle = Mathf.Clamp(eulerAngle, -40, 40);
+        eulerAngleY = Mathf.Clamp(eulerAngleY, -40, 40);
 
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, eulerAngle, transform.eulerAngles.z);
+        float eulerAngleX = transform.eulerAngles.x;
+        if (eulerAngleX > 180) {
+            eulerAngleX = eulerAngleX - 360;
+        }
+        eulerAngleX = Mathf.Clamp(eulerAngleX, -15, 360);
+
+        transform.eulerAngles = new Vector3(eulerAngleX, eulerAngleY, transform.eulerAngles.z);
     }
 
     public Transform GetFurthestPlayer()

@@ -31,11 +31,11 @@ public class PlayerController : MonoBehaviour, iTarget
     [Space(2)]
     [Header("General settings")]
     public Color playerColor;
+    public float playerHeight = 2.2f;
 
     [Space(2)]
     [Header("Movement settings")]
     public MoveState moveState;
-    public float speed;
     public AnimationCurve accelerationCurve;
 
 
@@ -57,9 +57,9 @@ public class PlayerController : MonoBehaviour, iTarget
     public float dunkJumpHeight; //In meters
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
-    public float dunkSpeed; 
+    public float dunkTime; //In seconds 
     [MinMaxSlider(0, 1)]
-    Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
+    public Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
     public AnimationCurve dunkJumpSpeedCurve;
     public AnimationCurve dunkJumpMovementCurve;
 
@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour, iTarget
     Ball possessedBall;
     iTarget target; //The object targeted by this player
     Coroutine dunkJumpCoroutine;
+    float speed;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
@@ -417,18 +418,17 @@ public class PlayerController : MonoBehaviour, iTarget
     IEnumerator StartDunk_C()
     {
         Vector3 startPosition = self.position;
-        Vector3 endPosition = self.position + (self.forward * dunkJumpDistance);
-        float dunkTime = Vector3.Distance(startPosition, endPosition) / dunkSpeed;
+        Vector3 endPosition = GameManager.i.GetGroundPosition(self.position + (self.forward * dunkJumpDistance)) + new Vector3(0,playerHeight/2f,0);
+        float dunkJumpTime = Vector3.Distance(startPosition, endPosition) / dunkJumpSpeed;
 
-        for (float i = 0; i < dunkTime; i+= Time.deltaTime)
+        for (float i = 0; i < dunkJumpTime; i+= Time.deltaTime)
         {
             yield return new WaitForEndOfFrame();
-            self.position = Vector3.Lerp(startPosition, endPosition, dunkJumpSpeedCurve.Evaluate(i / dunkTime));
-            float height = dunkJumpMovementCurve.Evaluate(i / dunkTime) * dunkJumpHeight;
+            self.position = Vector3.Lerp(startPosition, endPosition, dunkJumpSpeedCurve.Evaluate(i / dunkJumpTime));
+            float height = dunkJumpMovementCurve.Evaluate(i / dunkJumpTime) * dunkJumpHeight;
             self.position = new Vector3(self.position.x, self.position.y + height, self.position.z);
             if (possessedBall == true)
             {
-                Debug.Log("DUNK");
                 StartCoroutine(Dunk_C(endPosition));
                 StopCoroutine(dunkJumpCoroutine);
             }
@@ -438,6 +438,12 @@ public class PlayerController : MonoBehaviour, iTarget
     IEnumerator Dunk_C(Vector3 position)
     {
         Vector3 startPosition = self.position;
+        for (float i = 0; i < dunkTime; i+=Time.deltaTime)
+        {
+            yield return new WaitForEndOfFrame();
+            self.position = Vector3.Lerp(startPosition, position, i / dunkTime);
+        }
+        self.position = position;
         yield return null;
     }
 
@@ -492,7 +498,7 @@ public class PlayerController : MonoBehaviour, iTarget
             //Apply angle curve
             ball.transform.position = new Vector3(
                     ball.transform.position.x, 
-                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetPassHeight()), 
+                    ball.transform.position.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetPassHeight()), 
                     ball.transform.position.z
                 );
         }

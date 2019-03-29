@@ -39,6 +39,22 @@ public class GameManager : MonoBehaviour
         levelManager.players[playerID].EnableInput();
     }
 
+    public Vector3 GetGroundPosition(Vector3 position)
+    {
+        RaycastHit hit;
+        Vector3 groundPosition = position;
+        Vector3 groundPositionNoY = groundPosition + new Vector3(0, 1000, 0);
+        if (Physics.Raycast(groundPositionNoY,
+            Vector3.down,
+            out hit))
+        {
+            return hit.point;
+        } else
+        {
+            return position;
+        }
+    }
+
     public void CheckInputs()
     {
         if (Input.GetKeyDown(KeyCode.F1))

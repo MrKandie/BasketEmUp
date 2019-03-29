@@ -57,8 +57,8 @@ MonoBehaviour:
   cam: {fileID: 0}
   _targetedTransform: {fileID: 3535076308953019112}
   playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
+  playerHeight: 2.2
   moveState: 0
-  speed: 0
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -87,7 +87,7 @@ MonoBehaviour:
   maxSpeed: 7
   maxAcceleration: 200
   movingDrag: 4
-  idleDrag: 8
+  idleDrag: 0.01
   turnSpeed: 0.37
   walkAnimationSpeedCurve:
     serializedVersion: 2
@@ -113,6 +113,77 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  dunkJumpHeight: 7
+  dunkJumpDistance: 5
+  dunkJumpSpeed: 5
+  dunkTime: 0
+  dunkTreshold: {x: 0.186407, y: 0.8334658}
+  dunkJumpSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dunkJumpMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2220952
+      value: 0.93674934
+      inSlope: 0.26367754
+      outSlope: 0.26367754
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.18431203
+    - serializedVersion: 3
+      time: 0.82641596
+      value: 0.99623287
+      inSlope: 0.07595359
+      outSlope: 0.07595359
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17484292
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -10.795465
+      outSlope: -10.795465
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07638882
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   targetAngleTreshold: 5
   targetedBy: {fileID: 0}
   doingHandoff: 0
@@ -126,7 +197,7 @@ Rigidbody:
   m_GameObject: {fileID: 69913409235962623}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 5
+  m_Drag: 0.01
   m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
