@@ -5,6 +5,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class GlobalVFXManager : MonoBehaviour
 {
+    #region Variables
     [Header("Components")]
     public PostProcessVolume myPP;
 
@@ -40,9 +41,8 @@ public class GlobalVFXManager : MonoBehaviour
     float wantedSaturationValue;
     float wantedContrastValue;
 
+    #endregion
 
-
-    // Start is called before the first frame update
     void Start()
     {
         myPP.profile.TryGetSettings(out bloomLayer);
@@ -51,8 +51,7 @@ public class GlobalVFXManager : MonoBehaviour
         myPP.profile.TryGetSettings(out vignetteLayer);
         myPP.profile.TryGetSettings(out grainLayer);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         UpdateWantedValues();
