@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2543657012422248503}
   - component: {fileID: 8666635390815151469}
   - component: {fileID: 5419603750946610382}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: P_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,7 +228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7772275630196681676}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HandoffEffects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 6386295457186132924}
   - component: {fileID: 8686245072431596833}
   - component: {fileID: 8923789948574412728}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main gauche
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4621407884147341700}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 6122283427768529348}
   - component: {fileID: 1184472623027629320}
   - component: {fileID: 57944365231729432}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Corps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -483,7 +483,7 @@ GameObject:
   - component: {fileID: 273245122548325187}
   - component: {fileID: 7036509741946447823}
   - component: {fileID: 2216854521253780009}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SmokeBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5239,7 +5239,7 @@ GameObject:
   - component: {fileID: 6103426242887478521}
   - component: {fileID: 47267294258427855}
   - component: {fileID: 4823357926976144377}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: LightBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9995,7 +9995,7 @@ GameObject:
   - component: {fileID: 3535076308953019112}
   - component: {fileID: 1562087629335674185}
   - component: {fileID: 7474325885808464295}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main droite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
