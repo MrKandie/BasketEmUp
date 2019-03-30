@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour, iTarget
     [Space(2)]
     public float movingDrag = .4f;
     public float idleDrag = .4f;
+    public float onGroundGravityMultiplyer;
 
     [Space(2)]
     [Range(0.01f, 1f)]
@@ -82,13 +83,17 @@ public class PlayerController : MonoBehaviour, iTarget
     iTarget target; //The object targeted by this player
     Coroutine dunkJumpCoroutine;
     float speed;
+    float customDrag;
+    float customGravity;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
 
     private void Awake()
     {
-        GenerateHighlighter().SetActive(false); ;
+        GenerateHighlighter().SetActive(false);
+        customGravity = onGroundGravityMultiplyer;
+        customDrag = idleDrag;
     }
 
     void Update()
@@ -112,6 +117,8 @@ public class PlayerController : MonoBehaviour, iTarget
             accelerationTimer = 0;
         }
         Move();
+        ApplyDrag();
+        ApplyCustomGravity();
         UpdateAnimatorBlendTree();
     }
 
@@ -228,9 +235,9 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             if (moveState != MoveState.Idle)
             {
-                body.velocity = Vector3.zero;
+                body.velocity = new Vector3(0, body.velocity.y, 0);
             }
-            body.drag = idleDrag;
+            customDrag = idleDrag;
             moveState = MoveState.Idle;
         }
     }
@@ -258,14 +265,31 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         if (moveState == MoveState.Blocked) { return; }
         body.AddForce(input * (accelerationCurve.Evaluate(body.velocity.magnitude / maxSpeed) * maxAcceleration), ForceMode.Acceleration);
-        body.drag = movingDrag;
+        customDrag = movingDrag;
     }
 
     void Move()
     {
         if (moveState == MoveState.Blocked) { speed = 0; return; }
-        body.velocity = Vector3.ClampMagnitude(body.velocity, maxSpeed);
+        Vector3 myVel = body.velocity;
+        myVel.y = 0;
+        myVel = Vector3.ClampMagnitude(myVel, maxSpeed);
+        myVel.y = body.velocity.y;
+        body.velocity = myVel;
         speed = body.velocity.magnitude;
+    }
+
+    void ApplyDrag()
+    {
+        Vector3 myVel = body.velocity;
+        myVel.x *= 1 - customDrag;
+        myVel.z *= 1 - customDrag;
+        body.velocity = myVel;
+    }
+
+    void ApplyCustomGravity()
+    {
+        body.AddForce(new Vector3(0, -9.81f* customGravity, 0));
     }
     #endregion
 
@@ -423,9 +447,13 @@ public class PlayerController : MonoBehaviour, iTarget
     #region Coroutines 
     IEnumerator StartDunk_C()
     {
+        customGravity = 0;
+
         Vector3 startPosition = self.position;
         Vector3 endPosition = GameManager.i.GetGroundPosition(self.position + (self.forward * dunkJumpDistance)) + new Vector3(0,playerHeight/2f,0);
         float dunkJumpTime = Vector3.Distance(startPosition, endPosition) / dunkJumpSpeed;
+
+        playerAnim.SetTrigger("PrepareDunkTrigger");
 
         for (float i = 0; i < dunkJumpTime; i+= Time.deltaTime)
         {
@@ -439,10 +467,14 @@ public class PlayerController : MonoBehaviour, iTarget
                 StopCoroutine(dunkJumpCoroutine);
             }
         }
+        playerAnim.SetTrigger("DunkMissedTrigger");
+        customGravity = onGroundGravityMultiplyer;
     }
 
     IEnumerator Dunk_C(Vector3 position)
     {
+        playerAnim.SetTrigger("DunkTrigger");
+
         Vector3 startPosition = self.position;
         for (float i = 0; i < dunkTime; i+=Time.deltaTime)
         {
@@ -450,6 +482,7 @@ public class PlayerController : MonoBehaviour, iTarget
             self.position = Vector3.Lerp(startPosition, position, i / dunkTime);
         }
         self.position = position;
+        customGravity = onGroundGravityMultiplyer;
         yield return null;
     }
 

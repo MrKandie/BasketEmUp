@@ -86,8 +86,9 @@ MonoBehaviour:
   minWalkSpeed: 0.3
   maxSpeed: 7
   maxAcceleration: 200
-  movingDrag: 4
-  idleDrag: 0.01
+  movingDrag: 0.08
+  idleDrag: 0.05
+  onGroundGravityMultiplyer: 2.5
   turnSpeed: 0.37
   walkAnimationSpeedCurve:
     serializedVersion: 2
@@ -197,9 +198,9 @@ Rigidbody:
   m_GameObject: {fileID: 69913409235962623}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0.01
+  m_Drag: 0
   m_AngularDrag: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
