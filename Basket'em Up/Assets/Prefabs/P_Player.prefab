@@ -114,6 +114,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  dunkExplosionRadius: 5
+  dunkExplosionForce: 10000
+  dunkExplosionDamage: 10
   dunkJumpHeight: 7
   dunkJumpDistance: 5
   dunkJumpSpeed: 5
