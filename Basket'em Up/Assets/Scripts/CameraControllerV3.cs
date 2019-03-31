@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class CameraControllerV3 : MonoBehaviour
 {
@@ -12,8 +13,24 @@ public class CameraControllerV3 : MonoBehaviour
     Vector3 wantedPosition;
     Vector3 wantedForward;
 
-    // Update is called once per frame
+    public enum CameraState { Main, Dunk, Shoot};
+    CameraState myState = CameraState.Main;
+
     void FixedUpdate()
+    {
+        switch (myState)
+        {
+            case CameraState.Main:
+                MainStateUpdate();
+                break;
+            case CameraState.Dunk:
+                break;
+            case CameraState.Shoot:
+                break;
+        }
+    }
+
+    void MainStateUpdate()
     {
         furthestPlayer = GetFurthestPlayer();
 
@@ -24,7 +41,6 @@ public class CameraControllerV3 : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
         transform.forward = wantedForward;
-
         //Clamp camera
         float eulerAngleY = transform.eulerAngles.y;
         if (eulerAngleY > 180)
@@ -34,7 +50,8 @@ public class CameraControllerV3 : MonoBehaviour
         eulerAngleY = Mathf.Clamp(eulerAngleY, -40, 40);
 
         float eulerAngleX = transform.eulerAngles.x;
-        if (eulerAngleX > 180) {
+        if (eulerAngleX > 180)
+        {
             eulerAngleX = eulerAngleX - 360;
         }
         eulerAngleX = Mathf.Clamp(eulerAngleX, -15, 360);

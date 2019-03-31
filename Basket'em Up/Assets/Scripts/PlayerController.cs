@@ -189,6 +189,10 @@ public class PlayerController : MonoBehaviour, iTarget
                 playerAnim.SetTrigger("ShootingTrigger");
                 target = null;
             }
+            else
+            {
+                playerAnim.SetTrigger("ShootingMissedTrigger");
+            }
         }
         if (Input.GetMouseButtonDown(1))
         {
