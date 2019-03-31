@@ -55,6 +55,10 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Dunk settings")]
+    public float dunkExplosionRadius = 10;
+    public float dunkExplosionForce = 5000;
+    public int dunkExplosionDamage = 20;
+
     public float dunkJumpHeight; //In meters
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
@@ -481,6 +485,8 @@ public class PlayerController : MonoBehaviour, iTarget
             yield return new WaitForEndOfFrame();
             self.position = Vector3.Lerp(startPosition, position, i / dunkTime);
         }
+        possessedBall.transform.localPosition = Vector3.zero;
+        GenerateDunkExplosion(position, dunkExplosionRadius, dunkExplosionForce, dunkExplosionDamage);
         self.position = position;
         customGravity = onGroundGravityMultiplyer;
         yield return null;
@@ -548,6 +554,27 @@ public class PlayerController : MonoBehaviour, iTarget
     #endregion
 
     #region Private functions
+    private void GenerateDunkExplosion(Vector3 position, float radius, float power, int damages)
+    {
+        Collider[] colliders = Physics.OverlapSphere(position, radius);
+        foreach (Collider hit in colliders)
+        {
+            Enemy potentialEnemy = hit.gameObject.GetComponent<Enemy>();
+            if (potentialEnemy != null)
+            {
+                potentialEnemy.DisableNavmeshAgent();
+                potentialEnemy.AddDamage(damages);
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+                if (rb != null)
+                {
+                    rb.AddForce(new Vector3(0, 5000, 0));
+                    rb.AddExplosionForce(power, position + new Vector3(0, -2, 0), radius, 3.0F);
+                }
+            }
+        }
+    }
+
     private GameObject GenerateHighlighter()
     {
         if (highlighter != null) { return highlighter; }

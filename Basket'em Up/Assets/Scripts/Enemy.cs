@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, iTarget
 {
@@ -16,7 +17,10 @@ public class Enemy : MonoBehaviour, iTarget
     [Header("Debug")]
     int HPcurrent;
     Rigidbody rb;
+    protected NavMeshAgent agent;
     float invincibilityCD;
+    public bool agentDisabled;
+    public bool tryingToEnableAgent;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -25,11 +29,20 @@ public class Enemy : MonoBehaviour, iTarget
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.baseOffset = 1;
         HPcurrent = HPmax;
     }
 
-    private void Update()
+    virtual protected void Update()
     {
+        if (agentDisabled && tryingToEnableAgent)
+        {
+            if (IsGrounded())
+            {
+                EnableNavmeshAgent();
+            }
+        }
         if (invincibilityCD > 0)
         {
             invincibilityCD -= Time.deltaTime;
@@ -41,7 +54,7 @@ public class Enemy : MonoBehaviour, iTarget
         hitEffetTransform.rotation = _hitEffetRotation;
     }
 
-    public void AddDamage(int amount)
+    virtual public void AddDamage(int amount)
     {
         if (invincibilityCD > 0) { return; } 
         invincibilityCD = invincibilityTime;
@@ -57,9 +70,40 @@ public class Enemy : MonoBehaviour, iTarget
         }
     }
 
+    //Disable the navmesh agent to allow pushing or moving the rigidbody, until the gameobject touches the ground
+    virtual public void DisableNavmeshAgent()
+    {
+        agentDisabled = true;
+        agent.enabled = false;
+        tryingToEnableAgent = false;
+        StartCoroutine(TryToGroundAgent_C());
+    }
+
+    virtual public void EnableNavmeshAgent()
+    {
+        tryingToEnableAgent = false;
+        agentDisabled = false;
+        agent.enabled = true;
+    }
+
+    public bool IsGrounded()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position,
+            Vector3.down,
+            out hit,2f))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
     //Push the enemy toward a direction
     public void Push(Vector3 direction, float magnitude)
     {
+        DisableNavmeshAgent();
         direction = direction.normalized;
         direction = direction * magnitude;
         rb.AddForce(direction, ForceMode.Impulse);
@@ -80,5 +124,12 @@ public class Enemy : MonoBehaviour, iTarget
     public void OnTargetedBySomeone(Transform target)
     {
 
+    }
+
+    IEnumerator TryToGroundAgent_C()
+    {
+        tryingToEnableAgent = false;
+        yield return new WaitForSeconds(1f);
+        tryingToEnableAgent = true;
     }
 }
