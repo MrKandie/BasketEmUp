@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public Animator playerAnim;
     public ParticleSystem[] handoffEffects;
     public Camera cam;
+    public GameObject groundDunkEffect;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -573,6 +574,10 @@ public class PlayerController : MonoBehaviour, iTarget
                 }
             }
         }
+
+        Vector3 spawnPosition = new Vector3(transform.position.x, 0.05f, transform.position.z) + transform.forward *2;
+        spawnPosition.y = 0.05f;
+        Destroy(Instantiate(groundDunkEffect, spawnPosition, Quaternion.identity), 2);
     }
 
     private GameObject GenerateHighlighter()

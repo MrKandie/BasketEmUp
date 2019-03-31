@@ -55,6 +55,8 @@ MonoBehaviour:
   - {fileID: 7036509741946447823}
   - {fileID: 47267294258427855}
   cam: {fileID: 0}
+  groundDunkEffect: {fileID: 8532570793515419785, guid: c42cf0548d9ad0a4598aa7f77999e3ae,
+    type: 3}
   _targetedTransform: {fileID: 3535076308953019112}
   playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
   playerHeight: 2.2
