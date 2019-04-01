@@ -31,6 +31,7 @@ public class Rookie : Enemy
     private void NoBallMovement()
     {
         target = GetNearestPlayer();
+        agent.speed = speed;
         if (agent.enabled)
         {
             agent.destination = target.position;

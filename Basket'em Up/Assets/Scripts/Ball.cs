@@ -32,7 +32,7 @@ public class Ball : MonoBehaviour
         {
             Enemy enemy = potentialEnemy;
             enemy.AddDamage(GameManager.i.ballMovementManager.GetDamages());
-            enemy.Push(direction, 5);
+            enemy.Slow(0.2f, 1);
         }
         PlayerController potentialPlayer = other.GetComponent<PlayerController>();
         if (potentialPlayer != null && canBePicked)

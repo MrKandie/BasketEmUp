@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
     public float dunkTime; //In seconds 
+    public float dunkClimaxTime = 0.3f; //In seconds
     [MinMaxSlider(0, 1)]
     public Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
     public AnimationCurve dunkJumpSpeedCurve;
@@ -475,6 +476,7 @@ public class PlayerController : MonoBehaviour, iTarget
             self.position = new Vector3(self.position.x, self.position.y + height, self.position.z);
             if (possessedBall == true)
             {
+                playerAnim.SetTrigger("DunkTrigger");
                 StartCoroutine(Dunk_C(endPosition));
                 StopCoroutine(dunkJumpCoroutine);
             }
@@ -485,8 +487,12 @@ public class PlayerController : MonoBehaviour, iTarget
 
     IEnumerator Dunk_C(Vector3 position)
     {
-        playerAnim.SetTrigger("DunkTrigger");
-
+        DisableInput();
+        for (float i = 0; i < dunkClimaxTime; i+= Time.deltaTime)
+        {
+            self.position = self.position;
+            yield return new WaitForEndOfFrame();
+        }
         Vector3 startPosition = self.position;
         for (float i = 0; i < dunkTime; i+=Time.deltaTime)
         {
@@ -497,6 +503,7 @@ public class PlayerController : MonoBehaviour, iTarget
         GenerateDunkExplosion(position, dunkExplosionRadius, dunkExplosionForce, dunkExplosionDamage);
         self.position = position;
         customGravity = onGroundGravityMultiplyer;
+        EnableInput();
         yield return null;
     }
 

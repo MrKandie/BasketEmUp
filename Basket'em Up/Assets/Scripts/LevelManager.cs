@@ -43,7 +43,7 @@ public class LevelManager : MonoBehaviour
             if (s.GetType() == typeof(PlayerController))
             {
                 tempTargetableAllies.Add(s);
-            } else if (s.GetType() == typeof(Enemy))
+            } else if (s.GetType().IsSubclassOf(typeof(Enemy)))
             {
                 tempTargetableEnemies.Add(s);
             } else
