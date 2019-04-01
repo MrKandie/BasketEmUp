@@ -107,6 +107,13 @@ public class Enemy : MonoBehaviour, iTarget
         StartCoroutine(TryToGroundAgent_C());
     }
 
+    virtual public void PermaDisableNavmeshAgent()
+    {
+        agentDisabled = true;
+        agent.enabled = false;
+        tryingToEnableAgent = false;
+    }
+
     virtual public void EnableNavmeshAgent()
     {
         tryingToEnableAgent = false;
