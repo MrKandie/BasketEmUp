@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour, iTarget
     public ParticleSystem[] handoffEffects;
     public Camera cam;
     public GameObject groundDunkEffect;
+    public Transform shootQuadTransform;
+    public ParticleSystem ballReceivedParticleSystem;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -340,6 +342,7 @@ public class PlayerController : MonoBehaviour, iTarget
             {
                 Vector2 mousePosition = new Vector2(hit.point.x, hit.point.z);
                 mousePosition -= new Vector2(self.position.x, self.position.z);
+                //shootQuadTransform.rotation = Quaternion.LookRotation((new Vector3(mousePosition.x, 0, mousePosition.y) + self.position) - self.position);
                 return mousePosition;
             }
         }
@@ -609,6 +612,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         targetedBy = null;
         TakeBall(ball, 0);
+        ballReceivedParticleSystem.Play();
     }
 
     public void OnTargetedBySomeone(Transform target)

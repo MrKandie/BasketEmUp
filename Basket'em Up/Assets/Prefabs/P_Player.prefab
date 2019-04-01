@@ -57,6 +57,8 @@ MonoBehaviour:
   cam: {fileID: 0}
   groundDunkEffect: {fileID: 8532570793515419785, guid: c42cf0548d9ad0a4598aa7f77999e3ae,
     type: 3}
+  shootQuadTransform: {fileID: 0}
+  ballReceivedParticleSystem: {fileID: 4140970633969452101}
   _targetedTransform: {fileID: 3535076308953019112}
   playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
   playerHeight: 2.2
@@ -10019,6 +10021,7 @@ Transform:
   m_LocalScale: {x: 0.48012, y: 0.22313577, z: 0.48012}
   m_Children:
   - {fileID: 7772275630196681676}
+  - {fileID: 5926905534905076289}
   m_Father: {fileID: 164450937343815701}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10067,3 +10070,59 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1001 &3618516844980182844
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3535076308953019112}
+    m_Modifications:
+    - target: {fileID: 8412457504503316043, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_Name
+      value: P_BallReceived
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9986ce8de16a2b544ad9b2fb09399d5a, type: 3}
+--- !u!4 &5926905534905076289 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3618516844980182844}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4140970633969452101 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 810686673965636473, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3618516844980182844}
+  m_PrefabAsset: {fileID: 0}
