@@ -13,14 +13,18 @@ public class Enemy : MonoBehaviour, iTarget
     [Header("Settings")]
     public int HPmax = 100;
     public float invincibilityTime = 1f;
+    public float speed = 3.5f;
 
     [Header("Debug")]
     int HPcurrent;
     Rigidbody rb;
     protected NavMeshAgent agent;
     float invincibilityCD;
+    float slowCD;
     public bool agentDisabled;
     public bool tryingToEnableAgent;
+    private float oldSpeed;
+    private bool speedUpdated;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -32,6 +36,7 @@ public class Enemy : MonoBehaviour, iTarget
         agent = GetComponent<NavMeshAgent>();
         agent.baseOffset = 1;
         HPcurrent = HPmax;
+        speedUpdated = true;
     }
 
     virtual protected void Update()
@@ -43,6 +48,15 @@ public class Enemy : MonoBehaviour, iTarget
                 EnableNavmeshAgent();
             }
         }
+        if (slowCD > 0)
+        {
+            slowCD -= Time.deltaTime;
+        } else if (speedUpdated == false)
+        {
+            UnSlow();
+        }
+        slowCD = Mathf.Clamp(slowCD, 0, Mathf.Infinity);
+
         if (invincibilityCD > 0)
         {
             invincibilityCD -= Time.deltaTime;
@@ -70,6 +84,20 @@ public class Enemy : MonoBehaviour, iTarget
         }
     }
 
+    virtual public void Slow(float coef, float duration)
+    {
+        oldSpeed = speed;
+        speed = speed * coef;
+        slowCD = duration;
+        speedUpdated = false;
+    }
+
+    void UnSlow()
+    {
+        speed = oldSpeed;
+        speedUpdated = true;
+    }
+
     //Disable the navmesh agent to allow pushing or moving the rigidbody, until the gameobject touches the ground
     virtual public void DisableNavmeshAgent()
     {
@@ -77,6 +105,13 @@ public class Enemy : MonoBehaviour, iTarget
         agent.enabled = false;
         tryingToEnableAgent = false;
         StartCoroutine(TryToGroundAgent_C());
+    }
+
+    virtual public void PermaDisableNavmeshAgent()
+    {
+        agentDisabled = true;
+        agent.enabled = false;
+        tryingToEnableAgent = false;
     }
 
     virtual public void EnableNavmeshAgent()

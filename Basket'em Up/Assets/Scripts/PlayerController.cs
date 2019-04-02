@@ -33,8 +33,10 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("General settings")]
+    public int inputIndex;
     public Color playerColor;
     public float playerHeight = 2.2f;
+    public int MaxHP;
 
     [Space(2)]
     [Header("Movement settings")]
@@ -66,6 +68,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
     public float dunkTime; //In seconds 
+    public float dunkClimaxTime = 0.3f; //In seconds
     [MinMaxSlider(0, 1)]
     public Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
     public AnimationCurve dunkJumpSpeedCurve;
@@ -78,6 +81,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Debug")]
+    public int currentHP;
     Vector3 speedVector;
     float accelerationTimer;
     Vector3 lastVelocity;
@@ -101,6 +105,7 @@ public class PlayerController : MonoBehaviour, iTarget
         GenerateHighlighter().SetActive(false);
         customGravity = onGroundGravityMultiplyer;
         customDrag = idleDrag;
+        currentHP = MaxHP;
     }
 
     void Update()
@@ -156,11 +161,11 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void GeneralInput()
     {
-        if (Input.GetButtonDown("Dunk"))
+        if (Input.GetButtonDown("Dunk_" + inputIndex.ToString()) && dunkJumpCoroutine == null)
         {
             StartDunk();
         }
-        if (Input.GetButtonDown("Handoff"))
+        if (Input.GetButtonDown("Handoff_" + inputIndex.ToString()))
         {
             playerAnim.SetTrigger("HandoffTrigger");
             List<iTarget> ally = new List<iTarget>();
@@ -173,16 +178,16 @@ public class PlayerController : MonoBehaviour, iTarget
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;
         }
-        if (Input.GetButtonDown("Shoot"))
+        if (Input.GetButtonDown("Shoot_" + inputIndex.ToString()))
         {
             playerAnim.SetTrigger("PrepareShootingTrigger");
         }
-            if (Input.GetButton("Shoot"))
+            if (Input.GetButton("Shoot_" + inputIndex.ToString()))
         {
             Freeze();
             target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
         }
-        if (Input.GetButtonUp("Shoot"))
+        if (Input.GetButtonUp("Shoot_" + inputIndex.ToString()))
         {
             UnFreeze();
             if (target != null)
@@ -204,8 +209,8 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void GamepadInput()
     {
-        Vector3 _inputX = Input.GetAxisRaw("Horizontal") * cam.transform.right;
-        Vector3 _inputZ = Input.GetAxisRaw("Vertical") * cam.transform.forward;
+        Vector3 _inputX = Input.GetAxisRaw("Horizontal_" + inputIndex.ToString()) * cam.transform.right;
+        Vector3 _inputZ = Input.GetAxisRaw("Vertical_" + inputIndex.ToString()) * cam.transform.forward;
         input = _inputX + _inputZ;
         input.y = 0;
         input = input.normalized * ((input.magnitude - deadzone) / (1 - deadzone));
@@ -214,8 +219,8 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void KeyboardInput()
     {
-        Vector3 _inputX = Input.GetAxisRaw("Horizontal") * cam.transform.right;
-        Vector3 _inputZ = Input.GetAxisRaw("Vertical") * cam.transform.forward;
+        Vector3 _inputX = Input.GetAxisRaw("Horizontal_" + inputIndex.ToString()) * cam.transform.right;
+        Vector3 _inputZ = Input.GetAxisRaw("Vertical_" + inputIndex.ToString()) * cam.transform.forward;
         input = _inputX + _inputZ;
         input.y = 0;
         input.Normalize();
@@ -333,7 +338,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         if (HasGamepad())
         {
-            return new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+            return new Vector2(Input.GetAxisRaw("Mouse X_" + inputIndex.ToString()), Input.GetAxisRaw("Mouse Y_" + inputIndex.ToString()));
         } else
         {
             RaycastHit hit;
@@ -403,6 +408,28 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             return null;
         }
+    }
+
+    public void Kill()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public void AddDamage(int amount)
+    {
+        currentHP -= amount;
+        currentHP = Mathf.Clamp(currentHP, 0, MaxHP);
+        if (currentHP <= 0)
+        {
+            Kill();
+        }
+    }
+
+    public void Push(Vector3 direction, float magnitude)
+    {
+        direction = direction.normalized;
+        direction = direction * magnitude;
+        body.AddForce(direction, ForceMode.Impulse);
     }
 
     //Jump to start the dunk
@@ -475,18 +502,24 @@ public class PlayerController : MonoBehaviour, iTarget
             self.position = new Vector3(self.position.x, self.position.y + height, self.position.z);
             if (possessedBall == true)
             {
+                playerAnim.SetTrigger("DunkTrigger");
                 StartCoroutine(Dunk_C(endPosition));
                 StopCoroutine(dunkJumpCoroutine);
             }
         }
         playerAnim.SetTrigger("DunkMissedTrigger");
         customGravity = onGroundGravityMultiplyer;
+        dunkJumpCoroutine = null;
     }
 
     IEnumerator Dunk_C(Vector3 position)
     {
-        playerAnim.SetTrigger("DunkTrigger");
-
+        moveState = MoveState.Blocked;
+        for (float i = 0; i < dunkClimaxTime; i+= Time.deltaTime)
+        {
+            self.position = self.position;
+            yield return new WaitForEndOfFrame();
+        }
         Vector3 startPosition = self.position;
         for (float i = 0; i < dunkTime; i+=Time.deltaTime)
         {
@@ -497,6 +530,8 @@ public class PlayerController : MonoBehaviour, iTarget
         GenerateDunkExplosion(position, dunkExplosionRadius, dunkExplosionForce, dunkExplosionDamage);
         self.position = position;
         customGravity = onGroundGravityMultiplyer;
+        dunkJumpCoroutine = null;
+        moveState = MoveState.Idle;
         yield return null;
     }
 

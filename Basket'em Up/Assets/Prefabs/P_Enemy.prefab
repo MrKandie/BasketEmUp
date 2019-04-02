@@ -9880,10 +9880,20 @@ MonoBehaviour:
   hitEffetTransform: {fileID: 8343125976116994013}
   HPmax: 100
   invincibilityTime: 1
+  speed: 3.5
   agentDisabled: 0
   tryingToEnableAgent: 0
   _targetedTransform: {fileID: 8343125976612939768}
-  hasBall: 0
+  CaCDamages: 20
+  CaCCooldown: 4
+  CaCPushForce: 50
+  chargeSpeed: 15
+  chargeCooldown: 4
+  chargeDamage: 10
+  chargePushForce: 400
+  maxChargeDistance: 10
+  maxChargeTime: 4
+  hasBall: 1
 --- !u!195 &2068505556
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         momentumManager = FindObjectOfType<MomentumManager>();
         levelManager = FindObjectOfType<LevelManager>();
         ballMovementManager = FindObjectOfType<BallMovementManager>();
-        ControlPlayer(0);
+        ControlAllPlayers();
     }
 
     private void Update()
@@ -37,6 +37,14 @@ public class GameManager : MonoBehaviour
             player.DisableInput();
         }
         levelManager.players[playerID].EnableInput();
+    }
+
+    public void ControlAllPlayers()
+    {
+        foreach (PlayerController player in levelManager.players)
+        {
+            player.EnableInput();
+        }
     }
 
     public Vector3 GetGroundPosition(Vector3 position)
