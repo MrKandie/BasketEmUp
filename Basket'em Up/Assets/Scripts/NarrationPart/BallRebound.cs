@@ -9,6 +9,8 @@ public class BallRebound : MonoBehaviour
     public AnimationCurve reboundCurve;
     public float reboundHeight;
     float timerRebound;
+    public Vector3 offsetPlayer1;
+    public Vector3 offsetPlayer2;
 
     // Update is called once per frame
     void Update()
@@ -20,6 +22,7 @@ public class BallRebound : MonoBehaviour
         }
         else
         {
+            transform.position = transform.parent.position;
             timerRebound += Time.deltaTime;
             ballModel.position = transform.position - 1 * reboundHeight * (1-reboundCurve.Evaluate(timerRebound % 1)) * Vector3.up;
         }
