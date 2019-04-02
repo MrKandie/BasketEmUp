@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
 
     public List<Enemy> enemies;
     public List<PlayerController> players;
+    public Ball activeBall;
 
     private List<iTarget> allTargetableObjects;
     private List<iTarget> targetableAllies;
@@ -18,6 +19,7 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         UpdateTargetableObjectsList();
+        activeBall = FindObjectOfType<Ball>();
     }
 
     public void RemoveTargetFromList(iTarget target)

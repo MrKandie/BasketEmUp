@@ -20,7 +20,6 @@ public class GroundEffect : MonoBehaviour
         for (float i = 0; i < 1; i+=Time.deltaTime / timeForEffect)
         {
             myRend.material.SetFloat("_Progression", sliderCurve.Evaluate(i) * endSliderValue);
-            print(sliderCurve.Evaluate(i) * endSliderValue);
             yield return new WaitForEndOfFrame();
         }
         yield return null;

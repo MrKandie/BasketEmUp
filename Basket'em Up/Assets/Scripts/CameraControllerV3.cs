@@ -5,10 +5,28 @@ using Cinemachine;
 
 public class CameraControllerV3 : MonoBehaviour
 {
+    [System.Serializable]
+    public class CameraTarget
+    {
+        public Transform transform;
+        [Range(0,1)]
+        public float importance;
+    }
+
     public Transform player1;
     public Transform player2;
     private Transform furthestPlayer;
     public Transform cameraDirection;
+    public Camera cameraObj;
+    public float minCamDistance;
+    public float maxCamDistance;
+    public float cameraSpeed;
+
+    public float outOfCameraTreshold = 0.1f; //Si on augmente cette valeur, le joueur dépassera moins de la caméra
+    public float inCameraTreshold = 0.2f; //Si on augmente cette valeur, la caméra se rezoomera quand les joueurs sont proche du centre de l'écran
+    
+
+    public CameraTarget[] targets;
 
     Vector3 wantedPosition;
     Vector3 wantedForward;
@@ -22,6 +40,7 @@ public class CameraControllerV3 : MonoBehaviour
         {
             case CameraState.Main:
                 MainStateUpdate();
+                UpdateZoom();
                 break;
             case CameraState.Dunk:
                 break;
@@ -30,17 +49,53 @@ public class CameraControllerV3 : MonoBehaviour
         }
     }
 
+    void UpdateZoom()
+    {
+        int targetsOutOfCameraCount = 0;
+        int targetsInCameraTresholdCount = 0;
+        foreach (CameraTarget t in targets)
+        {
+            Vector2 targetPosViewport = Camera.main.WorldToViewportPoint(t.transform.position);
+            if (targetPosViewport.x < outOfCameraTreshold || targetPosViewport.y < outOfCameraTreshold || targetPosViewport.x > 1- outOfCameraTreshold  || targetPosViewport.y > 1- outOfCameraTreshold)
+            {
+                targetsOutOfCameraCount++;
+            } else if (targetPosViewport.x < 1-inCameraTreshold && targetPosViewport.x > inCameraTreshold && targetPosViewport.y < 1-inCameraTreshold && targetPosViewport.y > inCameraTreshold)
+            {
+                targetsInCameraTresholdCount++;
+            }
+        }
+        if (targetsOutOfCameraCount > 0)
+        {
+            if (Vector3.Distance(cameraObj.transform.position, this.transform.position) < maxCamDistance)
+            {
+                cameraObj.transform.position -= cameraObj.transform.forward * 0.1f * cameraSpeed;
+            }
+        } else if (targetsInCameraTresholdCount >= targets.Length)
+        {
+            if (Vector3.Distance(cameraObj.transform.position, this.transform.position) > minCamDistance)
+            {
+                cameraObj.transform.position += cameraObj.transform.forward * 0.1f * cameraSpeed;
+            }
+        }
+    }
+
     void MainStateUpdate()
     {
         furthestPlayer = GetFurthestPlayer();
 
         Vector3 dir = (furthestPlayer.position - transform.position).normalized;
-
-        wantedPosition = Vector3.Lerp(player1.position, player2.position, 0.5f);
+        Vector3 center = new Vector3();
+        foreach (CameraTarget t in targets)
+        {
+            center += t.transform.position * t.importance;
+        }
+        center = center / targets.Length;
+        wantedPosition = center;
         wantedForward = Vector3.Lerp(transform.forward, dir, 0.01f);
 
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
         transform.forward = wantedForward;
+
         //Clamp camera
         float eulerAngleY = transform.eulerAngles.y;
         if (eulerAngleY > 180)
