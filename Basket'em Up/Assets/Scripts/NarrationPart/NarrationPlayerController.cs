@@ -6,11 +6,13 @@ public class NarrationPlayerController : MonoBehaviour
 {
     public Animator myAnim;
     public bool player1IsTrue;
+    public float acceleration;
+    public float maxSpeed;
     Vector3 actuelDirection;
     public Rigidbody rb;
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         UpdatePosition();
         UpdateRotation();
@@ -22,17 +24,19 @@ public class NarrationPlayerController : MonoBehaviour
         {
             Vector3 inputVector1 = Input.GetAxis("Horizontal_1") * Camera.main.transform.right;
             Vector3 inputVector2 = Input.GetAxis("Vertical_1") * Camera.main.transform.forward;
-            rb.velocity = Vector3.Lerp(rb.velocity, inputVector2 + inputVector1, 0.1f);
+            Vector3 finalVector = inputVector1 + inputVector2;
+            print(finalVector.normalized);
+            rb.AddForce(finalVector * acceleration);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
         }
         else
         {
-            Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal_1"), 0, Input.GetAxis("Vertical_1"));
-            rb.velocity = Vector3.Lerp(rb.velocity, inputVector, 0.1f);
         }
     }
 
     void UpdateRotation()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity), 0.1f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity), 0.8f);
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 }

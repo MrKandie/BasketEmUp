@@ -8,7 +8,7 @@ public class PointBetweenPlayers : MonoBehaviour
     public Transform player2;
     public float height;
 
-    void Update()
+    void FixedUpdate()
     {
         transform.position = Vector3.Lerp(player1.position, player2.position, 0.5f) + Vector3.up* height;
     }
