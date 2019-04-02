@@ -162,7 +162,7 @@ public class Ball : MonoBehaviour
         {
             yield return new WaitForEndOfFrame();
             //Apply speed curve
-            transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i / passTime));
+            transform.position = Vector3.Lerp(startPosition, target.targetedTransform.position, speedCurve.Evaluate(i / passTime));
 
             //Apply angle curve
             transform.position = new Vector3(
@@ -171,7 +171,7 @@ public class Ball : MonoBehaviour
                     transform.position.z
                 );
         }
-        transform.position = endPosition;
+        transform.position = target.targetedTransform.position;
         hitTarget.Add(target);
         target.OnBallReceived(this);
     }
