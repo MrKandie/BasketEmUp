@@ -109,7 +109,7 @@ public class CameraControllerV3 : MonoBehaviour
         {
             eulerAngleX = eulerAngleX - 360;
         }
-        eulerAngleX = Mathf.Clamp(eulerAngleX, -15, 360);
+        eulerAngleX = Mathf.Clamp(eulerAngleX, -5, 360);
 
         transform.eulerAngles = new Vector3(eulerAngleX, eulerAngleY, transform.eulerAngles.z);
     }
