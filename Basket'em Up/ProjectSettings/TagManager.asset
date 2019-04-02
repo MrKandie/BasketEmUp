@@ -7,7 +7,6 @@ TagManager:
   - ball
   - targetable
   - enemy
-  - NarrationTrigger
   layers:
   - Default
   - TransparentFX
