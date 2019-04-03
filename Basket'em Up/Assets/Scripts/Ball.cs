@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BallMoveState { Idle, Moving}
+public enum BallMoveState { Idle, Moving, Spiky}
 public class Ball : MonoBehaviour
 {
     [Header("Reference")]
@@ -49,6 +49,11 @@ public class Ball : MonoBehaviour
             if (highlighter != null) { Destroy(highlighter); }
             hitTarget.Clear();
         }
+        if (potentialPlayer != null && state == BallMoveState.Spiky)
+        {
+            potentialPlayer.Push(direction.normalized, 5);
+            potentialPlayer.AddDamage(20);
+        }
     }
 
     //Find a random target around 
@@ -85,9 +90,10 @@ public class Ball : MonoBehaviour
         StartCoroutine(BounceOnGround_C(groundPosition));
     }
 
-    public void SetState(BallMoveState state)
+    public void SetState(BallMoveState newState)
     {
-        switch (state)
+        state = newState;
+        switch (newState)
         {
             case BallMoveState.Idle:
                 hitTarget.Clear();
@@ -100,6 +106,11 @@ public class Ball : MonoBehaviour
                 defaultCollider.enabled = false;
                 canBePicked = false;
                 break;
+            case BallMoveState.Spiky:
+                canBePicked = false;
+                defaultCollider.enabled = true;
+                break;
+
         }
     }
 

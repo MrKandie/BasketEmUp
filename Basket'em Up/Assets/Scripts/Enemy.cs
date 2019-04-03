@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, iTarget
     public Animator enemyAnim;
     public Animator HitAnim;
     public Transform hitEffetTransform;
+    public Transform hand;
 
     [Header("Settings")]
     public int HPmax = 100;
@@ -30,7 +31,7 @@ public class Enemy : MonoBehaviour, iTarget
     private Transform _targetedTransform;
     public Transform targetedTransform { get { return _targetedTransform; } set { _targetedTransform = value; } } //The position where the ball will land when someone shoot at this player
 
-    private void Awake()
+    virtual protected void Awake()
     {
         rb = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();

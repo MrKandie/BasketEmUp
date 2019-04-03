@@ -9932,12 +9932,20 @@ MonoBehaviour:
   enemyAnim: {fileID: 393082303927365840}
   HitAnim: {fileID: 8538841711825691928}
   hitEffetTransform: {fileID: 8538841711671249130}
+  hand: {fileID: 1252262178384368527}
   HPmax: 100
   invincibilityTime: 1
   speed: 3.5
   agentDisabled: 0
   tryingToEnableAgent: 0
   _targetedTransform: {fileID: 8538841711224134201}
+  state: 2
+  ballRecuperationCD: 4
+  hasBall: 0
+  passSpeed: 2
+  passHeight: 1
+  ballPrefab: {fileID: 8763349692532359301, guid: de8a579f4882b7a48b1e588fe3a8c289,
+    type: 3}
 --- !u!1001 &3533536554014748973
 PrefabInstance:
   m_ObjectHideFlags: 0
