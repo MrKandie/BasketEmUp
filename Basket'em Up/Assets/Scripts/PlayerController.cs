@@ -185,8 +185,11 @@ public class PlayerController : MonoBehaviour, iTarget
             if (Input.GetButton("Shoot_" + inputIndex.ToString()))
         {
             Freeze();
-            transform.rotation = Quaternion.AngleAxis(-90 +GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()), Vector3.up);
-            target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
+            if (input.magnitude >= 0.1)
+            {
+                transform.rotation = Quaternion.AngleAxis(-90 + GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()), Vector3.up);
+                target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
+            }
         }
         if (Input.GetButtonUp("Shoot_" + inputIndex.ToString()))
         {
@@ -261,14 +264,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void Rotate()
     {
-        if (moveState == MoveState.Blocked)
-        {
-            if (target != null)
-            {
-                turnRotation = Quaternion.LookRotation(target.targetedTransform.position - self.position);
-            }
-        }
-        else if (doingHandoff && handoffTarget != null)
+        if (doingHandoff && handoffTarget != null)
             turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
         else if (targetedBy != null)
             turnRotation = Quaternion.LookRotation(targetedBy.transform.position - self.position);
