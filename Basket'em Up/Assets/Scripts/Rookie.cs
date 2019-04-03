@@ -20,11 +20,7 @@ public class Rookie : Enemy
     float chargeCurrentCooldown;
     bool charging;
     Coroutine chargeCoroutine;
-
-    public override void AddDamage(int amount)
-    {
-        base.AddDamage(amount);
-    }
+    public bool hasBall;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -46,7 +42,6 @@ public class Rookie : Enemy
         }
     }
 
-    public bool hasBall;
     protected override void Update()
     {
         base.Update();
