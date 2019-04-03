@@ -91,7 +91,7 @@ public class CameraControllerV3 : MonoBehaviour
         }
         center = center / targets.Length;
         wantedPosition = center;
-        wantedForward = Vector3.Lerp(transform.forward, dir, 0.01f);
+        wantedForward = Vector3.Lerp(transform.forward, dir, 0.03f);
 
         transform.position = Vector3.Lerp(transform.position, wantedPosition, 0.2f);
         transform.forward = wantedForward;
