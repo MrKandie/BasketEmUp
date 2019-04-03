@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour, iTarget
                 planeBetweenPlayers.UpdateEnemiesInZone(false);
             }
         }
-            if (Input.GetButton("Shoot_" + inputIndex.ToString()))
+        if (Input.GetButton("Shoot_" + inputIndex.ToString()))
         {
             if (input.magnitude >= 0.1)
             {

@@ -22,7 +22,8 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
-        modelTransform.localScale = new Vector3(.6f, .6f, .6f);
+        transform.localScale = new Vector3(1, 1, 1);
+        Vector3 bite = new Vector3(0, 0, 0);
     }
 
     private void Awake()
