@@ -21,6 +21,11 @@ public class CameraControllerV3 : MonoBehaviour
     public float minCamDistance;
     public float maxCamDistance;
     public float cameraSpeed;
+    [MinMaxSlider(-360,360)]
+    public Vector2 xClamp;
+
+    [MinMaxSlider(-360, 360)]
+    public Vector2 yClamp;
 
     public float outOfCameraTreshold = 0.1f; //Si on augmente cette valeur, le joueur dépassera moins de la caméra
     public float inCameraTreshold = 0.2f; //Si on augmente cette valeur, la caméra se rezoomera quand les joueurs sont proche du centre de l'écran
@@ -102,14 +107,14 @@ public class CameraControllerV3 : MonoBehaviour
         {
             eulerAngleY = eulerAngleY - 360;
         }
-        eulerAngleY = Mathf.Clamp(eulerAngleY, -40, 40);
+        eulerAngleY = Mathf.Clamp(eulerAngleY, yClamp.x, yClamp.y);
 
         float eulerAngleX = transform.eulerAngles.x;
         if (eulerAngleX > 180)
         {
             eulerAngleX = eulerAngleX - 360;
         }
-        eulerAngleX = Mathf.Clamp(eulerAngleX, -5, 360);
+        eulerAngleX = Mathf.Clamp(eulerAngleX, xClamp.x, xClamp.y);
 
         transform.eulerAngles = new Vector3(eulerAngleX, eulerAngleY, transform.eulerAngles.z);
     }

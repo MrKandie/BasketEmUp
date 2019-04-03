@@ -74,6 +74,7 @@ public class Enemy : MonoBehaviour, iTarget
         invincibilityCD = invincibilityTime;
         HitAnim.SetTrigger("HitTrigger");
         enemyAnim.SetTrigger("HitTrigger");
+        GameManager.i.levelManager.activeBall.hitTarget.Add(this);
 
         HPcurrent -= amount;
         HPcurrent = Mathf.Clamp(HPcurrent, 0, HPmax);

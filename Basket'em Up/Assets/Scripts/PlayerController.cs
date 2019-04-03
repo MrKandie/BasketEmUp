@@ -599,8 +599,8 @@ public class PlayerController : MonoBehaviour, iTarget
         }
         ball.transform.position = endPosition;
         ball.triggerEnabled = false;
-        ball.direction = Vector3.zero;
         target.OnBallReceived(ball);
+        ball.direction = Vector3.zero;
         CancelHandoff();
         yield return null;
     }

@@ -33,6 +33,7 @@ public class Ball : MonoBehaviour
             Enemy enemy = potentialEnemy;
             enemy.AddDamage(GameManager.i.ballMovementManager.GetDamages());
             enemy.Slow(0.2f, 1);
+            hitTarget.Add(enemy);
         }
         PlayerController potentialPlayer = other.GetComponent<PlayerController>();
         if (potentialPlayer != null && canBePicked)
@@ -119,7 +120,7 @@ public class Ball : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 endPosition = position;
         float passSpeed = GameManager.i.ballMovementManager.GetBounceSpeed() * GameManager.i.ballMovementManager.bounceOnGroundSpeedCoef;
-        float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
+        float passTime = Mathf.Clamp(Vector3.Distance(startPosition, endPosition), 4, Mathf.Infinity) / passSpeed;
         AnimationCurve speedCurve = GameManager.i.ballMovementManager.bounceMovementCurve;
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.bounceAngleCurve;
         direction = endPosition - startPosition;
@@ -153,7 +154,7 @@ public class Ball : MonoBehaviour
         Vector3 startPosition = transform.position;
         Vector3 endPosition = target.targetedTransform.position;
         float passSpeed = GameManager.i.ballMovementManager.GetBounceSpeed();
-        float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
+        float passTime = Mathf.Clamp(Vector3.Distance(startPosition, endPosition),4,Mathf.Infinity) / passSpeed;
         AnimationCurve speedCurve = GameManager.i.ballMovementManager.bounceMovementCurve;
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.bounceAngleCurve;
         direction = endPosition - startPosition;
