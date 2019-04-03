@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour, iTarget
     bool inputDisabled;
     GameObject highlighter;
     Ball possessedBall;
-    iTarget target; //The object targeted by this player
+    public iTarget target; //The object targeted by this player
     Coroutine dunkJumpCoroutine;
     float speed;
     float customDrag;
@@ -185,6 +185,7 @@ public class PlayerController : MonoBehaviour, iTarget
             if (Input.GetButton("Shoot_" + inputIndex.ToString()))
         {
             Freeze();
+            transform.rotation = Quaternion.AngleAxis(-90 +GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()), Vector3.up);
             target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
         }
         if (Input.GetButtonUp("Shoot_" + inputIndex.ToString()))
@@ -271,7 +272,7 @@ public class PlayerController : MonoBehaviour, iTarget
             turnRotation = Quaternion.LookRotation(handoffTarget.position - self.position);
         else if (targetedBy != null)
             turnRotation = Quaternion.LookRotation(targetedBy.transform.position - self.position);
-        else 
+        else if (input.magnitude >= 0.1f)
             turnRotation = Quaternion.Euler(0, Mathf.Atan2(input.x, input.z) * 180 / Mathf.PI, 0);
 
         self.rotation = Quaternion.Slerp(transform.rotation, turnRotation, turnSpeed);
@@ -429,7 +430,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         direction = direction.normalized;
         direction = direction * magnitude;
-        body.AddForce(Vector3.up * 10, ForceMode.Impulse);
+        body.AddForce(Vector3.up * 2, ForceMode.Impulse);
         body.AddForce(direction, ForceMode.Impulse);
     }
 
@@ -449,6 +450,12 @@ public class PlayerController : MonoBehaviour, iTarget
         possessedBall.transform.SetParent(null);
         possessedBall.holder = null;
         possessedBall = null;
+    }
+
+    public void CancelHandoff()
+    {
+        handoffTarget = null;
+        doingHandoff = false;
     }
 
     //Gives the ball to the player
@@ -480,6 +487,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         Vector2 dir = initial - target;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        angle = - angle;
         return angle;
     }
     #endregion
@@ -593,6 +601,7 @@ public class PlayerController : MonoBehaviour, iTarget
         ball.triggerEnabled = false;
         ball.direction = Vector3.zero;
         target.OnBallReceived(ball);
+        CancelHandoff();
         yield return null;
     }
     #endregion
