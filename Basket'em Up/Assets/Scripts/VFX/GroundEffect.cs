@@ -8,11 +8,16 @@ public class GroundEffect : MonoBehaviour
     public AnimationCurve sliderCurve;
     public Renderer myRend;
     public float timeForEffect;
+    public ParticleSystem[] effectsOnSpawn;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(MovingSlider());
+        for (int i = 0; i < effectsOnSpawn.Length; i++)
+        {
+            effectsOnSpawn[i].Play();
+        }
     }
 
     IEnumerator MovingSlider()

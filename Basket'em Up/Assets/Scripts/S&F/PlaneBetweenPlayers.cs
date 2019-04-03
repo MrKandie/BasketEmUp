@@ -51,7 +51,8 @@ public class PlaneBetweenPlayers : MonoBehaviour
             if (!opacityOn)
             {
                 opacityOn = true;
-                myRend.material.SetFloat("_Opacity", 1);
+                myRend.material.SetFloat("_CenterOpacity", .2f);
+                myRend.material.SetFloat("_BorderOpacity", 1);
                 //StopAllCoroutines();
                 //StartCoroutine(ChangeOpacity(true));
             }
@@ -62,7 +63,8 @@ public class PlaneBetweenPlayers : MonoBehaviour
             if (nbEnemyInsideZone <= 0 && opacityOn)
             {
                 opacityOn = false;
-                myRend.material.SetFloat("_Opacity", 0);
+                myRend.material.SetFloat("_CenterOpacity", 0);
+                myRend.material.SetFloat("_BorderOpacity", 0);
                 //StartCoroutine(ChangeOpacity(false));
             }
         }

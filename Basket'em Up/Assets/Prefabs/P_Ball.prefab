@@ -141,6 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerCollider: {fileID: 4392951928487001936}
   defaultCollider: {fileID: 4664109409575150369}
+  modelTransform: {fileID: 4664109409575150370}
   holder: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   triggerEnabled: 0

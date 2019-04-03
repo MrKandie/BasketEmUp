@@ -541,6 +541,7 @@ public class PlayerController : MonoBehaviour, iTarget
         customGravity = onGroundGravityMultiplyer;
         dunkJumpCoroutine = null;
         moveState = MoveState.Blocked;
+        GameManager.i.momentumManager.DecrementMomentum(GameManager.i.momentumManager.momentum);
         yield return null;
     }
 
@@ -609,27 +610,33 @@ public class PlayerController : MonoBehaviour, iTarget
     #region Private functions
     private void GenerateDunkExplosion(Vector3 position, float radius, float power, int damages)
     {
-        Collider[] colliders = Physics.OverlapSphere(position, radius);
+        float trueRadius = radius * GameManager.i.momentumManager.momentum;
+        float truePower = power * GameManager.i.momentumManager.momentum;
+        int trueDamages = Mathf.RoundToInt(damages * GameManager.i.momentumManager.momentum);
+
+        Collider[] colliders = Physics.OverlapSphere(position, trueRadius);
         foreach (Collider hit in colliders)
         {
             Enemy potentialEnemy = hit.gameObject.GetComponent<Enemy>();
             if (potentialEnemy != null)
             {
                 potentialEnemy.DisableNavmeshAgent();
-                potentialEnemy.AddDamage(damages);
+                potentialEnemy.AddDamage(trueDamages);
                 Rigidbody rb = hit.GetComponent<Rigidbody>();
 
                 if (rb != null)
                 {
-                    rb.AddForce(new Vector3(0, 5000, 0));
-                    rb.AddExplosionForce(power, position + new Vector3(0, -2, 0), radius, 3.0F);
+                    //rb.AddForce(new Vector3(0, 5000, 0));
+                    //rb.AddExplosionForce(truePower, position + new Vector3(0, -2, 0), trueRadius, 3.0F);
                 }
             }
         }
 
         Vector3 spawnPosition = new Vector3(transform.position.x, 0.05f, transform.position.z) + transform.forward *2;
         spawnPosition.y = 0.05f;
-        Destroy(Instantiate(groundDunkEffect, spawnPosition, Quaternion.identity), 2);
+        GameObject dunkFXRef = Instantiate(groundDunkEffect, spawnPosition, Quaternion.Euler(90, 0, 0));
+        dunkFXRef.transform.localScale = new Vector3(trueRadius, trueRadius, trueRadius);
+        Destroy(dunkFXRef, 2);
     }
 
     private GameObject GenerateHighlighter()
