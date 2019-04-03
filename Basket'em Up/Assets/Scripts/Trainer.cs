@@ -9,4 +9,19 @@ public class Trainer : Enemy
         base.Update();
 
     }
+
+    void ThrowBallOnNearestPlayer()
+    {
+
+    }
+
+    void GiveBallToNearestRookie()
+    {
+
+    }
+
+    void FleeFromPlayers()
+    {
+
+    }
 }
