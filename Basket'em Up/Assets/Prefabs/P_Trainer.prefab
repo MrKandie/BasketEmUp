@@ -9935,17 +9935,23 @@ MonoBehaviour:
   hand: {fileID: 1252262178384368527}
   HPmax: 100
   invincibilityTime: 1
-  speed: 3.5
+  speed: 10
   agentDisabled: 0
   tryingToEnableAgent: 0
   _targetedTransform: {fileID: 8538841711224134201}
   state: 2
   ballRecuperationCD: 4
   hasBall: 0
-  passSpeed: 2
+  passSpeed: 8
   passHeight: 1
-  ballPrefab: {fileID: 8763349692532359301, guid: de8a579f4882b7a48b1e588fe3a8c289,
+  attackBallSpeed: 10
+  attackBallHeight: 0.5
+  attackPushStrength: 5
+  attackDamage: 10
+  ballPrefab: {fileID: 4664109409772999063, guid: e0d35cb957f1d3544bb956d055147efc,
     type: 3}
+  fleeDistanceTreshold: 10
+  fleeCheckCooldown: 1
 --- !u!1001 &3533536554014748973
 PrefabInstance:
   m_ObjectHideFlags: 0

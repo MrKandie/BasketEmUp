@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Trainer : Enemy
 {
@@ -16,21 +17,31 @@ public class Trainer : Enemy
     public int attackDamage = 10;
     public GameObject ballPrefab;
     public float fleeDistanceTreshold; //A partir de combien de mètres l'entraîneur se met à fuir ?
+    public float fleeCheckCooldown;
 
     float timeBeforeNextBall;
     PlayerController playerTargeted;
     Rookie rookieTargeted;
+    float timeBeforeTryingToFlee;
 
     protected override void Awake()
     {
         base.Awake();
         timeBeforeNextBall = ballRecuperationCD;
+        CheckAllRegionsAround(transform.position, 36, 2);
+        agent.speed = speed;
     }
     protected override void Update()
     {
         base.Update();
         UpdateCD();
-        IsEndangered();
+        if (IsEndangered())
+        {
+            state = State.Fleeing;
+        } else
+        {
+            state = State.Helping;
+        }
         switch (state)
         {
             case State.Fleeing:
@@ -120,20 +131,33 @@ public class Trainer : Enemy
         return false;
     }
 
-    void CheckAllRegionsAround(Vector3 position)
+    void CheckAllRegionsAround(Vector3 position, int posQuantity, float radius)
     {
-        for (int i = 0; i < 36; i++)
+        int angleToCheck = Random.Range(0, 360);
+        for (int i = 0; i < posQuantity; i++)
         {
-            //Check 360°
+            Vector3 newPosition = position;
+            newPosition.x = position.x + radius * Mathf.Cos(angleToCheck);
+            newPosition.z = position.z + radius * Mathf.Sin(angleToCheck);
+            angleToCheck += 360 / posQuantity;
+            if (IsRegionSafe(newPosition))
+            {
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(newPosition, out hit, 5, NavMesh.AllAreas))
+                {
+                    agent.destination = hit.position;
+                }
+                return;
+            }
         }
     }
 
     bool IsRegionSafe(Vector3 position)
     {
+        NavMeshHit hit;
         position.y += 1;
         //Check if region isn't in the sky
-        RaycastHit hit;
-        if (Physics.Raycast(position, Vector3.down, out hit, 5))
+        if (NavMesh.SamplePosition(position, out hit, 5, NavMesh.AllAreas))
         {
             //Zone is on ground
             foreach (PlayerController player in GameManager.i.levelManager.players)
@@ -152,7 +176,11 @@ public class Trainer : Enemy
 
     void FleeFromPlayers()
     {
-        //Find a safe region in a radius
+        if (timeBeforeTryingToFlee <= 0)
+        {
+            timeBeforeTryingToFlee = fleeCheckCooldown;
+            CheckAllRegionsAround(transform.position, 36, fleeDistanceTreshold);
+        }
     }
 
     void UpdateCD()
@@ -166,6 +194,10 @@ public class Trainer : Enemy
             {
                 hasBall = true;
             }
+        }
+        if (timeBeforeTryingToFlee > 0)
+        {
+            timeBeforeTryingToFlee -= Time.deltaTime;
         }
     }
 
