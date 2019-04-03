@@ -94,9 +94,9 @@ public class Rookie : Enemy
     private void NoBallMovement()
     {
         target = GetNearestPlayer();
-        agent.speed = speed;
         if (agent.enabled)
         {
+            agent.speed = speed;
             agent.destination = target.transform.position;
         }
         if (Vector3.Distance(target.transform.position, transform.position) < 2 && CaCCurrentCooldown <= 0)

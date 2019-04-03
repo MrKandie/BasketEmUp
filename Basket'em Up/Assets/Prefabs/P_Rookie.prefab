@@ -5076,6 +5076,7 @@ MonoBehaviour:
   enemyAnim: {fileID: 951577377890835532}
   HitAnim: {fileID: 951577376543889202}
   hitEffetTransform: {fileID: 951577376563066880}
+  hand: {fileID: 951577377841973265}
   HPmax: 100
   invincibilityTime: 1
   speed: 3.5

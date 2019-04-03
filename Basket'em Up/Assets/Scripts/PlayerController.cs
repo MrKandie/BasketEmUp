@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour, iTarget
         }
         if (Input.GetMouseButtonDown(1))
         {
-            TakeBall(FindObjectOfType<Ball>(), 0.1f);
+            TakeBall(GameManager.i.levelManager.activeBall, 0.1f);
         }
     }
 
@@ -584,7 +584,7 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             yield return new WaitForEndOfFrame();
             //Apply speed curve
-            ball.transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i / passTime));
+            ball.transform.position = Vector3.Lerp(startPosition, target.targetedTransform.position, speedCurve.Evaluate(i / passTime));
 
             //Apply angle curve
             ball.transform.position = new Vector3(
@@ -593,7 +593,7 @@ public class PlayerController : MonoBehaviour, iTarget
                     ball.transform.position.z
                 );
         }
-        ball.transform.position = endPosition;
+        ball.transform.position = target.targetedTransform.position;
         ball.triggerEnabled = false;
         target.OnBallReceived(ball);
         ball.direction = Vector3.zero;
