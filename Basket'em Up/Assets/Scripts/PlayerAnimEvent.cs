@@ -12,4 +12,9 @@ public class PlayerAnimEvent : MonoBehaviour
         pc.doingHandoff = false;
         pc.handoffTarget = null;
     }
+
+    public void ControlsBackToPlayer()
+    {
+        pc.moveState = MoveState.Idle;
+    }
 }

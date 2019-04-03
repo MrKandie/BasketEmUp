@@ -536,7 +536,7 @@ public class PlayerController : MonoBehaviour, iTarget
         self.position = position;
         customGravity = onGroundGravityMultiplyer;
         dunkJumpCoroutine = null;
-        moveState = MoveState.Idle;
+        moveState = MoveState.Blocked;
         yield return null;
     }
 
