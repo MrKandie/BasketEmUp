@@ -1035,7 +1035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1544252463, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
       propertyPath: xClamp.y
-      value: 45
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1544252463, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
       propertyPath: yClamp.x
