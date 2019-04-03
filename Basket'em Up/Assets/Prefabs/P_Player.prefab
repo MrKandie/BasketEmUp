@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 1787067330}
   - component: {fileID: 1787067333}
   - component: {fileID: 1787067332}
-  - component: {fileID: 1787067331}
   m_Layer: 9
   m_Name: Quad
   m_TagString: Untagged
@@ -109,20 +108,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1787067331
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787067329}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &69913409235962623
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +168,7 @@ MonoBehaviour:
     type: 3}
   shootQuadTransform: {fileID: 1586904589}
   ballReceivedParticleSystem: {fileID: 4140970633969452101}
+  planeBetweenPlayers: {fileID: 0}
   _targetedTransform: {fileID: 3535076308953019112}
   inputIndex: 1
   playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
@@ -214,7 +200,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   minWalkSpeed: 0.3
-  maxSpeed: 7
+  maxSpeedMin: 9
+  maxSpeedMax: 11
   maxAcceleration: 200
   movingDrag: 0.08
   idleDrag: 0.05
@@ -321,6 +308,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   targetAngleTreshold: 10
   currentHP: 0
+  shooting: 0
   targetedBy: {fileID: 0}
   doingHandoff: 0
   handoffTarget: {fileID: 0}
@@ -10267,15 +10255,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9986ce8de16a2b544ad9b2fb09399d5a, type: 3}
---- !u!198 &4140970633969452101 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 810686673965636473, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
-    type: 3}
-  m_PrefabInstance: {fileID: 3618516844980182844}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5926905534905076289 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6951047401371063677, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3618516844980182844}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4140970633969452101 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 810686673965636473, guid: 9986ce8de16a2b544ad9b2fb09399d5a,
     type: 3}
   m_PrefabInstance: {fileID: 3618516844980182844}
   m_PrefabAsset: {fileID: 0}

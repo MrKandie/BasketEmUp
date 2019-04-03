@@ -5077,7 +5077,7 @@ MonoBehaviour:
   HitAnim: {fileID: 951577376543889202}
   hitEffetTransform: {fileID: 951577376563066880}
   HPmax: 100
-  invincibilityTime: 1
+  invincibilityTime: 0.2
   speed: 3.5
   agentDisabled: 0
   tryingToEnableAgent: 0

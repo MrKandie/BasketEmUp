@@ -17,6 +17,8 @@ public class PlaneBetweenPlayers : MonoBehaviour
 
     int nbEnemyInsideZone;
     bool opacityOn;
+
+    [HideInInspector]public bool playerShooting;
     
     void Update()
     {
@@ -31,6 +33,7 @@ public class PlaneBetweenPlayers : MonoBehaviour
     {
         if (other.CompareTag("enemy"))
         {
+            nbEnemyInsideZone++;
             UpdateEnemiesInZone(true);
         }
     }
@@ -39,15 +42,16 @@ public class PlaneBetweenPlayers : MonoBehaviour
     {
         if (other.CompareTag("enemy"))
         {
-            UpdateEnemiesInZone(false);
+            nbEnemyInsideZone--;
+            if(nbEnemyInsideZone <= 0)
+                UpdateEnemiesInZone(false);
         }
     }
 
-    void UpdateEnemiesInZone(bool _more)
+    public void UpdateEnemiesInZone(bool _more)
     {
-        if (_more)
+        if (_more && !playerShooting)
         {
-            nbEnemyInsideZone++;
             if (!opacityOn)
             {
                 opacityOn = true;
@@ -59,8 +63,7 @@ public class PlaneBetweenPlayers : MonoBehaviour
         }
         else
         {
-            nbEnemyInsideZone--;
-            if (nbEnemyInsideZone <= 0 && opacityOn)
+            if (opacityOn)
             {
                 opacityOn = false;
                 myRend.material.SetFloat("_CenterOpacity", 0);

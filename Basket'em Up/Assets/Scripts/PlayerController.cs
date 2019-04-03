@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public GameObject groundDunkEffect;
     public Transform shootQuadTransform;
     public ParticleSystem ballReceivedParticleSystem;
+    public PlaneBetweenPlayers planeBetweenPlayers;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour, iTarget
     float customDrag;
     float customGravity;
     float maxSpeed;
+    [HideInInspector] public bool shooting;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
@@ -185,19 +187,38 @@ public class PlayerController : MonoBehaviour, iTarget
         if (Input.GetButtonDown("Shoot_" + inputIndex.ToString()))
         {
             playerAnim.SetTrigger("PrepareShootingTrigger");
+            Freeze();
+            if(possessedBall != null)
+            {
+                //shootQuadTransform.gameObject.SetActive(true);
+                shooting = true;
+                planeBetweenPlayers.playerShooting = true;
+                planeBetweenPlayers.UpdateEnemiesInZone(false);
+            }
         }
             if (Input.GetButton("Shoot_" + inputIndex.ToString()))
         {
-            Freeze();
             if (input.magnitude >= 0.1)
             {
                 transform.rotation = Quaternion.AngleAxis(-90 + GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()), Vector3.up);
                 target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
+                /*float quadYScale = Vector3.Distance(self.position, target.targetedTransform.position);
+                shootQuadTransform.transform.GetChild(0).localScale = new Vector3(.9f, quadYScale, 0.05f);*/
+                //shootQuadTransform.transform.GetChild(0)
             }
         }
         if (Input.GetButtonUp("Shoot_" + inputIndex.ToString()))
         {
             UnFreeze();
+            //shootQuadTransform.transform.GetChild(0).localScale = new Vector3(.9f, 15, 0.05f);
+            if (shooting)
+            {
+                shootQuadTransform.gameObject.SetActive(false);
+                shooting = false;
+                planeBetweenPlayers.playerShooting = false;
+                planeBetweenPlayers.UpdateEnemiesInZone(true);
+            }
+            shooting = false;
             if (target != null)
             {
                 PassBall(target, GameManager.i.momentumManager.momentum);
