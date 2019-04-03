@@ -250,7 +250,7 @@ MonoBehaviour:
   dunkJumpHeight: 7
   dunkJumpDistance: 5
   dunkJumpSpeed: 5
-  dunkTime: 0
+  dunkTime: 0.2
   dunkClimaxTime: 0.3
   dunkTreshold: {x: 0.186407, y: 0.8334658}
   dunkJumpSpeedCurve:
