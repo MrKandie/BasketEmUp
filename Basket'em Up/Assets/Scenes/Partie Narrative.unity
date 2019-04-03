@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -944,7 +944,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 630848895}
-  m_LocalRotation: {x: 0.15689634, y: 0.0019605844, z: -0.00031146748, w: 0.9876131}
+  m_LocalRotation: {x: 0.15689635, y: 0.001960622, z: -0.00031147347, w: 0.9876131}
   m_LocalPosition: {x: 0.37487778, y: 3.092455, z: -12.367377}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1497,6 +1497,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   reboundHeight: 0.8
+  offsetPlayer1: {x: 0, y: 0, z: 0}
+  offsetPlayer2: {x: 0, y: 0, z: 0}
 --- !u!1 &1189010431
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,8 +1531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myAnim: {fileID: 1761455226}
-  player1IsTrue: 1
-  acceleration: 20
+  player1IsTrue: 0
+  acceleration: 30
   maxSpeed: 5
   horizontalSpeedMultiplier: 0.5
   rb: {fileID: 1189010434}
@@ -1619,7 +1621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAnim: {fileID: 1605936675}
   player1IsTrue: 1
-  acceleration: 20
+  acceleration: 30
   maxSpeed: 5
   horizontalSpeedMultiplier: 0.5
   rb: {fileID: 1204604542}
@@ -3362,7 +3364,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896123926}
-  m_LocalRotation: {x: 0.15689634, y: 0.0019605844, z: -0.00031146748, w: 0.9876131}
+  m_LocalRotation: {x: 0.15689635, y: 0.001960622, z: -0.00031147347, w: 0.9876131}
   m_LocalPosition: {x: -9.49, y: 10.08, z: -1.2799997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

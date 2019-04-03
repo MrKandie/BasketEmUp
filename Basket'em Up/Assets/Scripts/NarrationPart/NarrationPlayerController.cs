@@ -62,18 +62,25 @@ public class NarrationPlayerController : MonoBehaviour
             Vector3 inputVector1 = Input.GetAxis("Horizontal_1") * Camera.main.transform.right;
             Vector3 inputVector2 = Input.GetAxis("Vertical_1") * Camera.main.transform.forward;
             Vector3 finalVector = inputVector1 * horizontalSpeedMultiplier + inputVector2;
-            print(finalVector.normalized);
             rb.AddForce(finalVector * acceleration);
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
         }
         else
         {
+            Vector3 inputVector1 = Input.GetAxis("Horizontal_2") * Camera.main.transform.right;
+            Vector3 inputVector2 = Input.GetAxis("Vertical_2") * Camera.main.transform.forward;
+            Vector3 finalVector = inputVector1 * horizontalSpeedMultiplier + inputVector2;
+            rb.AddForce(finalVector * acceleration);
         }
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+        myAnim.SetFloat("Blend", rb.velocity.magnitude / maxSpeed);
     }
 
     void UpdateRotation()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity), 0.8f);
-        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        if (rb.velocity.magnitude > 0.5f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity), 0.5f);
+            transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        }
     }
 }
