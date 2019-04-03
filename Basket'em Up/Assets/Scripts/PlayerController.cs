@@ -421,7 +421,7 @@ public class PlayerController : MonoBehaviour, iTarget
         currentHP = Mathf.Clamp(currentHP, 0, MaxHP);
         if (currentHP <= 0)
         {
-            Kill();
+            //Kill(); (Not for debug)
         }
     }
 
@@ -429,6 +429,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         direction = direction.normalized;
         direction = direction * magnitude;
+        body.AddForce(Vector3.up * 10, ForceMode.Impulse);
         body.AddForce(direction, ForceMode.Impulse);
     }
 
