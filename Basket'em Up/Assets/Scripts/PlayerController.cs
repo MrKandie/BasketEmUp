@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviour, iTarget
 
 
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
-    public float maxSpeed = 10;
+    public float maxSpeedMin = 9;
+    public float maxSpeedMax = 11;
     public float maxAcceleration = 10;
 
     [Space(2)]
@@ -96,6 +97,7 @@ public class PlayerController : MonoBehaviour, iTarget
     float speed;
     float customDrag;
     float customGravity;
+    float maxSpeed;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour, iTarget
         customGravity = onGroundGravityMultiplyer;
         customDrag = idleDrag;
         currentHP = MaxHP;
+        maxSpeed = maxSpeedMin;
     }
 
     void Update()
@@ -113,6 +116,7 @@ public class PlayerController : MonoBehaviour, iTarget
         GetInput();
         if (inputDisabled) { return; }
         HighlightTarget();
+        UpdateMaxSpeed();
     }
 
     private void FixedUpdate()
@@ -604,6 +608,11 @@ public class PlayerController : MonoBehaviour, iTarget
     #endregion
 
     #region Private functions
+    private void UpdateMaxSpeed()
+    {
+        maxSpeed = Mathf.Lerp(maxSpeedMin, maxSpeedMax, GameManager.i.momentumManager.momentum);
+    }
+
     private void GenerateDunkExplosion(Vector3 position, float radius, float power, int damages)
     {
         float trueRadius = radius * GameManager.i.momentumManager.momentum;

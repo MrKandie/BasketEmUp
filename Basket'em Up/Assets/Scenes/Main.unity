@@ -20175,6 +20175,11 @@ PrefabInstance:
       propertyPath: MaxHP
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: maxSpeedMax
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 6122283427768529348, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -43010,6 +43015,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dunkExplosionRadius
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: maxSpeedMax
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 218a241db58f56849816014d9aa8d204, type: 3}

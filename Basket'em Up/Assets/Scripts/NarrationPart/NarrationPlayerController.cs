@@ -79,7 +79,6 @@ public class NarrationPlayerController : MonoBehaviour
     {
         if (rb.velocity.magnitude > 0.5f)
         {
-            print("hey");
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity), 0.5f);
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         }
