@@ -20,9 +20,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _BorderOpacity: 1
+    - _BorderOpacity: 0
     - _BorderWidth: 0.042
-    - _CenterOpacity: 0.2
+    - _CenterOpacity: 0
     - _Cutoff: 0.5
     - _EmissiveMultiplier: 1.79
     - _InOrOut: 0

@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public GameObject groundDunkEffect;
     public Transform shootQuadTransform;
     public ParticleSystem ballReceivedParticleSystem;
+    public PlaneBetweenPlayers planeBetweenPlayers;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -45,7 +46,8 @@ public class PlayerController : MonoBehaviour, iTarget
 
 
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
-    public float maxSpeed = 10;
+    public float maxSpeedMin = 9;
+    public float maxSpeedMax = 11;
     public float maxAcceleration = 10;
 
     [Space(2)]
@@ -96,6 +98,8 @@ public class PlayerController : MonoBehaviour, iTarget
     float speed;
     float customDrag;
     float customGravity;
+    float maxSpeed;
+    [HideInInspector] public bool shooting;
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
@@ -106,6 +110,7 @@ public class PlayerController : MonoBehaviour, iTarget
         customGravity = onGroundGravityMultiplyer;
         customDrag = idleDrag;
         currentHP = MaxHP;
+        maxSpeed = maxSpeedMin;
     }
 
     void Update()
@@ -113,6 +118,7 @@ public class PlayerController : MonoBehaviour, iTarget
         GetInput();
         if (inputDisabled) { return; }
         HighlightTarget();
+        UpdateMaxSpeed();
     }
 
     private void FixedUpdate()
@@ -181,19 +187,38 @@ public class PlayerController : MonoBehaviour, iTarget
         if (Input.GetButtonDown("Shoot_" + inputIndex.ToString()))
         {
             playerAnim.SetTrigger("PrepareShootingTrigger");
-        }
-            if (Input.GetButton("Shoot_" + inputIndex.ToString()))
-        {
             Freeze();
+            if(possessedBall != null)
+            {
+                //shootQuadTransform.gameObject.SetActive(true);
+                shooting = true;
+                planeBetweenPlayers.playerShooting = true;
+                planeBetweenPlayers.UpdateEnemiesInZone(false);
+            }
+        }
+        if (Input.GetButton("Shoot_" + inputIndex.ToString()))
+        {
             if (input.magnitude >= 0.1)
             {
                 transform.rotation = Quaternion.AngleAxis(-90 + GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()), Vector3.up);
                 target = GetTargetedObject(GameManager.i.levelManager.GetTargetableEnemies());
+                /*float quadYScale = Vector3.Distance(self.position, target.targetedTransform.position);
+                shootQuadTransform.transform.GetChild(0).localScale = new Vector3(.9f, quadYScale, 0.05f);*/
+                //shootQuadTransform.transform.GetChild(0)
             }
         }
         if (Input.GetButtonUp("Shoot_" + inputIndex.ToString()))
         {
             UnFreeze();
+            //shootQuadTransform.transform.GetChild(0).localScale = new Vector3(.9f, 15, 0.05f);
+            if (shooting)
+            {
+                shootQuadTransform.gameObject.SetActive(false);
+                shooting = false;
+                planeBetweenPlayers.playerShooting = false;
+                planeBetweenPlayers.UpdateEnemiesInZone(true);
+            }
+            shooting = false;
             if (target != null)
             {
                 PassBall(target, GameManager.i.momentumManager.momentum);
@@ -537,6 +562,7 @@ public class PlayerController : MonoBehaviour, iTarget
         customGravity = onGroundGravityMultiplyer;
         dunkJumpCoroutine = null;
         moveState = MoveState.Blocked;
+        GameManager.i.momentumManager.DecrementMomentum(GameManager.i.momentumManager.momentum);
         yield return null;
     }
 
@@ -603,29 +629,40 @@ public class PlayerController : MonoBehaviour, iTarget
     #endregion
 
     #region Private functions
+    private void UpdateMaxSpeed()
+    {
+        maxSpeed = Mathf.Lerp(maxSpeedMin, maxSpeedMax, GameManager.i.momentumManager.momentum);
+    }
+
     private void GenerateDunkExplosion(Vector3 position, float radius, float power, int damages)
     {
-        Collider[] colliders = Physics.OverlapSphere(position, radius);
+        float trueRadius = radius * GameManager.i.momentumManager.momentum;
+        float truePower = power * GameManager.i.momentumManager.momentum;
+        int trueDamages = Mathf.RoundToInt(damages * GameManager.i.momentumManager.momentum);
+
+        Collider[] colliders = Physics.OverlapSphere(position, trueRadius);
         foreach (Collider hit in colliders)
         {
             Enemy potentialEnemy = hit.gameObject.GetComponent<Enemy>();
             if (potentialEnemy != null)
             {
                 potentialEnemy.DisableNavmeshAgent();
-                potentialEnemy.AddDamage(damages);
+                potentialEnemy.AddDamage(trueDamages);
                 Rigidbody rb = hit.GetComponent<Rigidbody>();
 
                 if (rb != null)
                 {
-                    rb.AddForce(new Vector3(0, 5000, 0));
-                    rb.AddExplosionForce(power, position + new Vector3(0, -2, 0), radius, 3.0F);
+                    //rb.AddForce(new Vector3(0, 5000, 0));
+                    //rb.AddExplosionForce(truePower, position + new Vector3(0, -2, 0), trueRadius, 3.0F);
                 }
             }
         }
 
         Vector3 spawnPosition = new Vector3(transform.position.x, 0.05f, transform.position.z) + transform.forward *2;
         spawnPosition.y = 0.05f;
-        Destroy(Instantiate(groundDunkEffect, spawnPosition, Quaternion.identity), 2);
+        GameObject dunkFXRef = Instantiate(groundDunkEffect, spawnPosition, Quaternion.Euler(90, 0, 0));
+        dunkFXRef.transform.localScale = new Vector3(trueRadius, trueRadius, trueRadius);
+        Destroy(dunkFXRef, 2);
     }
 
     private GameObject GenerateHighlighter()

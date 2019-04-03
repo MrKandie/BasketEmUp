@@ -5078,7 +5078,7 @@ MonoBehaviour:
   hitEffetTransform: {fileID: 951577376563066880}
   hand: {fileID: 951577377841973265}
   HPmax: 100
-  invincibilityTime: 1
+  invincibilityTime: 0.2
   speed: 3.5
   agentDisabled: 0
   tryingToEnableAgent: 0

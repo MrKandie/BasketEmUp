@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     [Header("Reference")]
     public Collider triggerCollider;
     public Collider defaultCollider;
+    public Transform modelTransform;
 
     [Header("Debug")]
     public PlayerController holder;
@@ -18,6 +19,12 @@ public class Ball : MonoBehaviour
     public BallMoveState state;
     private bool canBePicked;
     private GameObject highlighter;
+
+    private void Update()
+    {
+        transform.localScale = new Vector3(1, 1, 1);
+        Vector3 bite = new Vector3(0, 0, 0);
+    }
 
     private void Awake()
     {
