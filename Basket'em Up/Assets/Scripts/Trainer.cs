@@ -250,6 +250,8 @@ public class Trainer : Enemy
     {
         Vector3 startPosition = hand.transform.position;
         Vector3 endPosition = player.self.position;
+        Vector3 direction = endPosition- startPosition;
+        endPosition = endPosition + direction.normalized * 5;
         Vector3 playerPosition = player.self.position;
         playerPosition.y = transform.position.y;
         //Rotate players towards target and play particles
@@ -282,7 +284,7 @@ public class Trainer : Enemy
                 );
         }
         ball.GetComponent<Rigidbody>().isKinematic = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
         Destroy(ball);
         yield return null;
     }
