@@ -19,8 +19,9 @@ public class Trainer : Enemy
     public float fleeDistanceTreshold; //A partir de combien de mètres l'entraîneur se met à fuir ?
     public float fleeCheckCooldown;
 
+    public Material ballTrailMaterial;
     float timeBeforeNextBall;
-    public PlayerController playerTargeted;
+    PlayerController playerTargeted;
     Rookie rookieTargeted;
     float timeBeforeTryingToFlee;
     List<GameObject> generatedBalls = new List<GameObject>();
@@ -259,6 +260,7 @@ public class Trainer : Enemy
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
 
         GameObject ball = Instantiate(ballPrefab);
+        ball.transform.Find("Trail").GetComponent<TrailRenderer>().material = ballTrailMaterial;
         generatedBalls.Add(ball);
         ball.transform.position = this.hand.position;
         ball.GetComponent<Rigidbody>().isKinematic = true;
@@ -299,6 +301,7 @@ public class Trainer : Enemy
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
 
         GameObject ball = Instantiate(ballPrefab);
+        ball.transform.Find("Trail").GetComponent<TrailRenderer>().material = ballTrailMaterial;
         ball.transform.position = this.hand.position;
         Ball ballScript = ball.GetComponent<Ball>();
         ballScript.SetState(BallMoveState.Moving);
