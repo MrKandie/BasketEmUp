@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 8389507779031720874}
   - component: {fileID: 8389507779031720877}
   - component: {fileID: 1746201165}
+  - component: {fileID: 6006868601567478540}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -228,13 +229,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8389507779031720880}
-  m_LocalRotation: {x: 0.23616116, y: -0.01925269, z: -0.0008808338, w: 0.97152275}
-  m_LocalPosition: {x: 0.48, y: 15.99, z: -30.2}
+  m_LocalRotation: {x: 0.2840153, y: 0, z: 0, w: 0.95881975}
+  m_LocalPosition: {x: 0, y: 20.2, z: -36.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8389507779443543906}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 27.312002, y: -2.44, z: -0.697}
+  m_LocalEulerAnglesHint: {x: 33, y: 0, z: 0}
 --- !u!20 &8389507779031720878
 Camera:
   m_ObjectHideFlags: 0
@@ -413,6 +414,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Resolution: 1
   DefaultSpotCookie: {fileID: 2800000, guid: 5157bf6d690b6df458f6c0ce0c06d329, type: 3}
+--- !u!114 &6006868601567478540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8389507779031720880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eed1d9cbe64423499f1fefc0ce50417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Resolution: 1
+  DefaultSpotCookie: {fileID: 2800000, guid: 5157bf6d690b6df458f6c0ce0c06d329, type: 3}
 --- !u!1 &8389507779443543908
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,9 +498,9 @@ MonoBehaviour:
   cameraDirection: {fileID: 0}
   cameraObj: {fileID: 8389507779031720878}
   minCamDistance: 30
-  maxCamDistance: 40
+  maxCamDistance: 60
   cameraSpeed: 3
-  xClamp: {x: -10, y: 45}
+  xClamp: {x: -10, y: 10}
   yClamp: {x: -30, y: 30}
   outOfCameraTreshold: 0.25
   inCameraTreshold: 0.3
