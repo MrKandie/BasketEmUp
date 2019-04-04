@@ -83,10 +83,13 @@ public class Ball : MonoBehaviour
         Vector3 groundPosition = transform.position + directionNormalized;
         if (Physics.Raycast(groundPosition,
             Vector3.down,
-            out hit))
+            out hit,5))
             {
                 groundPosition.y = hit.point.y + 0.7f;
-            }
+            } else
+        {
+            groundPosition = transform.position;
+        }
         StartCoroutine(BounceOnGround_C(groundPosition));
     }
 

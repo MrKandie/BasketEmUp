@@ -31,7 +31,7 @@ public class Rookie : Enemy
             if (collision.gameObject.GetType().IsSubclassOf(typeof(Enemy)))
             {
                 collision.gameObject.GetComponent<Enemy>().AddDamage(chargeDamage);
-                collision.gameObject.GetComponent<Enemy>().Push(transform.forward, chargePushForce);
+                //collision.gameObject.GetComponent<Enemy>().Push(transform.forward, chargePushForce);
             }
             PlayerController potentialHitPlayer = collision.gameObject.GetComponent<PlayerController>();
             if (potentialHitPlayer != null)
@@ -86,6 +86,7 @@ public class Rookie : Enemy
         transform.LookAt(lookAtPosition);
         if (chargeCurrentCooldown <= 0)
         {
+            if (chargeCoroutine != null) { StopCoroutine(chargeCoroutine); }
             Charge();
             chargeCurrentCooldown = chargeCooldown;
         }
@@ -141,18 +142,18 @@ public class Rookie : Enemy
     IEnumerator Charge_C()
     {
         charging = true;
-        PermaDisableNavmeshAgent();
+        //PermaDisableNavmeshAgent();
         Vector3 startPosition = transform.position;
         float travelledDistance = 0;
         float startTime = Time.time;
         while (travelledDistance < maxChargeDistance || Time.time - startTime < maxChargeTime)
         {
+            yield return new WaitForEndOfFrame();
             transform.position = Vector3.MoveTowards(transform.position, transform.position + transform.forward, Time.deltaTime * chargeSpeed);
             travelledDistance = Vector3.Distance(transform.position, startPosition);
-            yield return new WaitForEndOfFrame();
         }
+        //EnableNavmeshAgent();
         charging = false;
-        EnableNavmeshAgent();
         yield return null;
     }
 }

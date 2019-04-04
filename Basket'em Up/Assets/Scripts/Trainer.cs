@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Trainer : Enemy
 {
-    public enum State { Fleeing, Attacking, Helping}
+    public enum State { Fleeing, Helping}
     public State state;
     public float ballRecuperationCD; //How much time to spawn a new ball
     public bool hasBall;
@@ -20,9 +20,10 @@ public class Trainer : Enemy
     public float fleeCheckCooldown;
 
     float timeBeforeNextBall;
-    PlayerController playerTargeted;
+    public PlayerController playerTargeted;
     Rookie rookieTargeted;
     float timeBeforeTryingToFlee;
+    List<GameObject> generatedBalls = new List<GameObject>();
 
     protected override void Awake()
     {
@@ -38,7 +39,8 @@ public class Trainer : Enemy
         if (IsEndangered())
         {
             state = State.Fleeing;
-        } else
+        }
+        else
         {
             state = State.Helping;
         }
@@ -46,9 +48,6 @@ public class Trainer : Enemy
         {
             case State.Fleeing:
                 FleeFromPlayers();
-                break;
-            case State.Attacking:
-                ThrowBallOnNearestPlayer();
                 break;
             case State.Helping:
                 GiveBallToNearestRookie();
@@ -103,7 +102,7 @@ public class Trainer : Enemy
             }
             else
             {
-                state = State.Attacking;
+                ThrowBallOnNearestPlayer();
             }
         }
     }
@@ -183,6 +182,14 @@ public class Trainer : Enemy
         }
     }
 
+    private void OnDestroy()
+    {
+        foreach (GameObject ball in generatedBalls)
+        {
+            Destroy(ball);
+        }
+    }
+
     void UpdateCD()
     {
         if (!hasBall) {
@@ -252,6 +259,7 @@ public class Trainer : Enemy
         AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
 
         GameObject ball = Instantiate(ballPrefab);
+        generatedBalls.Add(ball);
         ball.transform.position = this.hand.position;
         ball.GetComponent<Rigidbody>().isKinematic = true;
         Ball ballScript = ball.GetComponent<Ball>();
@@ -292,7 +300,9 @@ public class Trainer : Enemy
 
         GameObject ball = Instantiate(ballPrefab);
         ball.transform.position = this.hand.position;
-        ball.GetComponent<Ball>().SetState(BallMoveState.Moving);
+        Ball ballScript = ball.GetComponent<Ball>();
+        ballScript.SetState(BallMoveState.Moving);
+        ballScript.defaultCollider.enabled = false;
 
         for (float i = 0; i < passTime; i += Time.deltaTime)
         {
