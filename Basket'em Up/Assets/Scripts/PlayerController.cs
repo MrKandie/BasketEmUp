@@ -141,14 +141,6 @@ public class PlayerController : MonoBehaviour, iTarget
         UpdateAnimatorBlendTree();
     }
 
-    void OnGUI()
-    {
-        if (inputDisabled) { return; }
-        //Displays the mouse angle on the GUI for the active player
-        GUI.contentColor = new Color(0, 0, 0, 1);
-        GUI.Label(new Rect(25, 25, 200, 40), "Mouse angle " + GetAngle(new Vector2(self.transform.position.x, self.transform.position.z), new Vector2(self.transform.position.x, self.transform.position.z) + GetMouseDirection()));
-    }
-
     #region Input
     void GetInput()
     {
