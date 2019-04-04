@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Trainer : Enemy
 {
-    public enum State { Fleeing, Helping}
+    public enum State { Fleeing, Helping, Attacking}
     public State state;
     public float ballRecuperationCD; //How much time to spawn a new ball
     public bool hasBall;
@@ -43,7 +43,7 @@ public class Trainer : Enemy
         }
         else
         {
-            state = State.Helping;
+            DetermineCorrectAction();
         }
         switch (state)
         {
@@ -53,6 +53,21 @@ public class Trainer : Enemy
             case State.Helping:
                 GiveBallToNearestRookie();
                 break;
+            case State.Attacking:
+                ThrowBallOnNearestPlayer();
+                break;
+        }
+    }
+
+    void DetermineCorrectAction()
+    {
+        rookieTargeted = FindNearestRookie();
+        if (rookieTargeted != null)
+        {
+            state = State.Helping;
+        } else
+        {
+            state = State.Attacking;
         }
     }
 
@@ -67,18 +82,10 @@ public class Trainer : Enemy
         }
         if (hasBall)
         {
-            Rookie nearestRookie = FindNearestRookie();
-            if (nearestRookie != null)
-            {
-                state = State.Helping;
-            }
-            else
-            {
-                hasBall = false;
-                timeBeforeNextBall = ballRecuperationCD;
-                StartCoroutine(AttackPlayer_C(playerTargeted));
-                playerTargeted = null;
-            }
+            hasBall = false;
+            timeBeforeNextBall = ballRecuperationCD;
+            StartCoroutine(AttackPlayer_C(playerTargeted));
+            playerTargeted = null;
         }
     }
 
@@ -90,20 +97,12 @@ public class Trainer : Enemy
         }
         if (hasBall)
         {
-            if (rookieTargeted == null)
-            {
-                rookieTargeted = FindNearestRookie();
-            }
             if (rookieTargeted != null)
             {
                 hasBall = false;
                 timeBeforeNextBall = ballRecuperationCD;
                 StartCoroutine(PassBall_C(rookieTargeted));
                 rookieTargeted = null;
-            }
-            else
-            {
-                ThrowBallOnNearestPlayer();
             }
         }
     }
