@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviour, iTarget
     [HideInInspector] public GameObject targetedBy; //The object targeting this player
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
+    bool isJumping;
 
     private void Awake()
     {
@@ -167,6 +168,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     void GeneralInput()
     {
+        if (isJumping) { return; }
         if (Input.GetButtonDown("Dunk_" + inputIndex.ToString()) && dunkJumpCoroutine == null)
         {
             StartDunk();
@@ -516,6 +518,7 @@ public class PlayerController : MonoBehaviour, iTarget
     #region Coroutines 
     IEnumerator StartDunk_C()
     {
+        isJumping = true;
         customGravity = 0;
 
         Vector3 startPosition = self.position;
@@ -537,6 +540,7 @@ public class PlayerController : MonoBehaviour, iTarget
                 StopCoroutine(dunkJumpCoroutine);
             }
         }
+        isJumping = false;
         playerAnim.SetTrigger("DunkMissedTrigger");
         customGravity = onGroundGravityMultiplyer;
         dunkJumpCoroutine = null;
@@ -556,6 +560,7 @@ public class PlayerController : MonoBehaviour, iTarget
             yield return new WaitForEndOfFrame();
             self.position = Vector3.Lerp(startPosition, position, i / dunkTime);
         }
+        isJumping = false;
         possessedBall.transform.localPosition = Vector3.zero;
         GenerateDunkExplosion(position, dunkExplosionRadius, dunkExplosionForce, dunkExplosionDamage);
         self.position = position;
