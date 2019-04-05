@@ -13,17 +13,15 @@ public class GlobalVFXManager : MonoBehaviour
     [Header("Values when NO momentum")]
     public float noBloomValue;
     public float noVignetteIntensityValue;
-    public float noGrainValue;
-    public float noSaturationValue;
-    public float noContrastValue;
+    public float noChromaticAberrationValue;
+    public float noCameraFOV;
 
     [Space(10)]
     [Header("Values when FULL momentum")]
     public float fullBloomValue;
     public float fullVignetteIntensityValue;
-    public float fullGrainValue;
-    public float fullSaturationValue;
-    public float fullContrastValue;
+    public float fullChromaticAberrationValue;
+    public float fullCameraFOV;
 
     [Space(10)]
     [Header("Misc Values")]
@@ -33,13 +31,11 @@ public class GlobalVFXManager : MonoBehaviour
     AmbientOcclusion ambientOcclusionLayer;
     ColorGrading colorGradingLayer;
     Vignette vignetteLayer;
-    Grain grainLayer;
+    ChromaticAberration chromaticAberration;
 
     float wantedBloomValue;
     float wantedVignetteValue;
-    float wantedGrainValue;
-    float wantedSaturationValue;
-    float wantedContrastValue;
+    float wantedChromaticAberrationValue;
 
     #endregion
 
@@ -49,7 +45,7 @@ public class GlobalVFXManager : MonoBehaviour
         myPP.profile.TryGetSettings(out ambientOcclusionLayer);
         myPP.profile.TryGetSettings(out colorGradingLayer);
         myPP.profile.TryGetSettings(out vignetteLayer);
-        myPP.profile.TryGetSettings(out grainLayer);
+        myPP.profile.TryGetSettings(out chromaticAberration);
     }
     
     void Update()
@@ -60,19 +56,16 @@ public class GlobalVFXManager : MonoBehaviour
 
     void UpdateWantedValues()
     {
-        wantedBloomValue = Mathf.Lerp(noBloomValue, fullBloomValue, GameManager.i.momentumManager.momentum);
-        wantedVignetteValue = Mathf.Lerp(noVignetteIntensityValue, fullVignetteIntensityValue, GameManager.i.momentumManager.momentum);
-        wantedGrainValue = Mathf.Lerp(noGrainValue, fullGrainValue, GameManager.i.momentumManager.momentum);
-        wantedSaturationValue = Mathf.Lerp(noSaturationValue, fullSaturationValue, GameManager.i.momentumManager.momentum);
-        wantedContrastValue = Mathf.Lerp(noContrastValue, fullContrastValue, GameManager.i.momentumManager.momentum);
+        wantedBloomValue = Mathf.Lerp(noBloomValue, fullBloomValue, GameManager.i.momentumManager.GetSmoothMomentum());
+        wantedVignetteValue = Mathf.Lerp(noVignetteIntensityValue, fullVignetteIntensityValue, GameManager.i.momentumManager.GetSmoothMomentum());
+        wantedChromaticAberrationValue = Mathf.Lerp(noChromaticAberrationValue, fullChromaticAberrationValue, GameManager.i.momentumManager.GetSmoothMomentum());
+        Camera.main.fieldOfView = Mathf.Lerp(noCameraFOV, fullCameraFOV, GameManager.i.momentumManager.GetSmoothMomentum());
     }
 
     void UpdatePPValues()
     {
         bloomLayer.intensity.value = Mathf.Lerp(bloomLayer.intensity.value, wantedBloomValue, lerpSpeed);
         vignetteLayer.intensity.value = Mathf.Lerp(vignetteLayer.intensity.value, wantedVignetteValue, lerpSpeed);
-        grainLayer.intensity.value = Mathf.Lerp(grainLayer.intensity.value, wantedGrainValue, lerpSpeed);
-        colorGradingLayer.saturation.value = Mathf.Lerp(colorGradingLayer.saturation.value, wantedSaturationValue, lerpSpeed);
-        colorGradingLayer.contrast.value = Mathf.Lerp(colorGradingLayer.contrast.value, wantedContrastValue, lerpSpeed);
+        chromaticAberration.intensity.value = Mathf.Lerp(chromaticAberration.intensity.value, wantedChromaticAberrationValue, lerpSpeed);
     }
 }
