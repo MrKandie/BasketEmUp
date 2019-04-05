@@ -21,6 +21,11 @@ public class MomentumManager : MonoBehaviour
     //Settings
     private float lastIncrementationTime;
 
+    public float GetSmoothMomentum()
+    {
+        return slider.value;
+    }
+
     private void Awake()
     {
         InvokeRepeating("UpdateMomentumValue", 1, 1);
