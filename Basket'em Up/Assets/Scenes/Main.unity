@@ -14632,8 +14632,8 @@ MonoBehaviour:
   noChromaticAberrationValue: 0
   noCameraFOV: 50
   noGrainValue: 0
-  noSaturationValue: 17
-  noContrastValue: 0
+  noSaturationValue: 40
+  noContrastValue: 10
   fullBloomValue: 2.5
   fullVignetteIntensityValue: 0.4
   fullChromaticAberrationValue: 0.25
