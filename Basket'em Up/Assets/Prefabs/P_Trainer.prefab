@@ -9711,6 +9711,7 @@ GameObject:
   - component: {fileID: 6652525792889551618}
   - component: {fileID: 5046859508763599281}
   - component: {fileID: 393082303927365840}
+  - component: {fileID: 4660579274717286048}
   m_Layer: 9
   m_Name: Corps
   m_TagString: Untagged
@@ -9798,6 +9799,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4660579274717286048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6609443645274473576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9e4c51b0387943bf902077b391d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8538841711224134206
 GameObject:
   m_ObjectHideFlags: 0
@@ -10062,15 +10075,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 499781da4460eed48ba77ac737a320dc, type: 3}
---- !u!4 &8538841711671249130 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5154839874735192519, guid: 499781da4460eed48ba77ac737a320dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 3533536554014748973}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &8538841711825691928 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5154839874544636981, guid: 499781da4460eed48ba77ac737a320dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 3533536554014748973}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8538841711671249130 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5154839874735192519, guid: 499781da4460eed48ba77ac737a320dc,
     type: 3}
   m_PrefabInstance: {fileID: 3533536554014748973}
   m_PrefabAsset: {fileID: 0}

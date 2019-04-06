@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour, iTarget
     public bool tryingToEnableAgent;
     private float oldSpeed;
     private bool speedUpdated;
+    private bool dying = false;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -42,31 +43,35 @@ public class Enemy : MonoBehaviour, iTarget
 
     virtual protected void Update()
     {
-        if (agentDisabled && tryingToEnableAgent)
+        if (!dying)
         {
-            if (IsGrounded())
+            if (agentDisabled && tryingToEnableAgent)
             {
-                EnableNavmeshAgent();
+                if (IsGrounded())
+                {
+                    EnableNavmeshAgent();
+                }
             }
-        }
-        if (slowCD > 0)
-        {
-            slowCD -= Time.deltaTime;
-        } else if (speedUpdated == false)
-        {
-            UnSlow();
-        }
-        slowCD = Mathf.Clamp(slowCD, 0, Mathf.Infinity);
+            if (slowCD > 0)
+            {
+                slowCD -= Time.deltaTime;
+            }
+            else if (speedUpdated == false)
+            {
+                UnSlow();
+            }
+            slowCD = Mathf.Clamp(slowCD, 0, Mathf.Infinity);
 
-        if (invincibilityCD > 0)
-        {
-            invincibilityCD -= Time.deltaTime;
-        }
-        invincibilityCD = Mathf.Clamp(invincibilityCD, 0, Mathf.Infinity);
+            if (invincibilityCD > 0)
+            {
+                invincibilityCD -= Time.deltaTime;
+            }
+            invincibilityCD = Mathf.Clamp(invincibilityCD, 0, Mathf.Infinity);
 
-        Quaternion _hitEffetRotation = Quaternion.LookRotation(Camera.main.transform.position - hitEffetTransform.position);
-        _hitEffetRotation.eulerAngles = new Vector3(0, _hitEffetRotation.eulerAngles.y, 0);
-        hitEffetTransform.rotation = _hitEffetRotation;
+            Quaternion _hitEffetRotation = Quaternion.LookRotation(Camera.main.transform.position - hitEffetTransform.position);
+            _hitEffetRotation.eulerAngles = new Vector3(0, _hitEffetRotation.eulerAngles.y, 0);
+            hitEffetTransform.rotation = _hitEffetRotation;
+        }
     }
 
     virtual public void AddDamage(int amount)
@@ -82,7 +87,9 @@ public class Enemy : MonoBehaviour, iTarget
 
         if (HPcurrent <= 0)
         {
-            Kill();
+            enemyAnim.SetTrigger("DeathTrigger");
+            PermaDisableNavmeshAgent();
+            dying = true;
         }
     }
 
