@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class NarrationTriggers : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class NarrationTriggers : MonoBehaviour
     public CinemachineVirtualCamera bossZoomCamera;
 
     public int whichTrigger;
+
     public AudioClip[] dialogueClips;
     public AudioSource myAudioSource;
     public TextMeshProUGUI dialogueText;
@@ -20,6 +22,11 @@ public class NarrationTriggers : MonoBehaviour
     private string actualDialogue;
     private bool dialogueActive;
     private int howMuchPoint = 1;
+
+    public PostProcessProfile normalPP;
+    public PostProcessProfile zoomOnBossPP;
+    public PostProcessVolume cameraVolumePP;
+    public TextMeshPro quarterbackTMP;
 
     private void Start()
     {
@@ -56,14 +63,24 @@ public class NarrationTriggers : MonoBehaviour
                     bossZoomCamera.m_Priority = 11;
                     break;
                 case 5:
+                    cameraVolumePP.profile = zoomOnBossPP;
+                    quarterbackTMP.enabled = true;
+                    Time.timeScale = 0;
+                    break;
+                case 6:
+                    cameraVolumePP.profile = normalPP;
+                    quarterbackTMP.enabled = false;
+                    Time.timeScale = 1;
+                    break;
+                case 7:
                     myAudioSource.Stop();
                     SetDialogueText(4);
                     SetImageAlpha();
                     break;
-                case 6:
+                case 8:
                     bossZoomCamera.m_Priority = 9;
                     break;
-                case 7:
+                case 9:
                     myAudioSource.Stop();
                     SetDialogueText(5);
                     SetImageAlpha();
@@ -121,6 +138,7 @@ public class NarrationTriggers : MonoBehaviour
         dialogueText.color = dialogueColor[_whichDialogue];
         myAudioSource.PlayOneShot(dialogueClips[_whichDialogue]);
     }
+
     void SetImageAlpha()
     {
         Color newColor = Color.black;
