@@ -14,11 +14,13 @@ public class NarrationTriggers : MonoBehaviour
     public int whichTrigger;
 
     public AudioClip[] dialogueClips;
+    public AudioClip badassJingleClip;
     public AudioSource myAudioSource;
     public TextMeshProUGUI dialogueText;
     public Image blackUIImage;
     public string[] dialogueArray;
     public Color[] dialogueColor;
+    public Color[] outlineDialogueColor;
     private string actualDialogue;
     private bool dialogueActive;
     private int howMuchPoint = 1;
@@ -66,6 +68,8 @@ public class NarrationTriggers : MonoBehaviour
                     cameraVolumePP.profile = zoomOnBossPP;
                     quarterbackTMP.enabled = true;
                     Time.timeScale = 0;
+                    myAudioSource.Stop();
+                    myAudioSource.PlayOneShot(badassJingleClip);
                     break;
                 case 6:
                     cameraVolumePP.profile = normalPP;
