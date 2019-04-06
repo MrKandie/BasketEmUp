@@ -7,10 +7,12 @@ public class BallRebound : MonoBehaviour
     public Transform ballModel;
     public bool isTaken;
     public AnimationCurve reboundCurve;
-    public float reboundHeight;
+    public float reboundHeightPlayer1;
+    public float reboundHeightPlayer2;
     float timerRebound;
     public Vector3 offsetPlayer1;
     public Vector3 offsetPlayer2;
+    public NarrationPlayerController takenBy;
 
     // Update is called once per frame
     void Update()
@@ -20,11 +22,19 @@ public class BallRebound : MonoBehaviour
             ballModel.position = transform.position;
             timerRebound = 0;
         }
-        else
+        else if(takenBy != null)
         {
-            transform.position = transform.parent.position;
             timerRebound += Time.deltaTime;
-            ballModel.position = transform.position - 1 * reboundHeight * (1-reboundCurve.Evaluate(timerRebound % 1)) * Vector3.up;
+            if (takenBy.player1IsTrue)
+            {
+                transform.position = transform.parent.position + offsetPlayer1;
+                ballModel.position = transform.position - 1 * reboundHeightPlayer1 * (1 - reboundCurve.Evaluate(timerRebound % 1)) * Vector3.up;
+            }
+            else
+            {
+                transform.position = transform.parent.position + offsetPlayer2;
+                ballModel.position = transform.position - 1 * reboundHeightPlayer2 * (1 - reboundCurve.Evaluate(timerRebound % 1)) * Vector3.up;
+            }
         }
     }
 }

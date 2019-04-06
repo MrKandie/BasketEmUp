@@ -44,14 +44,27 @@ public class NarrationPlayerController : MonoBehaviour
     {
         ball.transform.parent = null;
         ballRebound.isTaken = false;
-        for (float i = 0; i < 1; i+=Time.deltaTime/timeToPass)
+        ballRebound.takenBy = null;
+        if (player1IsTrue)
         {
-            ball.position = Vector3.Lerp(myHand.position, otherPlayerHand.position, i);
-            yield return new WaitForEndOfFrame();
+            for (float i = 0; i < 1; i += Time.deltaTime / timeToPass)
+            {
+                ball.position = Vector3.Lerp(myHand.position+ballRebound.offsetPlayer1, otherPlayerHand.position + ballRebound.offsetPlayer2, i);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else
+        {
+            for (float i = 0; i < 1; i += Time.deltaTime / timeToPass)
+            {
+                ball.position = Vector3.Lerp(myHand.position + ballRebound.offsetPlayer2, otherPlayerHand.position + ballRebound.offsetPlayer1, i);
+                yield return new WaitForEndOfFrame();
+            }
         }
         otherPlayerController.ballInHand = true;
         ball.transform.parent = otherPlayerHand;
         ballRebound.isTaken = true;
+        ballRebound.takenBy = otherPlayerController;
         yield return null;
     }
 
