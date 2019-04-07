@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public MomentumManager momentumManager;
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public BallMovementManager ballMovementManager;
+    [HideInInspector] public EnemySpawner enemySpawner;
 
     [Header("Game settings")]
     public int NoSettingsYet;
@@ -22,12 +24,8 @@ public class GameManager : MonoBehaviour
         momentumManager = FindObjectOfType<MomentumManager>();
         levelManager = FindObjectOfType<LevelManager>();
         ballMovementManager = FindObjectOfType<BallMovementManager>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
         ControlAllPlayers();
-    }
-
-    private void Update()
-    {
-        CheckInputs();   
     }
 
     public void ControlPlayer(int playerID)
@@ -60,22 +58,6 @@ public class GameManager : MonoBehaviour
         } else
         {
             return position;
-        }
-    }
-
-    public void CheckInputs()
-    {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            ControlPlayer(0);
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            ControlPlayer(1);
-        }
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            ControlPlayer(2);
         }
     }
 }

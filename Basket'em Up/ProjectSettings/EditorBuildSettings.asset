@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 350b9c8efa748194186abb2f943d8fc7
+  - enabled: 1
+    path: Assets/Scenes/WorldBuildingJules.unity
+    guid: ab53b8499361ebe4085158a9939fa588
   m_configObjects: {}
