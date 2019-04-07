@@ -5079,7 +5079,7 @@ MonoBehaviour:
   hand: {fileID: 951577377841973265}
   HPmax: 100
   invincibilityTime: 0.2
-  speed: 3.5
+  speed: 6
   agentDisabled: 0
   tryingToEnableAgent: 0
   _targetedTransform: {fileID: 951577377958092405}

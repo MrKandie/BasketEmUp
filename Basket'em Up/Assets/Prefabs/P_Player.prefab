@@ -306,7 +306,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  targetAngleTreshold: 20
+  targetAngleTreshold: 35
   currentHP: 0
   shooting: 0
   targetedBy: {fileID: 0}
