@@ -18,6 +18,7 @@ public class NarrationPlayerController : MonoBehaviour
     public Transform ball;
     public BallRebound ballRebound;
     public float timeToPass;
+    public SoundManager soundManager;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -42,9 +43,11 @@ public class NarrationPlayerController : MonoBehaviour
 
     IEnumerator PassBallCoroutine()
     {
+        soundManager.PlayRandomSound(soundManager.whoosh, true);
         ball.transform.parent = null;
         ballRebound.isTaken = false;
         ballRebound.takenBy = null;
+        
         if (player1IsTrue)
         {
             for (float i = 0; i < 1; i += Time.deltaTime / timeToPass)
@@ -65,6 +68,7 @@ public class NarrationPlayerController : MonoBehaviour
         ball.transform.parent = otherPlayerHand;
         ballRebound.isTaken = true;
         ballRebound.takenBy = otherPlayerController;
+        soundManager.PlayRandomSound(soundManager.ballCatch, true);
         yield return null;
     }
 

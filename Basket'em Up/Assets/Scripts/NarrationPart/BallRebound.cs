@@ -13,6 +13,8 @@ public class BallRebound : MonoBehaviour
     public Vector3 offsetPlayer1;
     public Vector3 offsetPlayer2;
     public NarrationPlayerController takenBy;
+    public SoundManager soundManager;
+    bool soundPlayed = false;
 
     // Update is called once per frame
     void Update()
@@ -24,6 +26,15 @@ public class BallRebound : MonoBehaviour
         }
         else if(takenBy != null)
         {
+            if (reboundCurve.Evaluate(timerRebound % 1) > 0.5f && reboundCurve.Evaluate(timerRebound % 1) < 0.7f && !soundPlayed)
+            {
+                soundPlayed = true;
+                soundManager.PlaySound(soundManager.bounce);
+            }
+            if (reboundCurve.Evaluate(timerRebound % 1) > 0 && reboundCurve.Evaluate(timerRebound % 1) < 0.4f)
+            {
+                soundPlayed = false;
+            }
             timerRebound += Time.deltaTime;
             if (takenBy.player1IsTrue)
             {

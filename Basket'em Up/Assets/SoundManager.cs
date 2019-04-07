@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     public List<AudioClip> whoosh;
     public List<AudioClip> ballCatch;
     public List<AudioClip> enemyHit;
+    public AudioClip bounce;
     public AudioClip dunk;
 
     private void Awake()
