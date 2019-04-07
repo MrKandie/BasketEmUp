@@ -554,6 +554,7 @@ public class PlayerController : MonoBehaviour, iTarget
         }
         isJumping = false;
         possessedBall.transform.localPosition = Vector3.zero;
+        GameManager.i.soundManager.PlaySound(GameManager.i.soundManager.dunk, false);
         GenerateDunkExplosion(position, dunkExplosionRadius, dunkExplosionForce, dunkExplosionDamage);
         self.position = position;
         customGravity = onGroundGravityMultiplyer;
@@ -578,6 +579,7 @@ public class PlayerController : MonoBehaviour, iTarget
         possessedBall = ball;
         ball.holder = this;
         ball.transform.SetParent(hand.transform);
+        GameManager.i.soundManager.PlayRandomSound(GameManager.i.soundManager.ballCatch, true);
         yield return null;
     }
 
@@ -589,6 +591,7 @@ public class PlayerController : MonoBehaviour, iTarget
         Vector3 startPosition = ball.transform.position;
         Vector3 endPosition = target.targetedTransform.position;
         handoffTarget = target.targetedTransform;
+        GameManager.i.soundManager.PlayRandomSound(GameManager.i.soundManager.whoosh, true);
 
         //Rotate players towards target and play particles
         self.rotation = Quaternion.LookRotation(handoffTarget.position - self.position);

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public LevelManager levelManager;
     [HideInInspector] public BallMovementManager ballMovementManager;
     [HideInInspector] public EnemySpawner enemySpawner;
+    [HideInInspector] public SoundManager soundManager;
 
     [Header("Game settings")]
     public int NoSettingsYet;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
         levelManager = FindObjectOfType<LevelManager>();
         ballMovementManager = FindObjectOfType<BallMovementManager>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        soundManager = FindObjectOfType<SoundManager>();
         ControlAllPlayers();
     }
 

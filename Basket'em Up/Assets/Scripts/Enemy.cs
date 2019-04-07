@@ -80,6 +80,7 @@ public class Enemy : MonoBehaviour, iTarget
         invincibilityCD = invincibilityTime;
         HitAnim.SetTrigger("HitTrigger");
         enemyAnim.SetTrigger("HitTrigger");
+        GameManager.i.soundManager.PlayRandomSound(GameManager.i.soundManager.enemyHit, true);
         GameManager.i.levelManager.activeBall.hitTarget.Add(this);
 
         HPcurrent -= amount;
