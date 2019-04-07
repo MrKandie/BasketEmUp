@@ -5091,7 +5091,7 @@ MonoBehaviour:
   chargeDamage: 10
   chargePushForce: 100
   maxChargeDistance: 5
-  maxChargeTime: 4
+  maxChargeTime: 2
   hasBall: 0
 --- !u!195 &951577377875355933
 NavMeshAgent:
