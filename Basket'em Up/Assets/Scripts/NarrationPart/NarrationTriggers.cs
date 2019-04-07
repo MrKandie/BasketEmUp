@@ -16,6 +16,9 @@ public class NarrationTriggers : MonoBehaviour
     public AudioClip[] dialogueClips;
     public AudioClip badassJingleClip;
     public AudioSource myAudioSource;
+    public Animator bossAnim;
+    public Animator[] rookiesAnim;
+    public Animator player1Anim;
     public TextMeshProUGUI dialogueText;
     public Image blackUIImage;
     public string[] dialogueArray;
@@ -63,6 +66,11 @@ public class NarrationTriggers : MonoBehaviour
                     break;
                 case 4:
                     bossZoomCamera.m_Priority = 11;
+                    bossAnim.SetBool("Fixed", true);
+                    for (int i = 0; i < rookiesAnim.Length; i++)
+                    {
+                        rookiesAnim[i].SetTrigger("RallyingTrigger");
+                    }
                     break;
                 case 5:
                     cameraVolumePP.profile = zoomOnBossPP;
@@ -75,6 +83,7 @@ public class NarrationTriggers : MonoBehaviour
                     cameraVolumePP.profile = normalPP;
                     quarterbackTMP.enabled = false;
                     Time.timeScale = 1;
+                    bossAnim.SetBool("Fixed", false);
                     break;
                 case 7:
                     myAudioSource.Stop();
@@ -85,6 +94,7 @@ public class NarrationTriggers : MonoBehaviour
                     bossZoomCamera.m_Priority = 9;
                     break;
                 case 9:
+                    player1Anim.SetTrigger("PointingTrigger");
                     myAudioSource.Stop();
                     SetDialogueText(5);
                     SetImageAlpha();
