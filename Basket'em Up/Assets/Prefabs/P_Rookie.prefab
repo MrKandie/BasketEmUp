@@ -5090,7 +5090,7 @@ MonoBehaviour:
   chargeCooldown: 4
   chargeDamage: 10
   chargePushForce: 100
-  maxChargeDistance: 10
+  maxChargeDistance: 5
   maxChargeTime: 4
   hasBall: 0
 --- !u!195 &951577377875355933
