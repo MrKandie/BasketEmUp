@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Library library;
     [HideInInspector] public MomentumManager momentumManager;
     [HideInInspector] public LevelManager levelManager;
-    [HideInInspector] public BallMovementManager ballMovementManager;
+    [HideInInspector] public BallManager ballManager;
     [HideInInspector] public EnemySpawner enemySpawner;
     [HideInInspector] public SoundManager soundManager;
 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
         library = FindObjectOfType<Library>();
         momentumManager = FindObjectOfType<MomentumManager>();
         levelManager = FindObjectOfType<LevelManager>();
-        ballMovementManager = FindObjectOfType<BallMovementManager>();
+        ballManager = FindObjectOfType<BallManager>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
         soundManager = FindObjectOfType<SoundManager>();
         ControlAllPlayers();

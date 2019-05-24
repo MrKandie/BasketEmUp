@@ -81,7 +81,6 @@ public class Enemy : MonoBehaviour, iTarget
         HitAnim.SetTrigger("HitTrigger");
         enemyAnim.SetTrigger("HitTrigger");
         GameManager.i.soundManager.PlayRandomSound(GameManager.i.soundManager.enemyHit, true);
-        GameManager.i.levelManager.activeBall.hitTarget.Add(this);
 
         HPcurrent -= amount;
         HPcurrent = Mathf.Clamp(HPcurrent, 0, HPmax);
@@ -162,12 +161,12 @@ public class Enemy : MonoBehaviour, iTarget
 
     public void OnBallReceived(Ball ball)
     {
-        AddDamage(GameManager.i.ballMovementManager.GetDamages());
+        AddDamage(GameManager.i.ballManager.GetDamages());
     }
 
     public void OnTargetedBySomeone(Transform target)
     {
-
+        
     }
 
     IEnumerator TryToGroundAgent_C()

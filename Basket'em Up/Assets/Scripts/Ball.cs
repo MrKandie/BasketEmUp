@@ -9,51 +9,63 @@ public class Ball : MonoBehaviour
     public Collider triggerCollider;
     public Collider defaultCollider;
     public Transform modelTransform;
+    private Light pointLight;
 
     [Header("Debug")]
     public PlayerController holder;
     public Vector3 direction;
     public bool triggerEnabled;
-    public List<iTarget> hitTarget = new List<iTarget>();
     private Rigidbody rb;
     public BallMoveState state;
     private bool canBePicked;
-    private GameObject highlighter;
 
     private void Update()
     {
         transform.localScale = new Vector3(1, 1, 1);
-
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        pointLight = GetComponent<Light>();
         SetState(BallMoveState.Idle);
     }
 
+    // Change ball light intensity
+    public void SetBallLightIntensity(float newIntensity)
+    {
+        pointLight.intensity = newIntensity;
+    }
+
+    // Ball collision with other objects
     private void OnTriggerEnter(Collider other)
     {
+        //Check for a collision with an enemy
         Enemy potentialEnemy = other.GetComponent<Enemy>();
         if (potentialEnemy != null && direction != Vector3.zero && triggerEnabled)
         {
             Enemy enemy = potentialEnemy;
-            enemy.AddDamage(GameManager.i.ballMovementManager.GetDamages());
+            enemy.AddDamage(GameManager.i.ballManager.GetDamages());
             enemy.Slow(0.2f, 1);
-            hitTarget.Add(enemy);
+            GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerEnemyHit);
         }
+        
+        //Check for a collision with a player (To pick the ball when it's on the ground)
         PlayerController potentialPlayer = other.GetComponent<PlayerController>();
         if (potentialPlayer != null && canBePicked)
         {
             potentialPlayer.TakeBall(this, 0);
-            if (highlighter != null) { Destroy(highlighter); }
-            hitTarget.Clear();
         }
+
+        //Check for a collision with a player (Ball belong to an enemy and is "spiky")
         if (potentialPlayer != null && state == BallMoveState.Spiky)
         {
             potentialPlayer.Push(direction.normalized, 5);
             potentialPlayer.AddDamage(20);
         }
+
+        //Check for a destructible object
+        // TODO
     }
 
     public void SetState(BallMoveState newState)
@@ -62,7 +74,6 @@ public class Ball : MonoBehaviour
         switch (newState)
         {
             case BallMoveState.Idle:
-                hitTarget.Clear();
                 rb.isKinematic = false;
                 defaultCollider.enabled = true;
                 canBePicked = true;
@@ -87,7 +98,7 @@ public class Ball : MonoBehaviour
         foreach (iTarget target in GameManager.i.levelManager.GetTargetableEnemies())
         {
             float range = Vector3.Distance(target.targetedTransform.position, this.transform.position);
-            if (range < radius && hitTarget != null && !hitTarget.Contains(target))
+            if (range < radius)
             {
                 closestTarget = target;
                 radius = range;

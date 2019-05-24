@@ -537,7 +537,6 @@ public class PlayerController : MonoBehaviour, iTarget
 
     IEnumerator PassBall_C(Ball ball, iTarget target, float momentum)
     {
-        GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerPass);
         target.OnTargetedBySomeone(self.transform);
         doingHandoff = true;
         Vector3 startPosition = ball.transform.position;
@@ -552,10 +551,10 @@ public class PlayerController : MonoBehaviour, iTarget
             handoffEffects[i].Play();
         }
 
-        float passSpeed = GameManager.i.ballMovementManager.GetPassSpeed();
+        float passSpeed = GameManager.i.ballManager.GetPassSpeed();
         float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
-        AnimationCurve speedCurve = GameManager.i.ballMovementManager.passMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
+        AnimationCurve speedCurve = GameManager.i.ballManager.passMovementCurve;
+        AnimationCurve angleCurve = GameManager.i.ballManager.passAngleCurve;
 
         ball.direction = endPosition - startPosition;
         for (float i = 0; i < passTime; i+=Time.deltaTime)
@@ -567,7 +566,7 @@ public class PlayerController : MonoBehaviour, iTarget
             //Apply angle curve
             ball.transform.position = new Vector3(
                     ball.transform.position.x, 
-                    ball.transform.position.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetPassHeight()), 
+                    ball.transform.position.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballManager.GetPassHeight()), 
                     ball.transform.position.z
                 );
         }

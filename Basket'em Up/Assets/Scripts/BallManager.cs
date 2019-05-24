@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallMovementManager : MonoBehaviour
+public class BallManager : MonoBehaviour
 {
     [Header("Settings")]
     public AnimationCurve passMovementCurve;
@@ -15,6 +15,10 @@ public class BallMovementManager : MonoBehaviour
     [Header("Degats de la balle (100pv = full hp)")]
     [MinMaxSlider(0, 100)]
     public Vector2 minMaxPassDamage;
+
+    [Header("Intensité de la point light liée à la ball")]
+    [MinMaxSlider(0, 50)]
+    public Vector2 minMaxBallLightIntensity;
 
     [Header("Hauteur de la passe en metres")]
     [MinMaxSlider(0, 10)]
@@ -34,5 +38,10 @@ public class BallMovementManager : MonoBehaviour
     public int GetDamages()
     {
         return Mathf.RoundToInt(Mathf.Lerp(minMaxPassDamage.x, minMaxPassDamage.y, GameManager.i.momentumManager.momentum));
+    }
+
+    public float GetBallLightIntensity()
+    {
+        return Mathf.Lerp(minMaxBallLightIntensity.x, minMaxBallLightIntensity.y, GameManager.i.momentumManager.momentum);
     }
 }

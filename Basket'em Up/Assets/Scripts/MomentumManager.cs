@@ -9,7 +9,7 @@ public class MomentumManager : MonoBehaviour
     public float momentum; //Float correspondant à la puissance du momentum
 
     [Header("General settings")]
-    public float momentumGainedPerPass = 0.2f;
+    public float momentumGainedPerEnemyHit = 0.2f;
     public float momentumLosseWhenBallTouchGround = 0.5f;
     public AnimationCurve momentumLosseCurve;
     public float momentumLosseCoef = 1f;
@@ -34,12 +34,19 @@ public class MomentumManager : MonoBehaviour
     private void Update()
     {
         UpdateSlider();
+        UpdateBallPointLight();
     }
+
 
     #region functions related to momentum evolution
     private void UpdateSlider()
     {
         slider.value = Mathf.Lerp(slider.value, momentum, Time.deltaTime);
+    }
+
+    private void UpdateBallPointLight()
+    {
+        GameManager.i.levelManager.activeBall.SetBallLightIntensity(GameManager.i.ballManager.GetBallLightIntensity());
     }
 
     public void IncrementMomentum(float amount)

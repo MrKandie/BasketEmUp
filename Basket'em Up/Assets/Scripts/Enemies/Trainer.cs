@@ -257,8 +257,8 @@ public class Trainer : Enemy
         transform.rotation = Quaternion.LookRotation(playerPosition - transform.position);
 
         float passTime = Vector3.Distance(startPosition, endPosition) / attackBallSpeed;
-        AnimationCurve speedCurve = GameManager.i.ballMovementManager.passMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
+        AnimationCurve speedCurve = GameManager.i.ballManager.passMovementCurve;
+        AnimationCurve angleCurve = GameManager.i.ballManager.passAngleCurve;
 
         GameObject ball = Instantiate(ballPrefab);
         ball.transform.Find("Trail").GetComponent<TrailRenderer>().material = ballTrailMaterial;
@@ -298,8 +298,8 @@ public class Trainer : Enemy
         transform.rotation = Quaternion.LookRotation(enemyPosition - transform.position);
 
         float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
-        AnimationCurve speedCurve = GameManager.i.ballMovementManager.passMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.ballMovementManager.passAngleCurve;
+        AnimationCurve speedCurve = GameManager.i.ballManager.passMovementCurve;
+        AnimationCurve angleCurve = GameManager.i.ballManager.passAngleCurve;
 
         GameObject ball = Instantiate(ballPrefab);
         ball.transform.Find("Trail").GetComponent<TrailRenderer>().material = ballTrailMaterial;
