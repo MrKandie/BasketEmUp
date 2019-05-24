@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour, iTarget
     float distance;
     bool inputDisabled;
     GameObject highlighter;
-    Ball possessedBall;
+    [HideInInspector] public Ball possessedBall;
     public iTarget target; //The object targeted by this player
     Coroutine dunkJumpCoroutine;
     float speed;
@@ -531,6 +531,7 @@ public class PlayerController : MonoBehaviour, iTarget
         possessedBall = ball;
         ball.holder = this;
         ball.transform.SetParent(hand.transform);
+        ball.transform.localPosition = Vector3.zero;
         GameManager.i.soundManager.PlayRandomSound(GameManager.i.soundManager.ballCatch, true);
         yield return null;
     }
@@ -627,12 +628,12 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         playerAnim.SetFloat("IdleRunningBlend", speed / maxSpeed);
     }
-    private void Freeze()
+    public void Freeze()
     {
         moveState = MoveState.Blocked;
     }
 
-    private void UnFreeze()
+    public void UnFreeze()
     {
         moveState = MoveState.Idle;
     }

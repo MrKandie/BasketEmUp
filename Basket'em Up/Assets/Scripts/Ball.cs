@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BallMoveState { Idle, Moving, Spiky}
+public enum BallMoveState { Idle, Moving, Spiky, Blocked}
 public class Ball : MonoBehaviour
 {
     [Header("Reference")]
@@ -87,7 +87,11 @@ public class Ball : MonoBehaviour
                 canBePicked = false;
                 defaultCollider.enabled = true;
                 break;
-
+            case BallMoveState.Blocked:
+                canBePicked = false;
+                rb.isKinematic = true;
+                defaultCollider.enabled = false;
+                break;
         }
     }
 
