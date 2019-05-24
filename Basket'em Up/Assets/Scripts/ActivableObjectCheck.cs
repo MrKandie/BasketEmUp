@@ -15,12 +15,6 @@ public class ActivableObjectCheck : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public bool CheckIfAllObjectsActivated()
     {
         int activatedObjects=0;
@@ -35,6 +29,10 @@ public class ActivableObjectCheck : MonoBehaviour
         if (activatedObjects == objectsToActivate.Length)
         {
             print("Tout les objets ont étés activés");
+            foreach (var objects in objectsToActivate)
+            {
+                objects.FinalActivate();
+            }
             return true;
         }
         else
@@ -46,6 +44,5 @@ public class ActivableObjectCheck : MonoBehaviour
     public void ActivateObjectDebug(int index)
     {
         objectsToActivate[index].Activate();
-        CheckIfAllObjectsActivated();
     }
 }

@@ -10,9 +10,10 @@ public class ActivableObject : MonoBehaviour
 
     [Header("Automatic Variables")]
     public bool activated;
+    public bool finalActivated;
     public Collider activationCollider;
     public ActivableObjectCheck activationChecker;
-    public ParticleSystem particles;
+    public ParticleSystem FX;
 
 
     // Start is called before the first frame update
@@ -20,21 +21,40 @@ public class ActivableObject : MonoBehaviour
     {
         activated = false;
         activationCollider = this.GetComponent<Collider>();
-        particles = GetComponentInChildren<ParticleSystem>();
+        FX = GetComponentInChildren<ParticleSystem>();
     }
 
-    public void Activate()
+    public void Activate() 
     {
-        StartCoroutine(ActivationTime());
-        activationChecker.CheckIfAllObjectsActivated();
+        if (!finalActivated) //if the all the objects are not activated together
+        {
+            StartCoroutine(ActivationTime());
+            activationChecker.CheckIfAllObjectsActivated();
+        }
+        else //if all the objects are activated and you try to activate again (for DEBUG)
+        {
+            finalActivated = false;
+            activated = false;
+            FX.Stop();
+        }
     }
 
     public IEnumerator ActivationTime()
     {
         activated = true;
-        particles.Play();
+        FX.Play();
         yield return new WaitForSeconds(timeOfActivation);
-        activated = false;
-        particles.Stop();
+        if (!finalActivated)
+        {
+            activated = false;
+            FX.Stop();
+        }
+    }
+
+    public void FinalActivate()
+    {
+        finalActivated = true;
+        activated = true;
+        FX.Play();
     }
 }
