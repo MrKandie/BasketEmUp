@@ -66,6 +66,15 @@ public class Ball : MonoBehaviour
 
         //Check for a destructible object
         // TODO
+
+
+        //Check for an activable Object
+        ActivableObject potentialActObject = other.GetComponent<ActivableObject>();
+        if (potentialActObject != null)
+        {
+            potentialActObject.Activate();
+            //Diminish the Momentum of the value
+        }
     }
 
     public void SetState(BallMoveState newState)
