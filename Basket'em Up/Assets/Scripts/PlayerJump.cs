@@ -39,6 +39,7 @@ public class PlayerJump : MonoBehaviour
 
     public IEnumerator Jump()
     {
+        if (isJumping) { StopAllCoroutines(); }
         isJumping = true;
 
         jumpDirection = (selfTransform.forward + Vector3.up * 3f).normalized;

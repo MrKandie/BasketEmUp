@@ -163,6 +163,10 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             StartDunk();
         }
+        if (Input.GetButtonDown("Jump_" + inputIndex.ToString()))
+        {
+            StartCoroutine(self.GetComponent<PlayerJump>().Jump());
+        }
         if (Input.GetButtonDown("Handoff_" + inputIndex.ToString()))
         {
             playerAnim.SetTrigger("HandoffTrigger");
