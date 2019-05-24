@@ -163,7 +163,6 @@ public class Enemy : MonoBehaviour, iTarget
     public void OnBallReceived(Ball ball)
     {
         AddDamage(GameManager.i.ballMovementManager.GetDamages());
-        ball.BounceOnNearbyTargets();
     }
 
     public void OnTargetedBySomeone(Transform target)

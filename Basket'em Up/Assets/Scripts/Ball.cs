@@ -56,43 +56,6 @@ public class Ball : MonoBehaviour
         }
     }
 
-    //Find a random target around 
-    public void BounceOnNearbyTargets()
-    {
-        iTarget nearestEnemy = GetNearestEnemy();
-        if (nearestEnemy != null)
-        {
-            BounceOnTarget(GetNearestEnemy());
-        } else
-        {
-            BounceOnGround();
-        }
-    }
-
-    //The ball will bounce on a target
-    public void BounceOnTarget(iTarget target)
-    {
-        StartCoroutine(BounceOnTarget_C(target));
-    }
-
-    //The ball will bounce and fall on a random nearby position on the ground, it'll create a mark so a player can catch the ball
-    public void BounceOnGround()
-    {
-        RaycastHit hit;
-        Vector3 directionNormalized = direction.normalized * 4;
-        Vector3 groundPosition = transform.position + directionNormalized;
-        if (Physics.Raycast(groundPosition,
-            Vector3.down,
-            out hit,5))
-            {
-                groundPosition.y = hit.point.y + 0.7f;
-            } else
-        {
-            groundPosition = transform.position;
-        }
-        StartCoroutine(BounceOnGround_C(groundPosition));
-    }
-
     public void SetState(BallMoveState newState)
     {
         state = newState;
@@ -117,84 +80,19 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private iTarget GetNearestEnemy()
+    private iTarget GetNearestEnemy(float radius)
     {
         iTarget closestTarget = null;
-        float closestRadius = GameManager.i.ballMovementManager.bounceRadius;
         //Search for the target
         foreach (iTarget target in GameManager.i.levelManager.GetTargetableEnemies())
         {
             float range = Vector3.Distance(target.targetedTransform.position, this.transform.position);
-            if (range < closestRadius && hitTarget != null && !hitTarget.Contains(target))
+            if (range < radius && hitTarget != null && !hitTarget.Contains(target))
             {
                 closestTarget = target;
-                closestRadius = range;
+                radius = range;
             }
         }
         return closestTarget;
-    }
-
-    public IEnumerator BounceOnGround_C(Vector3 position)
-    {
-        highlighter = Instantiate(GameManager.i.library.highlighter);
-        highlighter.transform.position = position;
-        Vector3 startPosition = transform.position;
-        Vector3 endPosition = position;
-        float passSpeed = GameManager.i.ballMovementManager.GetBounceSpeed() * GameManager.i.ballMovementManager.bounceOnGroundSpeedCoef;
-        float passTime = Mathf.Clamp(Vector3.Distance(startPosition, endPosition), 4, Mathf.Infinity) / passSpeed;
-        AnimationCurve speedCurve = GameManager.i.ballMovementManager.bounceMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.ballMovementManager.bounceAngleCurve;
-        direction = endPosition - startPosition;
-
-        for (float i = 0; i < passTime; i += Time.deltaTime)
-        {
-            if (i > passTime/2 && !canBePicked)
-            {
-                canBePicked = true;
-            }
-            yield return new WaitForEndOfFrame();
-            //Apply speed curve
-            transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i / passTime));
-
-            //Apply angle curve
-            transform.position = new Vector3(
-                    transform.position.x,
-                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetBounceHeight()),
-                    transform.position.z
-                );
-        }
-        Destroy(highlighter);
-        transform.position = endPosition;
-        SetState(BallMoveState.Idle);
-        GameManager.i.momentumManager.DecrementMomentum(GameManager.i.momentumManager.momentumLosseWhenBallTouchGround);
-        yield return null;
-    }
-
-    public IEnumerator BounceOnTarget_C(iTarget target)
-    {
-        Vector3 startPosition = transform.position;
-        Vector3 endPosition = target.targetedTransform.position;
-        float passSpeed = GameManager.i.ballMovementManager.GetBounceSpeed();
-        float passTime = Mathf.Clamp(Vector3.Distance(startPosition, endPosition),4,Mathf.Infinity) / passSpeed;
-        AnimationCurve speedCurve = GameManager.i.ballMovementManager.bounceMovementCurve;
-        AnimationCurve angleCurve = GameManager.i.ballMovementManager.bounceAngleCurve;
-        direction = endPosition - startPosition;
-
-        for (float i = 0; i < passTime; i += Time.deltaTime)
-        {
-            yield return new WaitForEndOfFrame();
-            //Apply speed curve
-            transform.position = Vector3.Lerp(startPosition, target.targetedTransform.position, speedCurve.Evaluate(i / passTime));
-
-            //Apply angle curve
-            transform.position = new Vector3(
-                    transform.position.x,
-                    startPosition.y + (angleCurve.Evaluate(i / passTime) * GameManager.i.ballMovementManager.GetBounceHeight()),
-                    transform.position.z
-                );
-        }
-        transform.position = target.targetedTransform.position;
-        hitTarget.Add(target);
-        target.OnBallReceived(this);
     }
 }
