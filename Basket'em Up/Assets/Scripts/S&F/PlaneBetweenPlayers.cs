@@ -17,8 +17,6 @@ public class PlaneBetweenPlayers : MonoBehaviour
 
     int nbEnemyInsideZone;
     bool opacityOn;
-
-    [HideInInspector]public bool playerShooting;
     
     void Update()
     {
@@ -50,7 +48,7 @@ public class PlaneBetweenPlayers : MonoBehaviour
 
     public void UpdateEnemiesInZone(bool _more)
     {
-        if (_more && !playerShooting)
+        if (_more)
         {
             if (!opacityOn)
             {
