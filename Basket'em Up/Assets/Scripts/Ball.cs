@@ -65,7 +65,11 @@ public class Ball : MonoBehaviour
         }
 
         //Check for a destructible object
-        // TODO
+        DestructibleObject potentialDestructibleObject = other.GetComponent<DestructibleObject>();
+        if (potentialDestructibleObject != null)
+        {
+            potentialDestructibleObject.Damage(1);
+        }
     }
 
     public void SetState(BallMoveState newState)
