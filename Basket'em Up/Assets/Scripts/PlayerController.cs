@@ -612,6 +612,11 @@ public class PlayerController : MonoBehaviour, iTarget
                     //rb.AddExplosionForce(truePower, position + new Vector3(0, -2, 0), trueRadius, 3.0F);
                 }
             }
+            DestructibleObject potentialDestructibleObject = hit.gameObject.GetComponent<DestructibleObject>();
+            if (potentialDestructibleObject != null)
+            {
+                potentialDestructibleObject.Damage(1);
+            }
         }
 
         Vector3 spawnPosition = new Vector3(transform.position.x, 0.05f, transform.position.z) + transform.forward *2;
