@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MomentumManager : MonoBehaviour
 {
+
     [Range(0f,1f)]
     public float momentum; //Float correspondant à la puissance du momentum
 
@@ -13,6 +14,7 @@ public class MomentumManager : MonoBehaviour
     public float momentumLosseWhenBallTouchGround = 0.5f;
     public AnimationCurve momentumLosseCurve;
     public float momentumLosseCoef = 1f;
+    public float healFactor; // en valeur/secondes
 
     [Header("References")]
     public Slider slider;
@@ -35,6 +37,11 @@ public class MomentumManager : MonoBehaviour
     {
         UpdateSlider();
         UpdateBallPointLight();
+    }
+
+    public void UseMomentumToHeal()
+    {
+        momentum -= healFactor / 60; //parce que 60fps
     }
 
 

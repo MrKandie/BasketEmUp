@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public Color playerColor;
     public float playerHeight = 2.2f;
     public int MaxHP;
+    public float healingFactor; // en valeur/secondes
 
     [Space(2)]
     [Header("Movement settings")]
@@ -82,7 +83,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Debug")]
-    public int currentHP;
+    public float currentHP;
     Vector3 speedVector;
     float accelerationTimer;
     Vector3 lastVelocity;
@@ -180,10 +181,18 @@ public class PlayerController : MonoBehaviour, iTarget
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;
         }
+        if(Input.GetButtonDown("Healing_" + inputIndex.ToString())) //TODO Assign Input
+        {
+            if(possessedBall != null)
+            {
+                Heal();
+            }
+        }
         if (Input.GetMouseButtonDown(1))
         {
             TakeBall(GameManager.i.levelManager.activeBall, 0.1f);
         }
+
     }
 
     void GamepadInput()
@@ -290,6 +299,23 @@ public class PlayerController : MonoBehaviour, iTarget
     public void EnableInput()
     {
         inputDisabled = false;
+    }
+
+    public void Heal()
+    {
+        if(GameManager.i.momentumManager.momentum > 0)
+        {
+            if(currentHP >= MaxHP) //Can't heal more
+            {
+                //What happens when healing with full health
+                
+            }
+            else if (currentHP < MaxHP) //Heal has effect
+            {
+                currentHP += (healingFactor/60); // parce que 60fps
+                GameManager.i.momentumManager.UseMomentumToHeal(); //diminish Momentum
+            }
+        }
     }
 
     //Highlight the target with the correspunding player color
