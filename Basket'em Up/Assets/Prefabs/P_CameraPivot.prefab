@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 711d5ca348100b943a1c581623929e16, type: 2}
+  sharedProfile: {fileID: 0}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 8389507779031720877}
   - component: {fileID: 1746201165}
   - component: {fileID: 6006868601567478540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -338,7 +338,7 @@ MonoBehaviour:
   volumeTrigger: {fileID: 8389507779031720879}
   volumeLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 1
   antialiasingMode: 0
@@ -437,9 +437,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8389507779443543906}
-  - component: {fileID: 8389507779443543907}
-  - component: {fileID: 1544252463}
-  - component: {fileID: 1544252464}
+  - component: {fileID: 260819309}
+  - component: {fileID: 260819310}
+  - component: {fileID: 260819312}
   m_Layer: 0
   m_Name: P_CameraPivot
   m_TagString: Untagged
@@ -464,7 +464,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 25.323002, y: 33.304, z: -0.637}
---- !u!114 &8389507779443543907
+--- !u!114 &260819309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,15 +473,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8389507779443543908}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfdeb2eb932fd8e4381b4a00bb9b8986, type: 3}
+  m_Script: {fileID: 11500000, guid: 92814d8ce1935aa4c956bd0de95839a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: 4.83, y: 3.2, z: -3.28}
-  rotationOffset: {x: 22, y: -35.12, z: 0}
-  player1: {fileID: 0}
-  player2: {fileID: 0}
-  dirToP2: {fileID: 8389507780299436410}
---- !u!114 &1544252463
+  Name: Combat
+  parent: {fileID: 0}
+  minCamDistance: 30
+  maxCamDistance: 60
+  cameraSpeed: 3
+  xClamp: {x: -15, y: 10}
+  yClamp: {x: -30, y: 30}
+  outOfCameraTreshold: 0.25
+  inCameraTreshold: 0.3
+--- !u!114 &260819310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,20 +494,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 8389507779443543908}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b900556254188144cbbe4fc7660e08c4, type: 3}
+  m_Script: {fileID: 11500000, guid: eb5c2a80c3e63824fba4cfccba402329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatBehav: {fileID: 260819309}
+  platformBehav: {fileID: 260819312}
+  activatedBehav: 
   player1: {fileID: 0}
   player2: {fileID: 0}
-  cameraDirection: {fileID: 0}
   cameraObj: {fileID: 8389507779031720878}
-  minCamDistance: 30
-  maxCamDistance: 60
-  cameraSpeed: 3
-  xClamp: {x: -10, y: 10}
-  yClamp: {x: -30, y: 30}
-  outOfCameraTreshold: 0.25
-  inCameraTreshold: 0.3
+  cameraRef: {fileID: 0}
   targets:
   - transform: {fileID: 0}
     importance: 1
@@ -511,20 +511,27 @@ MonoBehaviour:
     importance: 1
   - transform: {fileID: 0}
     importance: 0.5
---- !u!114 &1544252464
+--- !u!114 &260819312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8389507779443543908}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68c118bae09be95489e214fe6cc1fe33, type: 3}
+  m_Script: {fileID: 11500000, guid: 92814d8ce1935aa4c956bd0de95839a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  targets: []
+  Name: Platform
+  parent: {fileID: 0}
+  minCamDistance: 30
+  maxCamDistance: 60
+  cameraSpeed: 3
+  xClamp: {x: -15, y: 10}
+  yClamp: {x: -30, y: 30}
+  outOfCameraTreshold: 0.25
+  inCameraTreshold: 0.3
 --- !u!1 &8389507780299436413
 GameObject:
   m_ObjectHideFlags: 0
