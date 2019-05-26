@@ -10,6 +10,13 @@ public enum MoveState
     Blocked,
 }
 
+public enum HealthState
+{
+    Normal,
+    Invincible,
+    Weak,
+}
+
 public class PlayerController : MonoBehaviour, iTarget
 {
 
@@ -36,6 +43,10 @@ public class PlayerController : MonoBehaviour, iTarget
     public int inputIndex;
     public Color playerColor;
     public float playerHeight = 2.2f;
+
+    [Space(2)]
+    [Header("Health settings")]
+    public HealthState healthState;
     public int MaxHP;
     public float healingFactor; // en valeur/secondes
 
@@ -43,8 +54,6 @@ public class PlayerController : MonoBehaviour, iTarget
     [Header("Movement settings")]
     public MoveState moveState;
     public AnimationCurve accelerationCurve;
-
-
     [Tooltip("Minimum required speed to go to walking state")] public float minWalkSpeed = 0.1f;
     public float maxSpeedMin = 9;
     public float maxSpeedMax = 11;
@@ -82,6 +91,13 @@ public class PlayerController : MonoBehaviour, iTarget
     [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
 
     [Space(2)]
+    [Header("Dash settings")]
+    public float dashLength; //In seconds
+    public AnimationCurve dashSpeedCurve;
+    public float dashSpeed = 10f; //In m/s
+    public float dashGhostInterval = 0.1f; //Interval in seconds between the spawn of a ghost while dashing
+
+    [Space(2)]
     [Header("Debug")]
     public float currentHP;
     Vector3 speedVector;
@@ -95,6 +111,7 @@ public class PlayerController : MonoBehaviour, iTarget
     [HideInInspector] public Ball possessedBall;
     public iTarget target; //The object targeted by this player
     Coroutine dunkJumpCoroutine;
+    Coroutine dashCoroutine;
     float speed;
     float customDrag;
     float customGravity;
@@ -181,6 +198,7 @@ public class PlayerController : MonoBehaviour, iTarget
             PassBall(target, GameManager.i.momentumManager.momentum);
             target = null;
         }
+        /*
         if(Input.GetButtonDown("Healing_" + inputIndex.ToString())) //TODO Assign Input
         {
             if(possessedBall != null)
@@ -188,11 +206,27 @@ public class PlayerController : MonoBehaviour, iTarget
                 Heal();
             }
         }
+        */
         if (Input.GetMouseButtonDown(1))
         {
             TakeBall(GameManager.i.levelManager.activeBall, 0.1f);
         }
-
+        if(Input.GetButtonDown("Dash_" + inputIndex.ToString()))
+        {
+            PrepareDash();
+        }
+        if(Input.GetButtonUp("Dash_" + inputIndex.ToString()))
+        {
+            ReleaseDash();
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            PrepareDash();
+        }
+        if (Input.GetKeyUp(KeyCode.V))
+        {
+            ReleaseDash();
+        }
     }
 
     void GamepadInput()
@@ -455,6 +489,27 @@ public class PlayerController : MonoBehaviour, iTarget
         doingHandoff = false;
     }
 
+    public void PrepareDash()
+    {
+        Freeze();
+    }
+
+    public void ReleaseDash()
+    {
+        FXManager.EnableGhostFX(transform.Find("Model").gameObject, GameManager.i.library.ghostFXMaterial, 1, dashGhostInterval);
+        dashCoroutine = StartCoroutine(Dash_C(dashLength, dashSpeed, dashSpeedCurve));
+    }
+
+    public void EndDash()
+    {
+        FXManager.StopGhostFX(transform.Find("Model").gameObject);
+        if (dashCoroutine != null)
+        {
+            StopCoroutine(dashCoroutine);
+        }
+        UnFreeze();
+    }
+
     //Gives the ball to the player
     public void TakeBall(Ball ball, float time)
     {
@@ -490,6 +545,19 @@ public class PlayerController : MonoBehaviour, iTarget
     #endregion
 
     #region Coroutines 
+    IEnumerator Dash_C(float dashLength, float dashSpeed, AnimationCurve speedCurve)
+    {
+        Vector3 startPosition = self.position;
+        Vector3 endPosition = self.position + self.forward * dashLength;
+        for (float i = 0; i < dashLength/dashSpeed; i+= Time.deltaTime)
+        {
+            self.transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i/(dashLength/dashSpeed)));
+            yield return new WaitForEndOfFrame();
+        }
+        EndDash();
+        yield return null;
+    }
+
     IEnumerator StartDunk_C()
     {
         isJumping = true;

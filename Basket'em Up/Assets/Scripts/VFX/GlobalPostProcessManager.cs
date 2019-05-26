@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-public class GlobalVFXManager : MonoBehaviour
+public class GlobalPostProcessManager : MonoBehaviour
 {
     #region Variables
     [Header("Components")]
