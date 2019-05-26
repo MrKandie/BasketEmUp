@@ -14,7 +14,6 @@ public enum HealthState
 {
     Normal,
     Invincible,
-    Weak,
 }
 
 public class PlayerController : MonoBehaviour, iTarget
@@ -96,6 +95,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve dashSpeedCurve;
     public float dashSpeed = 10f; //In m/s
     public float dashGhostInterval = 0.1f; //Interval in seconds between the spawn of a ghost while dashing
+    public int dashSelfDamages;
 
     [Space(2)]
     [Header("Debug")]
@@ -449,6 +449,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     public void AddDamage(int amount)
     {
+        if (healthState == HealthState.Invincible) { return; }
         currentHP -= amount;
         currentHP = Mathf.Clamp(currentHP, 0, MaxHP);
         if (currentHP <= 0)
@@ -497,6 +498,8 @@ public class PlayerController : MonoBehaviour, iTarget
     public void ReleaseDash()
     {
         FXManager.EnableGhostFX(transform.Find("Model").gameObject, GameManager.i.library.ghostFXMaterial, 1, dashGhostInterval);
+        AddDamage(dashSelfDamages);
+        healthState = HealthState.Invincible;
         dashCoroutine = StartCoroutine(Dash_C(dashLength, dashSpeed, dashSpeedCurve));
     }
 
@@ -507,6 +510,7 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             StopCoroutine(dashCoroutine);
         }
+        healthState = HealthState.Normal;
         UnFreeze();
     }
 
