@@ -29,9 +29,9 @@ public class MomentumCharger : MonoBehaviour
         if (potentialPlayer != null)
         {
             playersInside.Remove(potentialPlayer);
-            if (potentialPlayer.possessedBall != null)
+            if (playerChargingBall == potentialPlayer)
             {
-                //Cancel the charge
+                EndCharge();
             }
         }
     }
@@ -44,31 +44,35 @@ public class MomentumCharger : MonoBehaviour
             {
                 if (p.possessedBall != null)
                 {
-                    if (Input.GetButtonDown("Action_" + p.inputIndex.ToString()))
+                    if (Input.GetAxis("Action_" + p.inputIndex.ToString()) !=0)
                     {
-                        StartCharge(p);
-                    }
-                }
-            }
-            if (playerChargingBall != null)
-            {
-                if (Input.GetButton("Action_" + playerChargingBall.inputIndex.ToString()))
-                {
-                    if (ballIsInPedestral)
-                    {
-                        ballCharge += Time.deltaTime;
-                        ballChargingFX.transform.localScale = Vector3.Lerp(Vector3.zero, ballChargingFXDefaultSize, ballCharge / chargeTime);
-                        GameManager.i.momentumManager.IncrementMomentum(ballCharge / chargeTime - GameManager.i.momentumManager.momentum);
-                        if (ballCharge >= chargeTime)
+                        if (chargingBall == null)
                         {
-                            EndCharge();
-                            return;
+                            StartCharge(p);
                         }
                     }
                 }
-                if (Input.GetButtonUp("Action_" + playerChargingBall.inputIndex.ToString()))
+                if (playerChargingBall != null)
                 {
-                    EndCharge();
+                    if (Input.GetAxis("Action_" + p.inputIndex.ToString()) != 0)
+                    {
+                        if (ballIsInPedestral)
+                        {
+                            ballCharge += Time.deltaTime;
+                            ballChargingFX.transform.localScale = Vector3.Lerp(Vector3.one, ballChargingFXDefaultSize, ballCharge / chargeTime);
+                            GameManager.i.momentumManager.IncrementMomentum(ballCharge / chargeTime - GameManager.i.momentumManager.momentum);
+                            if (ballCharge >= chargeTime)
+                            {
+                                EndCharge();
+                                return;
+                            }
+                        }
+                    }
+
+                    if (Input.GetAxis("Action_" + p.inputIndex.ToString()) == 0)
+                    {
+                        EndCharge();
+                    }
                 }
             }
         }
