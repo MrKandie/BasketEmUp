@@ -13,6 +13,7 @@ public class FXManager : MonoBehaviour
 
     public static void EnableGhostFX(GameObject target, Material ghostMaterial, float ghostLifetime, float ghostSpawnInterval, float effectDuration = -1)
     {
+        if (target.GetComponent<GhostFX>() != null) { return; }
         GhostFX gFX = target.AddComponent<GhostFX>();
         gFX.StartCoroutine(gFX.SpawnGhost_C(target, ghostMaterial, effectDuration, ghostLifetime, ghostSpawnInterval, 0));
     }
@@ -24,9 +25,6 @@ public class FXManager : MonoBehaviour
         {
             gFX.StopAllCoroutines();
             Destroy(gFX);
-        } else
-        {
-            Debug.Log("Couldn't stop ghost effect for " + target.name);
         }
     }
 }

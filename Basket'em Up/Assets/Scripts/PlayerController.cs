@@ -576,6 +576,11 @@ public class PlayerController : MonoBehaviour, iTarget
         FXManager.EnableGhostFX(transform.Find("Model").gameObject, GameManager.i.library.ghostFXMaterial, 1, dashGhostInterval);
         AddDamage(dashSelfDamages);
         healthState = HealthState.Invincible;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1f))
+        {
+            return; //Obstacle in front, can't dash
+        }
         dashCoroutine = StartCoroutine(Dash_C(dashLength, dashSpeed, dashSpeedCurve));
     }
 
@@ -656,6 +661,11 @@ public class PlayerController : MonoBehaviour, iTarget
         Vector3 endPosition = self.position + self.forward * dashLength;
         for (float i = 0; i < dashLength/dashSpeed; i+= Time.deltaTime)
         {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1f))
+            {
+                EndDash();
+            }
             self.transform.position = Vector3.Lerp(startPosition, endPosition, speedCurve.Evaluate(i/(dashLength/dashSpeed)));
             yield return new WaitForEndOfFrame();
         }
