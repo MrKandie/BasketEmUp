@@ -47,4 +47,8 @@ MonoBehaviour:
     type: 3}
   ballChargingFX: {fileID: 1761246928432189669, guid: 848b5b2ac923d1c4aad69b86f5f0c145,
     type: 3}
+  chargingPassFX: {fileID: 8248348529879614727, guid: 7cfd6c49abd862446a15eaad4d66107f,
+    type: 3}
+  heavyChargeReadyFX: {fileID: 8014930226481112903, guid: 9cfe0eaff58e9b94ab27b52dfe8015c3,
+    type: 3}
   ghostFXMaterial: {fileID: 2100000, guid: 72eeb44ce4a539f4c92708b587c69a63, type: 2}

@@ -7,5 +7,7 @@ public class Library : MonoBehaviour
     [Header("Visuals")]
     public GameObject highlighter;
     public GameObject ballChargingFX;
+    public GameObject chargingPassFX;
+    public GameObject heavyChargeReadyFX;
     public Material ghostFXMaterial;
 }

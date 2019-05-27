@@ -644,6 +644,26 @@ PrefabInstance:
       propertyPath: volumeLayer.m_Bits
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: 260819310, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
+      propertyPath: player1
+      value: 
+      objectReference: {fileID: 1327624540}
+    - target: {fileID: 260819310, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
+      propertyPath: player2
+      value: 
+      objectReference: {fileID: 1612462154}
+    - target: {fileID: 260819310, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
+      propertyPath: targets.Array.data[1].transform
+      value: 
+      objectReference: {fileID: 1612462154}
+    - target: {fileID: 260819310, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
+      propertyPath: targets.Array.data[0].transform
+      value: 
+      objectReference: {fileID: 1327624540}
+    - target: {fileID: 260819310, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
+      propertyPath: targets.Array.data[2].transform
+      value: 
+      objectReference: {fileID: 342900490}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb05372d3b586414d99e7b45f8307a6a, type: 3}
 --- !u!114 &234554389 stripped
@@ -917,64 +937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dcf951a38710d54b8dbc137f4a54dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bounceRadius: 5
-  bounceAngleCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 3.5833335
-      outSlope: 3.5833335
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.028301887
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -4.296875
-      outSlope: -4.296875
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.03018868
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  bounceMovementCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.056818184
-      outSlope: 0.056818184
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.124528304
-    - serializedVersion: 3
-      time: 0.49640805
-      value: 0.5050136
-      inSlope: 1.9005777
-      outSlope: 1.9005777
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.13077274
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   passMovementCurve:
     serializedVersion: 2
     m_Curve:
@@ -1024,11 +986,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   minMaxPassSpeed: {x: 30, y: 105}
-  minMaxBounceSpeed: {x: 5, y: 10}
   minMaxPassDamage: {x: 20, y: 40}
+  minMaxBallLightIntensity: {x: 0, y: 0}
   minMaxPassHeight: {x: 0, y: 1}
-  minMaxBounceHeight: {x: 6, y: 7}
-  bounceOnGroundSpeedCoef: 0.6
 --- !u!4 &464236898
 Transform:
   m_ObjectHideFlags: 0
@@ -2008,7 +1968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   momentum: 0
-  momentumGainedPerPass: 0.1
+  momentumGainedPerEnemyHit: 0.2
   momentumLosseWhenBallTouchGround: 0.5
   momentumLosseCurve:
     serializedVersion: 2
@@ -2035,6 +1995,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   momentumLosseCoef: 10
+  healFactor: 0
   slider: {fileID: 2009461439}
 --- !u!1 &838530016
 GameObject:
@@ -3190,6 +3151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlighter: {fileID: 8570657855077913155, guid: 82af5376a0980574c8920ad5a04f48ee,
     type: 3}
+  ballChargingFX: {fileID: 0}
+  ghostFXMaterial: {fileID: 0}
 --- !u!4 &1288840595
 Transform:
   m_ObjectHideFlags: 0
@@ -4552,7 +4515,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1088097825}
   m_FillRect: {fileID: 586609375}
   m_HandleRect: {fileID: 1088097824}
@@ -4640,7 +4603,7 @@ MonoBehaviour:
   library: {fileID: 0}
   momentumManager: {fileID: 0}
   levelManager: {fileID: 0}
-  ballMovementManager: {fileID: 0}
+  ballManager: {fileID: 0}
   enemySpawner: {fileID: 0}
   soundManager: {fileID: 0}
   NoSettingsYet: 0
@@ -4906,7 +4869,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   transitionTime: 0.4
-  playerShooting: 0
 --- !u!23 &2146302111
 MeshRenderer:
   m_ObjectHideFlags: 0

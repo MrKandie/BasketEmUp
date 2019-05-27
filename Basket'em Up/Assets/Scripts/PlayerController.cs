@@ -97,6 +97,18 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve dunkJumpMovementCurve;
 
     [Space(2)]
+    [Header("Pass settings")]
+    [Range(0, 180f)]
+    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
+    [Range(0,1)] public float passSlowing = 0.8f; //While passing, the player is slowed by this coef
+
+    [Space(2)]
+    [Header("Heavy pass settings")]
+    public float heavyPassTime; //How much time the button pass must be held to make a heavy pass
+    public float heavyPassSpeedCoef = 1.2f;
+    public float heavyPassDamageCoef = 1.5f;
+
+    [Space(2)]
     [Header("Dash settings")]
     public float dashLength; //In seconds
     public AnimationCurve dashSpeedCurve;
@@ -127,9 +139,17 @@ public class PlayerController : MonoBehaviour, iTarget
     [HideInInspector] public bool doingHandoff;
     [HideInInspector] public Transform handoffTarget;
     bool isJumping;
+    float speedModificator;
+    float passCharge; //The charge time of the pass, if charged enough => heavy pass
+
+    GameObject heavyPassChargedFX;
+    GameObject chargingPassFX;
+
+    
 
     private void Awake()
     {
+        speedModificator = 1;
         GenerateHighlighter().SetActive(false);
         customGravity = onGroundGravityMultiplyer;
         customDrag = idleDrag;
@@ -192,28 +212,80 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             StartCoroutine(self.GetComponent<PlayerJump>().Jump());
         }
-        if (Input.GetButtonDown("Handoff_" + inputIndex.ToString()))
+
+
+        // PASSE DU JOUEUR
+        if (possessedBall != null)
         {
-            playerAnim.SetTrigger("HandoffTrigger");
-            List<iTarget> ally = new List<iTarget>();
-            foreach (iTarget target in GameManager.i.levelManager.GetTargetableAllies())
+            if (Input.GetAxis("Pass_" + inputIndex.ToString()) != 0)
             {
-                ally.Add(target);
+                if (chargingPassFX == null)
+                {
+                    chargingPassFX = Instantiate(GameManager.i.library.chargingPassFX, possessedBall.transform, false);
+                    chargingPassFX.transform.localPosition = Vector3.zero;
+                }
+                passCharge += Time.deltaTime;
+
+                //FX pour indiquer le joueur a chargé assez la balle pour faire une heavy pass
+                if (passCharge >= heavyPassTime && heavyPassChargedFX == null)
+                {
+                    Destroy(chargingPassFX);
+                    heavyPassChargedFX = Instantiate(GameManager.i.library.heavyChargeReadyFX, possessedBall.transform, false);
+                    heavyPassChargedFX.transform.localPosition = Vector3.zero;
+                }
+                if (!doingHandoff)
+                {
+                    speedModificator = passSlowing;
+                    doingHandoff = true;
+                    List<iTarget> ally = new List<iTarget>();
+                    foreach (iTarget target in GameManager.i.levelManager.GetTargetableAllies())
+                    {
+                        ally.Add(target);
+                    }
+                    ally.Remove(this);
+                    target = ally[0];
+                    handoffTarget = target.targetedTransform;
+                }
             }
-            ally.Remove(this);
-            target = ally[0];
-            PassBall(target, GameManager.i.momentumManager.momentum);
-            target = null;
+            else
+            {
+                if (doingHandoff)
+                {
+                    if (heavyPassChargedFX != null) { Destroy(heavyPassChargedFX); }
+                    if (chargingPassFX != null) { Destroy(chargingPassFX); }
+
+                    doingHandoff = false;
+                    speedModificator = 1;
+                    playerAnim.SetTrigger("HandoffTrigger");
+                    List<iTarget> ally = new List<iTarget>();
+                    foreach (iTarget target in GameManager.i.levelManager.GetTargetableAllies())
+                    {
+                        ally.Add(target);
+                    }
+                    ally.Remove(this);
+                    target = ally[0];
+                    if (passCharge >= heavyPassTime)
+                    {
+                        HeavyPass(target, GameManager.i.momentumManager.momentum);
+                    }
+                    else
+                    {
+                        LightPass(target, GameManager.i.momentumManager.momentum);
+                    }
+                    target = null;
+                    passCharge = 0;
+                }
+            }
         }
-        /*
-        if(Input.GetButtonDown("Healing_" + inputIndex.ToString())) //TODO Assign Input
+
+        // HEAL
+        if(Input.GetButtonDown("Healing_" + inputIndex.ToString()))
         {
             if(possessedBall != null)
             {
                 Heal();
             }
         }
-        */
         if (Input.GetMouseButtonDown(1))
         {
             TakeBall(GameManager.i.levelManager.activeBall, 0.1f);
@@ -313,7 +385,7 @@ public class PlayerController : MonoBehaviour, iTarget
         myVel.y = 0;
         myVel = Vector3.ClampMagnitude(myVel, maxSpeed);
         myVel.y = body.velocity.y;
-        body.velocity = myVel;
+        body.velocity = myVel * speedModificator;
         speed = body.velocity.magnitude;
     }
 
@@ -532,7 +604,7 @@ public class PlayerController : MonoBehaviour, iTarget
     }
 
     //Pass the ball to a specific player
-    public void PassBall(iTarget target, float momentum)
+    public void LightPass(iTarget target, float momentum)
     {
         //Conditions
         MonoBehaviour targetScript = target as MonoBehaviour;
@@ -541,7 +613,22 @@ public class PlayerController : MonoBehaviour, iTarget
         if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
 
         //Function
-        StartCoroutine(PassBall_C(possessedBall, target, momentum));
+        StartCoroutine(PassBall_C(possessedBall, target, momentum, 1));
+        possessedBall.damageModifier = 1;
+        DropBall();
+    }
+
+    public void HeavyPass(iTarget target, float momentum)
+    {
+        //Conditions
+        MonoBehaviour targetScript = target as MonoBehaviour;
+        if (targetScript == this) { Debug.LogWarning("Can't pass ball to yourself"); return; }
+        if (possessedBall == null) { return; }
+        if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
+
+        //Function
+        StartCoroutine(PassBall_C(possessedBall, target, momentum, heavyPassSpeedCoef));
+        possessedBall.damageModifier = heavyPassDamageCoef;
         DropBall();
     }
 
@@ -645,7 +732,7 @@ public class PlayerController : MonoBehaviour, iTarget
         yield return null;
     }
 
-    IEnumerator PassBall_C(Ball ball, iTarget target, float momentum)
+    IEnumerator PassBall_C(Ball ball, iTarget target, float momentum, float speedCoef)
     {
         target.OnTargetedBySomeone(self.transform);
         doingHandoff = true;
@@ -662,7 +749,7 @@ public class PlayerController : MonoBehaviour, iTarget
         }
 
         float passSpeed = GameManager.i.ballManager.GetPassSpeed();
-        float passTime = Vector3.Distance(startPosition, endPosition) / passSpeed;
+        float passTime = Vector3.Distance(startPosition, endPosition) / (passSpeed * speedCoef);
         AnimationCurve speedCurve = GameManager.i.ballManager.passMovementCurve;
         AnimationCurve angleCurve = GameManager.i.ballManager.passAngleCurve;
 

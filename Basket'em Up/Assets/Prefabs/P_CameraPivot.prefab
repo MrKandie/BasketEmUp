@@ -499,11 +499,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   combatBehav: {fileID: 260819309}
   platformBehav: {fileID: 260819312}
-  activatedBehav: 
+  activatedBehav: Combat
   player1: {fileID: 0}
   player2: {fileID: 0}
   cameraObj: {fileID: 8389507779031720878}
-  cameraRef: {fileID: 0}
+  cameraRef: {fileID: 8389507779031720879}
   targets:
   - transform: {fileID: 0}
     importance: 1
