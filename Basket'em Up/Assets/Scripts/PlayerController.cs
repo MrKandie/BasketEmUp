@@ -94,6 +94,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Pass settings")]
+    [Range(0, 180)] public float targetAngleTreshold = 30;
     [Range(0,1)] public float passSlowing = 0.8f; //While passing, the player is slowed by this coef
 
     [Space(2)]
