@@ -69,11 +69,23 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve walkAnimationSpeedCurve;
 
     [Space(2)]
+    [Header("Pass settings")]
+    [Range(0, 180f)]
+    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
+
+    [Space(2)]
+    [Header("Active Pass settings")]
+    public float timeForActivePass = 0.5f;
+    public float passAOERange = 10f;
+    public float passAOEDamage = 5;
+    public float passTimeDistorsion;
+    public GameObject passAOEFX;
+
+    [Space(2)]
     [Header("Dunk settings")]
     public float dunkExplosionRadius = 10;
     public float dunkExplosionForce = 5000;
     public int dunkExplosionDamage = 20;
-
     public float dunkJumpHeight; //In meters
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
@@ -83,11 +95,6 @@ public class PlayerController : MonoBehaviour, iTarget
     public Vector2 dunkTreshold; //The moment when the player can receive the ball and do a dunk
     public AnimationCurve dunkJumpSpeedCurve;
     public AnimationCurve dunkJumpMovementCurve;
-
-    [Space(2)]
-    [Header("Pass settings")]
-    [Range(0, 180f)]
-    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
 
     [Space(2)]
     [Header("Dash settings")]
@@ -680,6 +687,33 @@ public class PlayerController : MonoBehaviour, iTarget
         CancelHandoff();
         yield return null;
     }
+
+    public IEnumerator ActivePass(Ball ball)
+    {
+        float tempTime = 0;
+        bool passDone = false;
+
+        while (tempTime <= timeForActivePass && !passDone)
+        {
+            if (Input.GetButtonDown("Pass_" + inputIndex.ToString()))
+            {
+                passDone = true;
+            }
+            tempTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (passDone)
+        {
+            GameObject fx = Instantiate(passAOEFX, transform.position, Quaternion.identity);
+            fx.transform.localScale = new Vector3(passAOERange, passAOERange, passAOERange);
+            fx.GetComponent<ParticleSystem>().Play();
+        }
+        targetedBy = null;
+        TakeBall(ball, 0);
+        ballReceivedParticleSystem.Play();
+        yield return null;
+    }
     #endregion
 
     #region Private functions
@@ -747,9 +781,9 @@ public class PlayerController : MonoBehaviour, iTarget
 
     public void OnBallReceived(Ball ball)
     {
-        targetedBy = null;
-        TakeBall(ball, 0);
-        ballReceivedParticleSystem.Play();
+        
+        StartCoroutine(ActivePass(ball));
+
     }
 
     public void OnTargetedBySomeone(Transform target)

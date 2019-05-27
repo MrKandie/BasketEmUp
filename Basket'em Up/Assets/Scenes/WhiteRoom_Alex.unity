@@ -758,6 +758,22 @@ PrefabInstance:
       propertyPath: playerColor.r
       value: 0.9926069
       objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: timeForActivePass
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: passAOERange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: passAOEFX
+      value: 
+      objectReference: {fileID: 4048727396307156406, guid: 62f53133aa10aff42a2e1930c6b84ddc,
+        type: 3}
     - target: {fileID: 5480206383546780882, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: gravitySpectrum
@@ -1346,6 +1362,7 @@ MonoBehaviour:
   highlighter: {fileID: 8570657855077913155, guid: 82af5376a0980574c8920ad5a04f48ee,
     type: 3}
   ballChargingFX: {fileID: 0}
+  ghostFXMaterial: {fileID: 0}
 --- !u!1001 &761776657
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1521,6 +1538,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   momentumLosseCoef: 10
+  healFactor: 0
   slider: {fileID: 2036144681}
 --- !u!1 &897163208
 GameObject:
@@ -3931,6 +3949,22 @@ PrefabInstance:
       propertyPath: planeBetweenPlayers
       value: 
       objectReference: {fileID: 2067154919}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: timeForActivePass
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: passAOERange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543657012422248503, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: passAOEFX
+      value: 
+      objectReference: {fileID: 4048727396307156406, guid: 62f53133aa10aff42a2e1930c6b84ddc,
+        type: 3}
     - target: {fileID: 6122283427768529348, guid: 218a241db58f56849816014d9aa8d204,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
