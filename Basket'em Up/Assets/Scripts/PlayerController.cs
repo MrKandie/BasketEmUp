@@ -76,8 +76,8 @@ public class PlayerController : MonoBehaviour, iTarget
     [Space(2)]
     [Header("Active Pass settings")]
     public float timeForActivePass = 0.5f;
-    public float passAOERange = 10f;
-    public float passAOEDamage = 5;
+    public float passAOERange = 5f;
+    public float passAOEDamage = 5f;
     public float passTimeDistorsion;
     public GameObject passAOEFX;
 
@@ -692,12 +692,18 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         float tempTime = 0;
         bool passDone = false;
+        bool isTriggerPressed = false;
 
         while (tempTime <= timeForActivePass && !passDone)
         {
-            if (Input.GetButtonDown("Pass_" + inputIndex.ToString()))
+            if (Input.GetAxis("Pass_" + inputIndex.ToString()) > 0f && !isTriggerPressed)
             {
+                isTriggerPressed = true;
                 passDone = true;
+            }
+            else if(Input.GetAxis("Pass_" + inputIndex.ToString()) <= 0f)
+            {
+                isTriggerPressed = false;
             }
             tempTime += Time.deltaTime;
             yield return null;
@@ -706,8 +712,9 @@ public class PlayerController : MonoBehaviour, iTarget
         if (passDone)
         {
             GameObject fx = Instantiate(passAOEFX, transform.position, Quaternion.identity);
-            fx.transform.localScale = new Vector3(passAOERange, passAOERange, passAOERange);
-            fx.GetComponent<ParticleSystem>().Play();
+            ParticleSystem ps = fx.GetComponent<ParticleSystem>();
+            ps.startSize = passAOERange;
+            ps.Play();
         }
         targetedBy = null;
         TakeBall(ball, 0);
