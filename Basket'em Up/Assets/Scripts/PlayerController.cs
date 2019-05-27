@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Pass settings")]
-    [Range(0, 180)] public float targetAngleTreshold = 30;
+    [Range(0, 180)] public float targetAngleTreshold = 30; //A quel point la visée est généreuse [Obsoléte car le tir n'existe plus]
     [Range(0,1)] public float passSlowing = 0.8f; //While passing, the player is slowed by this coef
 
     [Space(2)]
@@ -422,6 +422,7 @@ public class PlayerController : MonoBehaviour, iTarget
             {
                 currentHP += (healingFactor/60); // parce que 60fps
                 GameManager.i.momentumManager.UseMomentumToHeal(); //diminish Momentum
+                GameManager.i.comboManager.AddCoup(Coup.Heal);
             }
         }
     }
@@ -571,6 +572,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     public void ReleaseDash()
     {
+        GameManager.i.comboManager.AddCoup(Coup.Dash);
         FXManager.EnableGhostFX(transform.Find("Model").gameObject, GameManager.i.library.ghostFXMaterial, 1, dashGhostInterval);
         AddDamage(dashSelfDamages);
         healthState = HealthState.Invincible;
@@ -608,6 +610,7 @@ public class PlayerController : MonoBehaviour, iTarget
         if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
 
         //Function
+        GameManager.i.comboManager.AddCoup(Coup.LightPass);
         StartCoroutine(PassBall_C(possessedBall, target, momentum, 1));
         possessedBall.damageModifier = 1;
         DropBall();
@@ -622,8 +625,17 @@ public class PlayerController : MonoBehaviour, iTarget
         if (targetScript.GetType() == typeof(PlayerController)) { possessedBall.triggerEnabled = true; }
 
         //Function
-        StartCoroutine(PassBall_C(possessedBall, target, momentum, heavyPassSpeedCoef));
-        possessedBall.damageModifier = heavyPassDamageCoef;
+        GameManager.i.comboManager.AddCoup(Coup.HeavyPass);
+        float speedCoef = heavyPassSpeedCoef;
+        float damageCoef = heavyPassDamageCoef;
+        if (GameManager.i.comboManager.hyperHeavyAttackReady == true)
+        {
+            //PLAYER DID A COMBO, so his attack is boosted
+            speedCoef *= GameManager.i.comboManager.comboSpeedModifier;
+            damageCoef *= GameManager.i.comboManager.comboDamageModifier;
+        }
+        StartCoroutine(PassBall_C(possessedBall, target, momentum, speedCoef));
+        possessedBall.damageModifier = damageCoef;
         DropBall();
     }
 
@@ -683,6 +695,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
     IEnumerator Dunk_C(Vector3 position)
     {
+        GameManager.i.comboManager.AddCoup(Coup.Dunk);
         moveState = MoveState.Blocked;
         for (float i = 0; i < dunkClimaxTime; i+= Time.deltaTime)
         {
