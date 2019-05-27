@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public GameObject groundDunkEffect;
     public ParticleSystem ballReceivedParticleSystem;
     public PlaneBetweenPlayers planeBetweenPlayers;
+    public Slider healthBar;
 
     [SerializeField]
     private Transform _targetedTransform;
@@ -109,7 +110,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve dashSpeedCurve;
     public float dashSpeed = 10f; //In m/s
     public float dashGhostInterval = 0.1f; //Interval in seconds between the spawn of a ghost while dashing
-    public int dashSelfDamages;
+    public int dashSelfDamages = 10;
 
     [Space(2)]
     [Header("Debug")]
@@ -177,6 +178,7 @@ public class PlayerController : MonoBehaviour, iTarget
         ApplyDrag();
         ApplyCustomGravity();
         UpdateAnimatorBlendTree();
+        UpdateHPBar();
     }
 
     #region Input
@@ -427,6 +429,14 @@ public class PlayerController : MonoBehaviour, iTarget
         }
     }
 
+    void UpdateHPBar()
+    {
+        float currentValue = healthBar.value;
+        float newValue = currentHP / MaxHP;
+
+         healthBar.value = Mathf.Lerp(currentValue, newValue, Time.deltaTime * 10);
+    }
+
     //Highlight the target with the correspunding player color
     public void HighlightGameObject(GameObject target)
     {
@@ -454,7 +464,6 @@ public class PlayerController : MonoBehaviour, iTarget
             {
                 Vector2 mousePosition = new Vector2(hit.point.x, hit.point.z);
                 mousePosition -= new Vector2(self.position.x, self.position.z);
-                //shootQuadTransform.rotation = Quaternion.LookRotation((new Vector3(mousePosition.x, 0, mousePosition.y) + self.position) - self.position);
                 return mousePosition;
             }
         }
