@@ -69,11 +69,23 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve walkAnimationSpeedCurve;
 
     [Space(2)]
+    [Header("Pass settings")]
+    [Range(0, 180f)]
+    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
+
+    [Space(2)]
+    [Header("Active Pass settings")]
+    public float timeForActivePass = 0.5f;
+    public float passAOERange = 5f;
+    public float passAOEDamage = 5f;
+    public float passTimeDistorsion;
+    public GameObject passAOEFX;
+
+    [Space(2)]
     [Header("Dunk settings")]
     public float dunkExplosionRadius = 10;
     public float dunkExplosionForce = 5000;
     public int dunkExplosionDamage = 20;
-
     public float dunkJumpHeight; //In meters
     public float dunkJumpDistance; //In meters
     public float dunkJumpSpeed; //In m/s
@@ -762,6 +774,40 @@ public class PlayerController : MonoBehaviour, iTarget
         CancelHandoff();
         yield return null;
     }
+
+    public IEnumerator ActivePass(Ball ball)
+    {
+        float tempTime = 0;
+        bool passDone = false;
+        bool isTriggerPressed = false;
+
+        while (tempTime <= timeForActivePass && !passDone)
+        {
+            if (Input.GetAxis("Pass_" + inputIndex.ToString()) > 0f && !isTriggerPressed)
+            {
+                isTriggerPressed = true;
+                passDone = true;
+            }
+            else if(Input.GetAxis("Pass_" + inputIndex.ToString()) <= 0f)
+            {
+                isTriggerPressed = false;
+            }
+            tempTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (passDone)
+        {
+            GameObject fx = Instantiate(passAOEFX, transform.position, Quaternion.identity);
+            ParticleSystem ps = fx.GetComponent<ParticleSystem>();
+            ps.startSize = passAOERange;
+            ps.Play();
+        }
+        targetedBy = null;
+        TakeBall(ball, 0);
+        ballReceivedParticleSystem.Play();
+        yield return null;
+    }
     #endregion
 
     #region Private functions
@@ -829,9 +875,9 @@ public class PlayerController : MonoBehaviour, iTarget
 
     public void OnBallReceived(Ball ball)
     {
-        targetedBy = null;
-        TakeBall(ball, 0);
-        ballReceivedParticleSystem.Play();
+        
+        StartCoroutine(ActivePass(ball));
+
     }
 
     public void OnTargetedBySomeone(Transform target)
