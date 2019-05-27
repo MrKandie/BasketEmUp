@@ -140,8 +140,9 @@ public class PlayerController : MonoBehaviour, iTarget
 
     GameObject heavyPassChargedFX;
     GameObject chargingPassFX;
+    bool isTriggerPressed = false;
 
-    
+
 
     private void Awake()
     {
@@ -216,6 +217,7 @@ public class PlayerController : MonoBehaviour, iTarget
         {
             if (Input.GetAxis("Pass_" + inputIndex.ToString()) != 0)
             {
+                isTriggerPressed = true;
                 if (chargingPassFX == null)
                 {
                     chargingPassFX = Instantiate(GameManager.i.library.chargingPassFX, possessedBall.transform, false);
@@ -806,7 +808,6 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         float tempTime = 0;
         bool passDone = false;
-        bool isTriggerPressed = false;
 
         while (tempTime <= timeForActivePass && !passDone)
         {
@@ -854,7 +855,7 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         float trueRadius = radius * GameManager.i.momentumManager.momentum;
         float truePower = power * GameManager.i.momentumManager.momentum;
-        int trueDamages = Mathf.RoundToInt(damages * GameManager.i.momentumManager.momentum);
+        int trueDamages = Mathf.RoundToInt(damages + (1* GameManager.i.momentumManager.momentum));
 
         Collider[] colliders = Physics.OverlapSphere(position, trueRadius);
         foreach (Collider hit in colliders)
@@ -869,7 +870,8 @@ public class PlayerController : MonoBehaviour, iTarget
                 if (rb != null)
                 {
                     //rb.AddForce(new Vector3(0, 5000, 0));
-                    //rb.AddExplosionForce(truePower, position + new Vector3(0, -2, 0), trueRadius, 3.0F);
+                    Debug.DrawRay(position, Vector3.up, Color.green, 10f);
+                    rb.AddExplosionForce(truePower, position , trueRadius, 3.0F);
                 }
             }
             DestructibleObject potentialDestructibleObject = hit.gameObject.GetComponent<DestructibleObject>();
@@ -881,7 +883,7 @@ public class PlayerController : MonoBehaviour, iTarget
 
         Vector3 spawnPosition = new Vector3(transform.position.x, 0.05f, transform.position.z) + transform.forward *2;
         spawnPosition.y = 0.05f;
-        GameObject dunkFXRef = Instantiate(groundDunkEffect, spawnPosition, Quaternion.Euler(90, 0, 0));
+        GameObject dunkFXRef = Instantiate(groundDunkEffect, spawnPosition, Quaternion.Euler(-90, 0, 0));
         dunkFXRef.transform.localScale = new Vector3(trueRadius, trueRadius, trueRadius);
         Destroy(dunkFXRef, 2);
     }
