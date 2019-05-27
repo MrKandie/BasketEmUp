@@ -77,9 +77,10 @@ public class PlayerController : MonoBehaviour, iTarget
     [Header("Active Pass settings")]
     public float timeForActivePass = 0.5f;
     public float passAOERange = 5f;
-    public float passAOEDamage = 5f;
+    public int passAOEDamage = 5;
     public float passTimeDistorsion;
     public GameObject passAOEFX;
+    public int activePassMomentum;
 
     [Space(2)]
     [Header("Dunk settings")]
@@ -98,8 +99,6 @@ public class PlayerController : MonoBehaviour, iTarget
 
     [Space(2)]
     [Header("Pass settings")]
-    [Range(0, 180f)]
-    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
     [Range(0,1)] public float passSlowing = 0.8f; //While passing, the player is slowed by this coef
 
     [Space(2)]
@@ -788,7 +787,7 @@ public class PlayerController : MonoBehaviour, iTarget
                 isTriggerPressed = true;
                 passDone = true;
             }
-            else if(Input.GetAxis("Pass_" + inputIndex.ToString()) <= 0f)
+            else if (Input.GetAxis("Pass_" + inputIndex.ToString()) <= 0f)
             {
                 isTriggerPressed = false;
             }
@@ -799,9 +798,16 @@ public class PlayerController : MonoBehaviour, iTarget
         if (passDone)
         {
             GameObject fx = Instantiate(passAOEFX, transform.position, Quaternion.identity);
+            PassAoEDetection script = fx.GetComponent<PassAoEDetection>();
             ParticleSystem ps = fx.GetComponent<ParticleSystem>();
+
+            script.damage = passAOEDamage;
+            script.range = passAOERange;
+
             ps.startSize = passAOERange;
             ps.Play();
+
+            GameManager.i.momentumManager.momentum += activePassMomentum;
         }
         targetedBy = null;
         TakeBall(ball, 0);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6847172656790991360}
   - component: {fileID: 2622099336273404483}
   - component: {fileID: 6912588936511308172}
-  - component: {fileID: 1863742041628136995}
+  - component: {fileID: 8094257446904833622}
   m_Layer: 0
   m_Name: FX_PassAoE
   m_TagString: Untagged
@@ -4658,7 +4658,7 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &1863742041628136995
+--- !u!114 &8094257446904833622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
