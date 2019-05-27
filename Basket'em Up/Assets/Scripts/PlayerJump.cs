@@ -52,7 +52,6 @@ public class PlayerJump : MonoBehaviour
         while (distanceToGround > minimalHeight && isJumping)
         {
             float forceDown = distanceToGround * Mathf.Lerp(0, downModificator, t);
-            print("force down " + forceDown);
             selfRig.AddForce(Vector3.down* forceDown, ForceMode.Force);
             t += Time.deltaTime;
             yield return null;

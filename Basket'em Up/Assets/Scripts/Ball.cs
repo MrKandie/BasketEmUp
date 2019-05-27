@@ -18,6 +18,7 @@ public class Ball : MonoBehaviour
     private Rigidbody rb;
     public BallMoveState state;
     private bool canBePicked;
+    public float damageModifier = 1;
 
     private void Update()
     {
@@ -45,7 +46,7 @@ public class Ball : MonoBehaviour
         if (potentialEnemy != null && direction != Vector3.zero && triggerEnabled)
         {
             Enemy enemy = potentialEnemy;
-            enemy.AddDamage(GameManager.i.ballManager.GetDamages());
+            enemy.AddDamage(Mathf.RoundToInt(GameManager.i.ballManager.GetDamages() * damageModifier));
             enemy.Slow(0.2f, 1);
             GameManager.i.momentumManager.IncrementMomentum(GameManager.i.momentumManager.momentumGainedPerEnemyHit);
         }
