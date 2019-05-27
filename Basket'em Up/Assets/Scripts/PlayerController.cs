@@ -69,11 +69,6 @@ public class PlayerController : MonoBehaviour, iTarget
     public AnimationCurve walkAnimationSpeedCurve;
 
     [Space(2)]
-    [Header("Pass settings")]
-    [Range(0, 180f)]
-    [Tooltip("angle treshold to target something, big values mean it's easier to target something")] public float targetAngleTreshold = 30;
-
-    [Space(2)]
     [Header("Active Pass settings")]
     public float timeForActivePass = 0.5f;
     public float passAOERange = 5f;
