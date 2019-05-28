@@ -253,6 +253,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d61e39d73d9919d40b9c31f5ea2bdcd9, type: 3}
+--- !u!114 &75669872 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8410603324845070335, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &128580764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -352,6 +364,12 @@ Transform:
   m_Father: {fileID: 231921824}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!198 &168948595 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7036509741946447823, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,6 +535,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5a2c670c4d3a804cad7f60144800fe8, type: 3}
+--- !u!95 &208555143 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1184472623027629320, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &231921822
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +826,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 951577377934531864, guid: a5a2c670c4d3a804cad7f60144800fe8,
     type: 3}
   m_PrefabInstance: {fileID: 1527263747}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &338328626 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 47267294258427855, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &342900490 stripped
 Transform:
@@ -1654,6 +1684,229 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 586609374}
   m_CullTransparentMesh: 0
+--- !u!1 &629923415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 69913409235962623, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &629923416 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8666635390815151469, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &629923419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629923415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536f36e5014309847af6d38cc8ac23bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: {fileID: 1327624540}
+  body: {fileID: 629923416}
+  deadzone: 0.2
+  hand: {fileID: 768950749}
+  playerAnim: {fileID: 208555143}
+  handoffEffects:
+  - {fileID: 168948595}
+  - {fileID: 338328626}
+  cam: {fileID: 32188218}
+  groundDunkEffect: {fileID: 8532570793515419785, guid: c42cf0548d9ad0a4598aa7f77999e3ae,
+    type: 3}
+  ballReceivedParticleSystem: {fileID: 885206900}
+  planeBetweenPlayers: {fileID: 2146302110}
+  healthBar: {fileID: 75669872}
+  _targetedTransform: {fileID: 768950749}
+  inputIndex: 1
+  playerColor: {r: 0.9926069, g: 1, b: 0, a: 1}
+  playerHeight: 2.2
+  healthState: 1
+  MaxHP: 100
+  healingFactor: 0
+  healFX: {fileID: 5402105073326152163, guid: 1958dab9fa4562646947153d0e19da67, type: 3}
+  moveState: 2
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0000006170012
+      value: 0.4983635
+      inSlope: 0.5016362
+      outSlope: 0.5016362
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.5016362
+      outSlope: 0.5016362
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minWalkSpeed: 0.3
+  maxSpeedMin: 9
+  maxSpeedMax: 12
+  maxAcceleration: 200
+  movingDrag: 0.08
+  idleDrag: 0.05
+  onGroundGravityMultiplyer: 2.5
+  turnSpeed: 0.37
+  walkAnimationSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  timeForActivePass: 0.5
+  passAOERange: 10
+  passAOEDamage: 5
+  passTimeDistorsion: 0
+  passAOEFX: {fileID: 4048727396307156406, guid: 62f53133aa10aff42a2e1930c6b84ddc,
+    type: 3}
+  activePassMomentum: 0
+  dunkExplosionRadius: 10
+  dunkExplosionForce: 10000
+  dunkExplosionDamage: 10
+  dunkJumpHeight: 7
+  dunkJumpDistance: 5
+  dunkJumpSpeed: 5
+  dunkTime: 0.2
+  dunkClimaxTime: 0.3
+  dunkTreshold: {x: 0.186407, y: 0.8334658}
+  dunkJumpSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dunkJumpMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2220952
+      value: 0.93674934
+      inSlope: 0.26367754
+      outSlope: 0.26367754
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.18431203
+    - serializedVersion: 3
+      time: 0.82641596
+      value: 0.99623287
+      inSlope: 0.07595359
+      outSlope: 0.07595359
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17484292
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -10.795465
+      outSlope: -10.795465
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07638882
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  targetAngleTreshold: 35
+  passSlowing: 0.1
+  heavyPassTime: 1
+  heavyPassSpeedCoef: 1.2
+  heavyPassDamageCoef: 1.5
+  dashLength: 7
+  dashSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dashSpeed: 50
+  dashGhostInterval: 0.02
+  dashSelfDamages: 10
+  currentHP: 0
+  possessedBall: {fileID: 0}
+  targetedBy: {fileID: 0}
+  doingHandoff: 0
+  handoffTarget: {fileID: 0}
 --- !u!1 &664634469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1957,6 +2210,12 @@ Transform:
   m_Father: {fileID: 1220877125}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &768950749 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3535076308953019112, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &777145336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,6 +2553,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 62a94e53d4b01b641b9ddc629e6da7dd, type: 2}
+    - target: {fileID: 7585727719087081179, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585727719087081179, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 218a241db58f56849816014d9aa8d204, type: 3}
 --- !u!114 &874674763 stripped
@@ -2404,6 +2673,12 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!198 &885206900 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4140970633969452101, guid: 218a241db58f56849816014d9aa8d204,
+    type: 3}
+  m_PrefabInstance: {fileID: 1573674272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &900462591
 GameObject:
   m_ObjectHideFlags: 0
@@ -3615,6 +3890,16 @@ PrefabInstance:
       propertyPath: playerColor.r
       value: 0.9926069
       objectReference: {fileID: 0}
+    - target: {fileID: 7585727719087081179, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585727719087081179, guid: 218a241db58f56849816014d9aa8d204,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 218a241db58f56849816014d9aa8d204, type: 3}
 --- !u!114 &1573674273 stripped
@@ -3623,7 +3908,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1573674272}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 629923415}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 536f36e5014309847af6d38cc8ac23bb, type: 3}
