@@ -418,17 +418,18 @@ public class PlayerController : MonoBehaviour, iTarget
     {
         if(GameManager.i.momentumManager.momentum > 0)
         {
-            if(currentHP >= MaxHP) //Can't heal more
+            
+            if (currentHP >= MaxHP) //Can't heal more
             {
                 //What happens when healing with full health
-                healFX.Stop();
             }
             else if (currentHP < MaxHP) //Heal has effect
             {
-                currentHP += healingFactor*Time.deltaTime; 
+                print("bidouille");
+                currentHP += healingFactor; 
                 GameManager.i.momentumManager.UseMomentumToHeal(); //diminish Momentum
                 GameManager.i.comboManager.AddCoup(Coup.Heal);
-                healFX.Play();
+                Instantiate(healFX, transform.position, Quaternion.identity);
             }
         }
     }
