@@ -9,7 +9,7 @@ public class PlayerJump : MonoBehaviour
     private Transform selfTransform;
     private Rigidbody selfRig;
     private Vector3 jumpDirection;
-    private float downModificator;
+    public float downModificator;
     private float distanceToGround;
 
     [Header("Jump settings")]
@@ -19,13 +19,15 @@ public class PlayerJump : MonoBehaviour
     [Header("Jump variables")]
     public bool isJumping = false;
 
+    [HideInInspector]
+    public bool grounded;
+
     // Start is called before the first frame update
     void Start()
     {
         self = gameObject;
         if (self.GetComponent<Rigidbody>()) { selfRig = self.GetComponent<Rigidbody>(); }
         selfTransform = transform;
-        downModificator = jumpForce / 2;
     }
 
     private void Update()
@@ -35,16 +37,24 @@ public class PlayerJump : MonoBehaviour
         Physics.Raycast(selfTransform.position, Vector3.down, out hit, Mathf.Infinity);
         distanceToGround = ( hit.point - selfTransform.position).magnitude;
         Debug.DrawLine(selfTransform.position, hit.point, Color.blue, 1f);
+        if (distanceToGround > minimalHeight)
+        {
+            grounded = false;
+        }
+        else
+            grounded = true;
+
+        print(grounded);
     }
 
     public IEnumerator Jump()
     {
-        if (isJumping) { StopAllCoroutines(); }
-        isJumping = true;
+        /*if (isJumping) { StopAllCoroutines(); }
+        isJumping = true;*/
 
         jumpDirection = (selfTransform.forward + Vector3.up * 3f).normalized;
 
-        Debug.DrawLine(selfTransform.position, selfTransform.position+jumpDirection, Color.green, 1f);
+        /*Debug.DrawLine(selfTransform.position, selfTransform.position+jumpDirection, Color.green, 1f);
 
         selfRig.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
         yield return new WaitForSeconds(0.2f);
@@ -63,7 +73,8 @@ public class PlayerJump : MonoBehaviour
             isJumping = false;
         }
 
-        //Physics.gravity = GameManager.i.baseGravity;
-        
+        //Physics.gravity = GameManager.i.baseGravity;*/
+        selfRig.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+        yield return null;
     }
 }

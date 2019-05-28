@@ -210,7 +210,7 @@ MonoBehaviour:
   maxAcceleration: 200
   movingDrag: 0.08
   idleDrag: 0.05
-  onGroundGravityMultiplyer: 2.5
+  onGroundGravityMultiplyer: 4
   turnSpeed: 0.37
   walkAnimationSpeedCurve:
     serializedVersion: 2
@@ -323,7 +323,7 @@ MonoBehaviour:
   heavyPassTime: 1
   heavyPassSpeedCoef: 1.2
   heavyPassDamageCoef: 1.5
-  dashLength: 10
+  dashLength: 7
   dashSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -348,8 +348,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  dashSpeed: 20
-  dashGhostInterval: 0.01
+  dashSpeed: 50
+  dashGhostInterval: 0.02
   dashSelfDamages: 10
   currentHP: 0
   possessedBall: {fileID: 0}
@@ -398,9 +398,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abeeddfd888764794f247d7719ecee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 15
+  downModificator: 5
+  jumpForce: 10
   minimalHeight: 1.2
   isJumping: 0
+  grounded: 0
 --- !u!1 &576522956130905405
 GameObject:
   m_ObjectHideFlags: 0
