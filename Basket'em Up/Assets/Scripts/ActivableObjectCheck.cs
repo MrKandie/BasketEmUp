@@ -33,7 +33,8 @@ public class ActivableObjectCheck : MonoBehaviour
             foreach (var objects in objectsToActivate)
             {
                 objects.FinalActivate();
-                EventAction();
+                //EventAction();
+                FindObjectOfType<DoorOpening>().OpenDoor();
             }
             return true;
         }

@@ -101,7 +101,7 @@ public class CameraBehaviour : MonoBehaviour
         }
         eulerAngleX = Mathf.Clamp(eulerAngleX, xClamp.x, xClamp.y);
 
-        transform.eulerAngles = new Vector3(eulerAngleX, eulerAngleY, transform.eulerAngles.z);
+        transform.eulerAngles = new Vector3(eulerAngleX, eulerAngleY+90, transform.eulerAngles.z);
     }
 
     public Transform GetFurthestPlayer()
