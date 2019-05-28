@@ -5,6 +5,7 @@ using UnityEngine;
 public class ActivableObjectCheck : MonoBehaviour
 {
     public ActivableObject[] objectsToActivate;
+    public ActivationScript activation;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,7 @@ public class ActivableObjectCheck : MonoBehaviour
             foreach (var objects in objectsToActivate)
             {
                 objects.FinalActivate();
+                EventAction();
             }
             return true;
         }
@@ -44,5 +46,10 @@ public class ActivableObjectCheck : MonoBehaviour
     public void ActivateObjectDebug(int index)
     {
         objectsToActivate[index].Activate();
+    }
+
+    public void EventAction()
+    {
+        activation.Event();
     }
 }

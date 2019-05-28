@@ -14,14 +14,17 @@ public class PassAoEDetection : MonoBehaviour
     
     private void OnParticleTrigger()
     {
-        foreach(var enemy in GameManager.i.levelManager.enemies)
-        {
-            float distance = (enemy.transform.position - transform.position).magnitude;
-            if (distance <= range)
+            foreach (var enemy in GameManager.i.levelManager.enemies)
             {
-                enemy.AddDamage(damage);
+                if (enemy != null)
+                {
+                    float distance = (enemy.transform.position - transform.position).magnitude;
+                    if (distance <= range)
+                    {
+                        enemy.AddDamage(damage);
+                    }
+                }
             }
-        }
     }
 }
 

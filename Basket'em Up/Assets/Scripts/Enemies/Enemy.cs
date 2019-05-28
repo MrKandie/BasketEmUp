@@ -72,6 +72,7 @@ public class Enemy : MonoBehaviour, iTarget
             _hitEffetRotation.eulerAngles = new Vector3(0, _hitEffetRotation.eulerAngles.y, 0);
             hitEffetTransform.rotation = _hitEffetRotation;
         }
+
     }
 
     virtual public void AddDamage(int amount)
@@ -90,6 +91,7 @@ public class Enemy : MonoBehaviour, iTarget
             enemyAnim.SetTrigger("DeathTrigger");
             PermaDisableNavmeshAgent();
             dying = true;
+            Kill();
         }
     }
 
