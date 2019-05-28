@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, iTarget
     public HealthState healthState;
     public int MaxHP;
     public float healingFactor; // en valeur/secondes
+    public ParticleSystem healFX;
 
     [Space(2)]
     [Header("Movement settings")]
@@ -420,13 +421,14 @@ public class PlayerController : MonoBehaviour, iTarget
             if(currentHP >= MaxHP) //Can't heal more
             {
                 //What happens when healing with full health
-                
+                healFX.Stop();
             }
             else if (currentHP < MaxHP) //Heal has effect
             {
-                currentHP += (healingFactor/60); // parce que 60fps
+                currentHP += healingFactor*Time.deltaTime; 
                 GameManager.i.momentumManager.UseMomentumToHeal(); //diminish Momentum
                 GameManager.i.comboManager.AddCoup(Coup.Heal);
+                healFX.Play();
             }
         }
     }

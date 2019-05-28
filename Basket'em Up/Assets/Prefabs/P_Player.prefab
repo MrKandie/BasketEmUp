@@ -173,11 +173,12 @@ MonoBehaviour:
   healthBar: {fileID: 8410603324845070335}
   _targetedTransform: {fileID: 3535076308953019112}
   inputIndex: 1
-  playerColor: {r: 1, g: 0, b: 0.027940273, a: 1}
+  playerColor: {r: 0.9926069, g: 1, b: 0, a: 1}
   playerHeight: 2.2
   healthState: 0
   MaxHP: 100
   healingFactor: 0
+  healFX: {fileID: 5402105073326152163, guid: 1958dab9fa4562646947153d0e19da67, type: 3}
   moveState: 0
   accelerationCurve:
     serializedVersion: 2
@@ -236,12 +237,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   timeForActivePass: 0.5
-  passAOERange: 5
+  passAOERange: 10
   passAOEDamage: 5
   passTimeDistorsion: 0
-  passAOEFX: {fileID: 0}
+  passAOEFX: {fileID: 4048727396307156406, guid: 62f53133aa10aff42a2e1930c6b84ddc,
+    type: 3}
   activePassMomentum: 0
-  dunkExplosionRadius: 25
+  dunkExplosionRadius: 10
   dunkExplosionForce: 10000
   dunkExplosionDamage: 10
   dunkJumpHeight: 7
@@ -396,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5abeeddfd888764794f247d7719ecee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 25
+  jumpForce: 15
   minimalHeight: 1.2
   isJumping: 0
 --- !u!1 &576522956130905405
